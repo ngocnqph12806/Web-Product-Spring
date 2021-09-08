@@ -1,13 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <!--    <title layout:fragment="title">START</title>-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta content="A premium admin dashboard template by mannatthemes" name="description">
+    <meta content="Mannatthemes" name="author">
+    <!-- App favicon -->
+<!--    <link rel="/web-admin/plugin/shortcut icon" href="favicon.ico">-->
+<!--    <link href="/web-admin/plugin/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="/web-admin/plugin/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">&lt;!&ndash; App css &ndash;&gt;-->
+
+    <link href="/web-admin/plugin/jquery-jvectormap-2.0.2.css" rel="stylesheet" type="text/css"><!-- DataTables -->
+    <link href="/web-admin/plugin/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/web-admin/plugin/icons.css"  rel="stylesheet" type="text/css">
+    <link href="/web-admin/plugin/style.css" rel="stylesheet" type="text/css">
+
+    <title layout:fragment="title">START</title>
 </head>
 <body>
-<!--<div layout:fragment="content">-->
-<!---->
-<!---->
-<!--</div>-->
+<div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>
+<div th:replace="/layout/admin/midle-bar.html :: midle-bar-admin"></div>
+
+<div class="page-wrapper">
+    <div th:replace="/layout/admin/nav.html :: nav-admin"></div>
+    <div class="page-content">
+        <div class="container-fluid" layout:fragment="content-admin"></div>
+        <div th:replace="/layout/admin/footer.html :: footer-admin"></div>
+    </div>
+</div>
+<script th:src="@{'/web-admin/plugin/jquery.min.js'}"></script>
+<script th:src="@{'/web-admin/plugin/bootstrap.bundle.min.js'}"></script>
+<!--<script src="/web-admin/plugin/waves.min.js" ></script>-->
+<!--<script src="/web-admin/plugin/jquery.slimscroll.min.js"></script>-->
+<!--<script src="/web-admin/plugin/jquery-jvectormap-2.0.2.min.js"></script>-->
+<!--<script src="/web-admin/plugin/jquery-jvectormap-world-mill-en.js"></script>-->
+<!--<script src="/web-admin/plugin/moment.js"></script>-->
+<!--<script src="/web-admin/plugin/apexcharts.min.js"></script>-->
+<!--<script src="/web-admin/plugin/irregular-data-series.js"></script>-->
+<!--<script src="/web-admin/plugin/series1000.js"></script>-->
+<!--<script src="/web-admin/plugin/ohlc.js"></script>-->
+<script th:src="@{'/web-admin/plugin/jquery.dashboard.init.js'}"></script>
+<!-- App js -->
+<script th:src="@{'/web-admin/plugin/app.js'}"></script>
+<div layout:fragment="script-admin"></div>
 </body>
 </html>
 

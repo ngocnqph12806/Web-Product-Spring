@@ -17,7 +17,7 @@ public class CustomersReturnDetailsEntity {
     private CustomersReturnEntity idCustomersReturn;
     @ManyToOne
     @JoinColumn
-    private OrderDtailsEntity idOrderDtails;
+    private OrderDetailsEntity idOrderDtails;
     @Column
     private Integer quantity;
 

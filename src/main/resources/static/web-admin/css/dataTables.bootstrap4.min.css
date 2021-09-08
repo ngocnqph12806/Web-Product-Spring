@@ -77,17 +77,17 @@ div.dataTables_wrapper div.dataTables_processing {
     padding: 1em 0
 }
 
-table.dataTable thead>tr>th.sorting_asc,
-table.dataTable thead>tr>th.sorting_desc,
-table.dataTable thead>tr>th.sorting,
-table.dataTable thead>tr>td.sorting_asc,
-table.dataTable thead>tr>td.sorting_desc,
-table.dataTable thead>tr>td.sorting {
+table.dataTable thead > tr > th.sorting_asc,
+table.dataTable thead > tr > th.sorting_desc,
+table.dataTable thead > tr > th.sorting,
+table.dataTable thead > tr > td.sorting_asc,
+table.dataTable thead > tr > td.sorting_desc,
+table.dataTable thead > tr > td.sorting {
     padding-right: 30px
 }
 
-table.dataTable thead>tr>th:active,
-table.dataTable thead>tr>td:active {
+table.dataTable thead > tr > th:active,
+table.dataTable thead > tr > td:active {
     outline: none
 }
 
@@ -179,7 +179,7 @@ div.dataTables_scrollFoot table {
     }
 }
 
-table.dataTable.table-condensed>thead>tr>th {
+table.dataTable.table-condensed > thead > tr > th {
     padding-right: 20px
 }
 
@@ -211,14 +211,14 @@ div.dataTables_scrollHead table.table-bordered {
     border-bottom-width: 0
 }
 
-div.table-responsive>div.dataTables_wrapper>div.row {
+div.table-responsive > div.dataTables_wrapper > div.row {
     margin: 0
 }
 
-div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:first-child {
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:first-child {
     padding-left: 0
 }
 
-div.table-responsive>div.dataTables_wrapper>div.row>div[class^="col-"]:last-child {
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:last-child {
     padding-right: 0
 }

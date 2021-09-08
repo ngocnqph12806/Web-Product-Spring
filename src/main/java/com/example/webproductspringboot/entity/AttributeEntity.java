@@ -4,8 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "attribute")
 @Data
 public class AttributeEntity {
@@ -21,5 +22,7 @@ public class AttributeEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+    @OneToMany(mappedBy = "idAttribute")
+    private List<AttributeValueEntity> lstAttributeValueEntities;
 
 }

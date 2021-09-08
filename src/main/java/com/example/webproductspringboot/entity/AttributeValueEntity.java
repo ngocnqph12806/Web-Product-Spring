@@ -3,8 +3,9 @@ package com.example.webproductspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "attribute_value")
 @Data
 public class AttributeValueEntity {
@@ -17,5 +18,7 @@ public class AttributeValueEntity {
     private AttributeEntity idAttribute;
     @Column(nullable = false, length = 10)
     private String value;
+    @OneToMany(mappedBy = "idAttributeValue")
+    private List<ProductDetailsEntity> lstProductDetailsEntities;
 
 }

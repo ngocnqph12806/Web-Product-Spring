@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div class="container bestsellers" th:fragment="best-seller-web">
+    <hr class="mb-3">
+    <div class="heading">
+        <h2 class="title text-center">BEST SELLERS</h2>
+        <p class="content text-center mb-4">The Trends Boutique: The latest fashion trends from top brands!</p>
+    </div>
+
+    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+         data-owl-options='{
+                        "nav": true,
+                        "dots": false,
+                        "margin": 20,
+                        "loop": false,
+                        "responsive": {
+                            "0": {
+                                "items":2
+                            },
+                            "768": {
+                                "items":3
+                            },
+                            "992": {
+                                "items":4
+                            }
+                        }
+                    }'>
+        <div class="product demo21">
+            <figure class="product-media">
+                <span class="product-label label-sale">Sale</span>
+                <a href="product.html">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-1-1.jpg" alt="Product image" class="product-image">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-1-2.jpg" alt="Product image" class="product-image-hover">
+                </a>
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body text-center">
+                <div class="product-cat">
+                    <a href="#">Shoes</a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="product.html">Nike Renew Arena</a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <span class="new-price">$58.99</span>
+                    <span class="old-price">Was $75.00</span>
+                </div><!-- End .product-price -->
+                <div class="ratings-container">
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+                    <span class="ratings-text">( 2 Reviews )</span>
+                </div><!-- End .rating-container -->
+
+                <div class="product-nav product-nav-dots">
+                    <a href="#" class="active" style="background: #c12f46;"><span class="sr-only">Color name</span></a>
+                    <a href="#" style="background: #d3def0;"><span class="sr-only">Color name</span></a>
+                </div><!-- End .product-nav -->
+
+                <div class="product-action">
+                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>ADD TO CART</span></a>
+                    <a href="#" class="btn-addtolist"><span>&nbsp;Add to Wishlist</span></a>
+                </div><!-- End .product-action -->
+
+
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+
+        <div class="product demo21">
+            <figure class="product-media">
+                <span class="product-label label-new">New</span>
+                <a href="product.html">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-2-1.jpg" alt="Product image" class="product-image">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-2-2.jpg" alt="Product image" class="product-image-hover">
+                </a>
+
+                <div class="product-countdown" data-until="+9h" data-format="HMS" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+            </figure><!-- End .product-media -->
+
+            <div class="product-body text-center">
+                <div class="product-cat">
+                    <a href="#">Jackets & Vests</a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="product.html">Advanced Skin 12 Set</a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <span class="cur-price">$199.99</span>
+                </div><!-- End .product-price -->
+                <div class="ratings-container">
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 60%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+                    <span class="ratings-text">( 4 Reviews )</span>
+                </div><!-- End .rating-container -->
+
+                <div class="product-nav product-nav-dots" style="visibility: hidden;">
+                    <a href="#" class="active" style="background: #db7e6c;"><span class="sr-only">Color name</span></a>
+                </div><!-- End .product-nav -->
+
+                <div class="product-action">
+                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>ADD TO CART</span></a>
+                    <a href="#" class="btn-addtolist"><span>&nbsp;Add to Wishlist</span></a>
+                </div><!-- End .product-action -->
+
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+
+        <div class="product demo21">
+            <figure class="product-media">
+                <a href="product.html">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-3-1.jpg" alt="Product image" class="product-image">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-3-2.jpg" alt="Product image" class="product-image-hover">
+                </a>
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body text-center">
+                <div class="product-cat">
+                    <a href="#">Tops</a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="product.html">On Performance-T Shirt</a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <span class="cur-price">$99.99</span>
+                </div><!-- End .product-price -->
+                <div class="ratings-container">
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 40%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+                    <span class="ratings-text">( 0 Reviews )</span>
+                </div><!-- End .rating-container -->
+
+                <div class="product-nav product-nav-dots">
+                    <a href="#" class="active" style="background: #db7e6c;"><span class="sr-only">Color name</span></a>
+                    <a href="#" style="background: #5a7399;"><span class="sr-only">Color name</span></a>
+                </div><!-- End .product-nav -->
+                <div class="product-action">
+                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>ADD TO CART</span></a>
+                    <a href="#" class="btn-addtolist"><span>&nbsp;Add to Wishlist</span></a>
+                </div><!-- End .product-action -->
+
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+
+        <div class="product demo21">
+            <figure class="product-media">
+                <a href="product.html">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-4-1.jpg" alt="Product image" class="product-image">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-4-2.jpg" alt="Product image" class="product-image-hover">
+                </a>
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body text-center">
+                <div class="product-cat">
+                    <a href="#">Bottoms</a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="product.html">CB Carbon 2 Cycling Short</a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <span class="cur-price">$159.99</span>
+                </div><!-- End .product-price -->
+                <div class="ratings-container">
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+                    <span class="ratings-text">( 12 Reviews )</span>
+                </div><!-- End .rating-container -->
+                <div class="product-nav product-nav-dots" style="visibility: hidden;">
+                    <a href="#" class="active" style="background: #db7e6c;"><span class="sr-only">Color name</span></a>
+                </div><!-- End .product-nav -->
+
+                <div class="product-action">
+                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>ADD TO CART</span></a>
+                    <a href="#" class="btn-addtolist"><span>&nbsp;Add to Wishlist</span></a>
+                </div><!-- End .product-action -->
+
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+
+        <div class="product demo21">
+            <figure class="product-media">
+                <a href="product.html">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-1-1.jpg" alt="Product image" class="product-image">
+                    <img src="/web/assets/images/demos/demo-21/bestSellers/product-1-2.jpg" alt="Product image" class="product-image-hover">
+                </a>
+
+                <div class="product-countdown" data-until="+7h" data-format="HMS" data-relative="true" data-labels-short="true"></div><!-- End .product-countdown -->
+
+            </figure><!-- End .product-media -->
+
+            <div class="product-body text-center">
+                <div class="product-cat">
+                    <a href="#">Tops</a>
+                </div><!-- End .product-cat -->
+                <h3 class="product-title"><a href="product.html">On Performance-T Shirt</a></h3><!-- End .product-title -->
+                <div class="product-price">
+                    <span class="cur-price">$99.99</span>
+                </div><!-- End .product-price -->
+                <div class="ratings-container">
+                    <div class="ratings">
+                        <div class="ratings-val" style="width: 40%;"></div><!-- End .ratings-val -->
+                    </div><!-- End .ratings -->
+                    <span class="ratings-text">( 0 Reviews )</span>
+                </div><!-- End .rating-container -->
+
+                <div class="product-nav product-nav-dots">
+                    <a href="#" class="active" style="background: #db7e6c;"><span class="sr-only">Color name</span></a>
+                    <a href="#" style="background: #5a7399;"><span class="sr-only">Color name</span></a>
+                </div><!-- End .product-nav -->
+                <div class="product-action">
+                    <a href="#" class="btn-product btn-cart" title="Add to cart"><span>ADD TO CART</span></a>
+                    <a href="#" class="btn-addtolist"><span>&nbsp;Add to Wishlist</span></a>
+                </div><!-- End .product-action -->
+
+            </div><!-- End .product-body -->
+        </div><!-- End .product -->
+
+    </div><!-- End .owl-carousel -->
+</div>
+</body>
+</html>

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "voucher")
@@ -34,5 +35,7 @@ public class VoucherEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+    @OneToMany(mappedBy = "idVoucher")
+    private List<VoucherUseEntity> lstVoucherUseEntities;
 
 }

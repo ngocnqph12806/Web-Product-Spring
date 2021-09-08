@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "brand")
@@ -27,5 +28,9 @@ public class BrandEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+    @OneToMany(mappedBy = "idBrand")
+    private List<ProductEntity> lstProduct;
+    @OneToMany(mappedBy = "idBrand")
+    private List<CollectionBrandEntity> lstCollectionBrandEntities;
 
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -25,5 +26,7 @@ public class InvoiceEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+    @OneToMany(mappedBy = "idInvoice")
+    private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
 
 }

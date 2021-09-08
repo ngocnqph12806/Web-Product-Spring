@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "customer_return")
@@ -28,5 +29,7 @@ public class CustomersReturnEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+    @OneToMany(mappedBy = "idCustomersReturn")
+    private List<CustomersReturnDetailsEntity> lstCustomersReturnDetailsEntities;
 
 }

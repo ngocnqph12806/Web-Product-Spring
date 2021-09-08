@@ -18,23 +18,23 @@
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20180813</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.json</groupId>-->
+<!--            <artifactId>json</artifactId>-->
+<!--            <version>20180813</version>-->
+<!--        </dependency>-->
         <!-- Thymeleaf Dialect -->
 <!--        <dependency>-->
 <!--            <groupId>org.thymeleaf.extras</groupId>-->
 <!--            <artifactId>thymeleaf-extras-springsecurity5</artifactId>-->
 <!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security/spring-security-config &ndash;&gt;-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-config</artifactId>-->
 <!--            <version>5.5.2</version>-->
 <!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security/spring-security-web &ndash;&gt;-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-web</artifactId>-->

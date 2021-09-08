@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "staff")
@@ -36,5 +37,20 @@ public class StaffEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
+
+//    @OneToMany(mappedBy = "idStaff")
+//    private List<VoucherUseEntity> lstVoucherUseEntities;
+    @OneToMany(mappedBy = "idStaffCreate")
+    private List<InvoiceEntity> lstInvoiceEntitiesCreate;
+    @OneToMany(mappedBy = "idStaffCheck")
+    private List<InvoiceEntity> lstInvoiceEntitiesCheck;
+    @OneToMany(mappedBy = "staffCreate")
+    private List<OrderEntity> lstOrderEntitiesCreate;
+    @OneToMany(mappedBy = "staffSales")
+    private List<OrderEntity> lstOrderEntitieSale;
+    @OneToMany(mappedBy = "idStaff")
+    private List<HistoryEntity> lstHistoryEntities;
+    @OneToMany(mappedBy = "idStaff")
+    private List<CustomersReturnEntity> lstCustomersReturnEntities;
 
 }

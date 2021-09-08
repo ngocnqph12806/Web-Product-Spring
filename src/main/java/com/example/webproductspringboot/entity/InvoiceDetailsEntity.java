@@ -3,6 +3,7 @@ package com.example.webproductspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "invoice_details")
@@ -17,7 +18,7 @@ public class InvoiceDetailsEntity {
     private InvoiceEntity idInvoice;
     @ManyToOne
     @JoinColumn
-    private ProductDetailsEntity idProductDetails;
+    private ProductEntity idProduct;
     @Column
     private Long price;
     @Column
