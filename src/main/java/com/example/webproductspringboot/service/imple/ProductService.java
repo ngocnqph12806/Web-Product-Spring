@@ -2,6 +2,7 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.product.DetailsProductDto;
 import com.example.webproductspringboot.dto.product.FilterPriceProductDto;
+import com.example.webproductspringboot.dto.product.FormProductDto;
 import com.example.webproductspringboot.dto.product.IntroProductDto;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
@@ -60,6 +61,16 @@ public class ProductService implements IProductService {
                 .min(_iProductReponsitory.findMinPrice())
                 .max(_iProductReponsitory.findMaxPrice())
                 .build();
+    }
+
+    @Override
+    public IntroProductDto findIntroById(String id) {
+        return null;
+    }
+
+    @Override
+    public IntroProductDto save(FormProductDto dto) {
+        return null;
     }
 
 

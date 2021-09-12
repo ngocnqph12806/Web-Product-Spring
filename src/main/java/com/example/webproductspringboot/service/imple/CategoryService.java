@@ -1,5 +1,6 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.product.FormCategoryAdminDto;
 import com.example.webproductspringboot.dto.product.IntroCategoryAdminDto;
 import com.example.webproductspringboot.dto.product.SearchCategoryDto;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
@@ -29,5 +30,15 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<IntroCategoryAdminDto> findAllIntroCategoryAdmin() {
         return _iCategoryReponsitory.findAll().stream().map(IntroCategoryAdminDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public IntroCategoryAdminDto save(FormCategoryAdminDto dto) {
+        return null;
+    }
+
+    @Override
+    public IntroCategoryAdminDto findIntroById(String id) {
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.webproductspringboot.dto.product;
+package com.example.webproductspringboot.dto.partner;
 
 import com.example.webproductspringboot.entity.BrandEntity;
 import lombok.AllArgsConstructor;

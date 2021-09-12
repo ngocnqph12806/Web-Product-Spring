@@ -2,6 +2,7 @@ package com.example.webproductspringboot.service.intf;
 
 import com.example.webproductspringboot.dto.product.DetailsProductDto;
 import com.example.webproductspringboot.dto.product.FilterPriceProductDto;
+import com.example.webproductspringboot.dto.product.FormProductDto;
 import com.example.webproductspringboot.dto.product.IntroProductDto;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface IProductService  {
     Set<String> getSetColorByIdCategory(String idCategory);
 
     FilterPriceProductDto getMinMaxPrice();
+
+    IntroProductDto findIntroById(String id);
+
+    IntroProductDto save(FormProductDto dto);
 }

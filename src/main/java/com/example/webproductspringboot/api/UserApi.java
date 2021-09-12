@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
-public class StaffApi {
+public class UserApi {
 
     @Autowired
     private IUserService _iUserService;
