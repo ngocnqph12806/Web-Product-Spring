@@ -73,7 +73,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public FormUserAdminDto saveInfoStaff(FormUserAdminDto formUserAdminDto) {
+    public IntroStaffAdminDto saveInfoStaff(FormUserAdminDto formUserAdminDto) {
         UserEntity userEntity = formUserAdminDto.toEntity();
         if (userEntity.getId() == null || userEntity.getId().isBlank() || userEntity.getId().isEmpty()) {
             userEntity = userEntity.toBuilder()
@@ -100,7 +100,7 @@ public class UserService implements IUserService {
         if (userEntity == null) {
             throw new InternalServerException("Lưu không thành công");
         }
-        return FormUserAdminDto.toDto(userEntity);
+        return IntroStaffAdminDto.toDto(userEntity);
     }
 
     @Override

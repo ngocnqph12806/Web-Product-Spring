@@ -2,6 +2,7 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.dto.staff.FormUserAdminDto;
+import com.example.webproductspringboot.dto.staff.IntroStaffAdminDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IUserService;
@@ -39,7 +40,8 @@ public class StaffApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        return ResponseEntity.ok(_iUserService.saveInfoStaff(formUserAdminDto));
+        ResultDto<IntroStaffAdminDto> result = new ResultDto<>(true, "Lưu thành công", _iUserService.saveInfoStaff(formUserAdminDto));
+        return ResponseEntity.ok(result);
     }
 
     // thay đổi status và block

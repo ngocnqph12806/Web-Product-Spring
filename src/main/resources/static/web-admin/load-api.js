@@ -32,6 +32,9 @@ function loadDataAdmin(index, url_page) {
                     document.querySelector('.main__load').outerHTML = ''
                 }
             }
+        },
+        error: function (response) {
+
         }
     });
 }
@@ -53,6 +56,7 @@ function submitFormDataAdmin(formData, url, urlSuccess) {
         //     xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
         // },
         success: function (data) {
+            console.log(data)
             if (data.result) {
                 swal("Thành công", data.message, "success").then((function (t) {
                     if (t) window.location = urlSuccess

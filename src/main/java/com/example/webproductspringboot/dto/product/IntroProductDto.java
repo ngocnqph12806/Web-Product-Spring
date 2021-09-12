@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,19 +37,23 @@ public class IntroProductDto {
         return IntroProductDto.builder()
                 .idProduct(entity.getId())
                 .nameProduct(entity.getName())
-                .idCategory(entity.getIdCategory().getId())
-                .idUrlCategory(entity.getIdCategory().getIdUrl())
-                .nameCategory(entity.getIdCategory().getName())
-                .pathCategory(entity.getIdCategory().getPathUrl())
-                .idBrand(entity.getIdBrand().getId())
-                .nameBrand(entity.getIdBrand().getName())
+                .idCategory(entity.getIdCategory() != null ? entity.getIdCategory().getId() : "")
+                .idUrlCategory(entity.getIdCategory() != null ? entity.getIdCategory().getIdUrl() : Long.parseLong(""))
+                .nameCategory(entity.getIdCategory() != null ? entity.getIdCategory().getName() : "")
+                .pathCategory(entity.getIdCategory() != null ? entity.getIdCategory().getPathUrl() : "")
+                .idBrand(entity.getIdBrand() != null ? entity.getIdBrand().getId() : "")
+                .nameBrand(entity.getIdBrand() != null ? entity.getIdBrand().getName() : "")
                 .price(entity.getPrice())
                 .priceSale(entity.getPriceSale())
                 .idUrl(entity.getIdUrl())
                 .pathUrl(entity.getPathUrl())
-                .pointReview((int) entity.getLstReviewProductEntities().stream().mapToDouble(e -> e.getPoint()).average().orElse(0.0))
+                .pointReview(entity.getLstReviewProductEntities() != null
+                        ? (int) entity.getLstReviewProductEntities().stream().mapToDouble(e -> e.getPoint()).average().orElse(0.0)
+                        : 0)
                 .description(entity.getDescription())
-                .pathImageProduct(entity.getLstProductImageEntities().stream().map(PathImageProductDto::toDto).collect(Collectors.toList()))
+                .pathImageProduct(entity.getLstProductImageEntities() != null
+                        ? entity.getLstProductImageEntities().stream().map(PathImageProductDto::toDto).collect(Collectors.toList())
+                        : new ArrayList<>())
                 .build();
     }
 

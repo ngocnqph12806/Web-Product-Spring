@@ -8,4 +8,6 @@ public interface ICollectionService  {
     List<IntroCollectionAdminDto> findAllIntroCollectionsAdmin();
 
     IntroCollectionAdminDto findIntroCollectionById(String idCollection);
+
+    IntroCollectionAdminDto saveCollection(IntroCollectionAdminDto dto);
 }

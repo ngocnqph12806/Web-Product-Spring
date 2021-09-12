@@ -20,11 +20,11 @@ public class DetailsProductValueDto {
     private String pathBanner;
 
     public static DetailsProductValueDto toDto(ProductDetailsEntity entity) {
-        if(entity == null) return null;
+        if (entity == null) return null;
         return DetailsProductValueDto.builder()
                 .idProductDetails(entity.getId())
-                .idValueDetails(entity.getIdValueDetails().getId())
-                .nameValueDetails(entity.getIdValueDetails().getName())
+                .idValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getId() : null)
+                .nameValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getName() : null)
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .pathBanner(entity.getPathBanner())

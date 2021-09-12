@@ -21,8 +21,17 @@ public class IntroCollectionAdminDto {
         return IntroCollectionAdminDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .countProducts(entity.getLstCollectionCategoryEntities().stream()
-                        .mapToInt(e -> e.getIdCategory().getLstProductEntities().size()).sum())
+                .countProducts(entity.getLstCollectionCategoryEntities() != null
+                        ? entity.getLstCollectionCategoryEntities().stream()
+                        .mapToInt(e -> e.getIdCategory().getLstProductEntities().size()).sum()
+                        : 0)
+                .build();
+    }
+
+    public CollectionEntity toEntity() {
+        return CollectionEntity.builder()
+                .id(this.id)
+                .name(this.name)
                 .build();
     }
 }

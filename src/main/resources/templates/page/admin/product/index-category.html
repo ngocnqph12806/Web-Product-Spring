@@ -55,12 +55,14 @@
                     </div>
                     <!--end /tableresponsive-->
                     <hr class="mt-3 mb-3"/>
-                    <form id="form-add-collection" class="row">
+                    <form id="form-input-collection" class="row">
                         <input type="hidden" name="id"/>
                         <div class="col-xl-9 mb-3">
                             <input class="form-control" name="name" type="text" placeholder="Nhập tên danh mục"/>
                         </div>
-                        <button class="btn btn-primary mb-3">Thêm danh muc</button>
+                        <button type="button" id="btn-input-collection" class="btn btn-primary mb-3">
+                            Thêm danh muc
+                        </button>
                     </form>
                 </div>
                 <!--end card-body-->
@@ -201,8 +203,7 @@
                             <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
                                 Huỷ bỏ
                             </button>
-                            <button type="button" onclick="saveStaff()"
-                                    class="btn btn-primary waves-effect waves-light">
+                            <button type="button" class="btn btn-primary waves-effect waves-light">
                                 Lưu lại
                             </button>
                         </div>
@@ -214,6 +215,22 @@
 </div>
 <th:block layout:fragment="script-admin">
     <script>
+
+        $('#btn-input-collection').click(function () {
+            let data = JSON.parse(JSON.stringify($("#form-input-collection").serializeArray()))
+            let obj = {};
+            for (let i = 0; i < data.length; i++) {
+                let name = data[i].name;
+                let value = data[i].value;
+                if (name === 'name' && !checkName(value, 'Tên danh mục')) return;
+                obj[name] = value;
+            }
+            console.log(obj)
+            setTimeout(function () {
+                submitFormDataAdmin(JSON.stringify(obj), '/api/collections', window.location.href)
+            }, 10)
+        })
+
         function getCollection(e) {
             let id = e.dataset.id
             if (id !== null && id !== undefined && id !== '') {
@@ -222,11 +239,8 @@
                     type: 'GET',
                     contentType: 'application/json',
                     success: function (response) {
-                        appendFormdata('form-add-collection', response)
-                        // console.log($('#form-add-collection :input'))
-                        // var values = {};
-                        //
-                        // console.log(values)
+                        appendFormdata('form-input-collection', response)
+                        $('#btn-input-collection').html('Chỉnh sửa')
                     },
                     error: function (response) {
                         console.log(response)

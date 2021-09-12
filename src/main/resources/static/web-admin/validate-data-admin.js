@@ -8,6 +8,23 @@
 
 // " 123/13 Hương lộ 2. Khu phố 2, Quận Bình Tân. Phường Bình Trị Đông A"
 
+function checkName(value, title) {
+    const REGEX_NAME = /^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/
+    if (value === null || value === '') {
+        toastDanger(title + ' không được để trống', 'Lỗi');
+        return false;
+    }
+    if (value.trim().length < 5) {
+        toastWarning(title + ' phải từ 5 ký tự', 'Lỗi');
+        return false
+    }
+    if (REGEX_NAME.test(value)) {
+        return true
+    }
+    toastWarning(title + ' không đúng', 'Lỗi');
+    return false;
+}
+
 function checkRealName(value) {
     const REGEX_FULL_NAME = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/
     if (value === null || value === '') {
@@ -192,75 +209,27 @@ function toastDanger(message, title) {
     swal(title, message, "error")
 }
 
-function appendFormdata(idForm, data, nameFileAvatar, name) {
+function appendFormdata(idForm, data, objFile, name) {
     name = name || '';
     if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
         Object.keys(data).forEach(key => {
-            appendFormdata(idForm, data[key], nameFileAvatar, name ? `${name}[${key}]` : key);
+            appendFormdata(idForm, data[key], objFile, name ? `${name}[${key}]` : key);
         });
     } else {
-        // if (name === 'dateOfBirth') {
-        //     data = moment(data).format('MM/DD/YYYY')
-        // }
-        // if (name === 'address') {
-        //     // let nameInput = 'textarea[name=' + name + ']';
-        //     // $(nameInput).val(data);
-        //     // $('#' + idForm + ' :textarea').each(function () {
-        //     //     if (name === this.name) {
-        //     //         console.log('a')
-        //     //         $(this).val(data);
-        //     //     }
-        //     // })
-        // } else if (name === 'role') {
-        //     // let nameInput = 'select[name=' + name + ']';
-        //     // $(nameInput).val(data).change();
-        //     $('#' + idForm + ' :select').each(function () {
-        //         if (name === this.name) {
-        //             console.log('b')
-        //
-        //             $(this).val(data).change();
-        //         }
-        //     })
-        // } else if (name === 'avatar') {
-        //     // let nameInput = 'input[name=' + name + ']';
-        //     // $(nameInput)[0].dataset.oldimg = data;
-        //     // nameFileAvatar = data
-        //
-        //     $('#' + idForm + ' :input').each(function () {
-        //         if (name === this.name) {
-        //             console.log(nameFileAvatar)
-        //             $(this).dataset.oldimg = data;
-        //             nameFileAvatar = data
-        //         }
-        //     })
-        // } else {
-        //     $('#' + idForm + ' :input').each(function () {
-        //         console.log(this.type)
-        //         if(this.type === 'file') {
-        //             $(this).dataset.oldimg = data;
-        //         }else if(this.type === 'select-one'){
-        //             $(this).val(data).change();
-        //         }else if(this.type === 'text'){
-        //             $(this).val(data);
-        //         }
-        //         // if (name === this.name) {
-        //         //     console.log('c')
-        //         //     $(this).val(data);
-        //         // }
-        //     })
-        // }
+        let d = new Date(data)
+        if (d instanceof Date && !isNaN(d) && name.includes('date')) {
+            data = moment(data).format('MM/DD/YYYY')
+        }
         $('#' + idForm + ' :input').each(function () {
-            if(this.name === name) {
-                // console.log(this.type)
-                // console.log(this.name)
+            if (this.name === name) {
                 if (this.type === 'file') {
                     $(this)[0].dataset.oldimg = data
-                    nameFileAvatar = data
+                    objFile.nameFile = data
                     return;
                 } else if (this.type === 'select-one') {
                     $(this).val(data).change();
                     return;
-                } else if (this.type === 'text' || this.type === 'textarea') {
+                } else if (this.type === 'text' || this.type === 'textarea' || this.type === 'hidden') {
                     $(this).val(data);
                     return;
                 }

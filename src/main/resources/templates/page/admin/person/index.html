@@ -182,7 +182,8 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label text-right">Ảnh đại diện</label>
                             <div class="col-sm-10">
-                                <input type="file" id="input-file-now-custom-2" name="avatar" class="file-avatar dropify"
+                                <input type="file" id="input-file-now-custom-2" name="avatar"
+                                       class="file-avatar dropify"
                                        onchange="onChangeFileAvatar(this)" data-oldimg="" data-height="200">
                             </div>
                         </div>
@@ -202,11 +203,16 @@
 <th:block layout:fragment="script-admin">
     <script>
 
-        var targetFileAvatar = null;
-        var nameFileAvatar = $('.file-avatar')[0].dataset.oldimg
+        // var targetFileAvatar = null;
+        // var nameFileAvatar = $('.file-avatar')[0].dataset.oldimg
+        var objFileAvatar = {
+            targetFileAvatar: null,
+            nameFile: $('.file-avatar')[0].dataset.oldimg,
+        }
 
         function onChangeFileAvatar(e) {
-            targetFileAvatar = e
+            objFileAvatar.targetFileAvatar = e
+            console.log(objFileAvatar.targetFileAvatar)
         }
 
         function saveStaff() {
@@ -238,17 +244,17 @@
             } else {
                 obj['role'] = role
             }
-            if (nameFileAvatar === null || nameFileAvatar === undefined || nameFileAvatar === '') {
-                if (targetFileAvatar !== null && targetFileAvatar !== undefined) {
-                    nameFileAvatar = writeFileGitHub(targetFileAvatar)
-                    targetFileAvatar = null
+            // if (objFileAvatar.nameFile === null || objFileAvatar.nameFile === undefined || objFileAvatar.nameFile === '') {
+                if (objFileAvatar.targetFileAvatar !== null && objFileAvatar.targetFileAvatar !== undefined) {
+                    objFileAvatar.nameFile = writeFileGitHub(objFileAvatar.targetFileAvatar)
+                    objFileAvatar.targetFileAvatar = null
                 }
-            }
+            // }
             // avatar đúng định dạng hình ảnh
-            if (!checkImage(nameFileAvatar, 'Ảnh đại diện')) {
+            if (!checkImage(objFileAvatar.nameFile, 'Ảnh đại diện')) {
                 return
             } else {
-                obj['avatar'] = nameFileAvatar
+                obj['avatar'] = objFileAvatar.nameFile
             }
             setTimeout(function () {
                 submitFormDataAdmin(JSON.stringify(obj), '/api/users', window.location.href)
@@ -264,8 +270,8 @@
                 success: function (response) {
                     // let {data} = response
                     console.log(response)
-                    appendFormdata('form-input-staff',response,nameFileAvatar)
-                    console.log(nameFileAvatar)
+                    appendFormdata('form-input-staff', response, objFileAvatar)
+                    console.log(objFileAvatar.nameFile)
                 }
             });
         }
@@ -298,7 +304,6 @@
         })
 
     </script>
-    <script src="/web-admin/js/moment.js"></script>
     <script src="/web-admin/js/daterangepicker.js"></script>
     <script src="/web-admin/js/tempusdominus-bootstrap-4.js"></script>
     <script src="/web-admin/js/bootstrap-material-datetimepicker.js"></script>

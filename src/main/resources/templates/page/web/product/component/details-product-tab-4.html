@@ -22,7 +22,7 @@
                             </div><!-- End .rating-container -->
                         </div><!-- End .col -->
                         <div class="col">
-                            <p class="review-date" th:text="*{#dates.format(created, 'dd-MM-yyyy hh:mm:ss a')}">6 days ago</p>
+                            <p class="review-date" th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy hh:mm:ss a')}">6 days ago</p>
                             <div class="review-content">
                                 <p th:text="*{description}"></p>
                             </div><!-- End .review-content -->

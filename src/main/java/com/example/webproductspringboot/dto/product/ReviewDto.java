@@ -23,7 +23,7 @@ public class ReviewDto {
     private String email;
     private String description;
     private Boolean introduce;
-    private Date created;
+    private Date dateCreated;
     private List<String> lstPathImages;
 
     public static ReviewDto toDto(ReviewProductEntity entity) {
@@ -36,7 +36,7 @@ public class ReviewDto {
                 .email(entity.getIdVisit().getEmail())
                 .description(entity.getDescription())
                 .introduce(entity.getIntroduce())
-                .created(entity.getCreated())
+                .dateCreated(entity.getCreated())
                 .lstPathImages(entity.getLstReviewImageEntities().stream().map(e -> e.getPathImage()).collect(Collectors.toList()))
                 .build();
     }

@@ -39,21 +39,29 @@ public class DetailsProductDto {
         return DetailsProductDto.builder()
                 .idProduct(entity.getId())
                 .nameProduct(entity.getName())
-                .idCategory(entity.getIdCategory().getId())
-                .idUrlCategory(entity.getIdCategory().getIdUrl())
-                .nameCategory(entity.getIdCategory().getName())
-                .pathCategory(entity.getIdCategory().getPathUrl())
-                .idBrand(entity.getIdBrand().getId())
-                .nameBrand(entity.getIdBrand().getName())
+                .idCategory(entity.getIdCategory() != null ? entity.getIdCategory().getId() : "")
+                .idUrlCategory(entity.getIdCategory() != null ? entity.getIdCategory().getIdUrl() : Long.parseLong(""))
+                .nameCategory(entity.getIdCategory() != null ? entity.getIdCategory().getName() : "")
+                .pathCategory(entity.getIdCategory() != null ? entity.getIdCategory().getPathUrl() : "")
+                .idBrand(entity.getIdBrand() != null ? entity.getIdBrand().getId() : "")
+                .nameBrand(entity.getIdBrand() != null ? entity.getIdBrand().getName() : "")
                 .price(entity.getPrice())
                 .priceSale(entity.getPriceSale())
                 .pathUserManual(entity.getPathUserManual())
                 .description(entity.getDescription())
                 .pointReview((int) entity.getLstReviewProductEntities().stream().mapToDouble(e -> e.getPoint()).average().orElse(0.0))
-                .lstPathImages(entity.getLstProductImageEntities().stream().map(e -> e.getPath()).collect(Collectors.toList()))
-                .detailsProduct(entity.getLstProductDetailsEntities().stream().map(DetailsProductValueDto::toDto).collect(Collectors.toList()))
-                .reviewProduct(entity.getLstReviewProductEntities().stream().map(ReviewDto::toDto).collect(Collectors.toList()))
-                .lstIdDetailsProduct(entity.getLstProductDetailsEntities().stream().map(e -> e.getIdValueDetails().getId()).collect(Collectors.toSet()))
+                .lstPathImages(entity.getLstProductImageEntities() != null
+                        ? entity.getLstProductImageEntities().stream().map(e -> e.getPath()).collect(Collectors.toList())
+                        : null)
+                .detailsProduct(entity.getLstProductDetailsEntities() != null
+                        ? entity.getLstProductDetailsEntities().stream().map(DetailsProductValueDto::toDto).collect(Collectors.toList())
+                        : null)
+                .reviewProduct(entity.getLstReviewProductEntities() != null
+                        ? entity.getLstReviewProductEntities().stream().map(ReviewDto::toDto).collect(Collectors.toList())
+                        : null)
+                .lstIdDetailsProduct(entity.getLstProductDetailsEntities() != null
+                        ? entity.getLstProductDetailsEntities().stream().map(e -> e.getIdValueDetails().getId()).collect(Collectors.toSet())
+                        : null)
                 .build();
     }
 

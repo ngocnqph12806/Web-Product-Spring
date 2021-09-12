@@ -23,7 +23,7 @@ public class IntroCategoryAdminDto {
                 .id(entity.getId())
                 .name(entity.getName())
                 .pathCategory(entity.getPathUrl())
-                .countProducts(entity.getLstProductEntities().size())
+                .countProducts(entity.getLstProductEntities() != null ? entity.getLstProductEntities().size() : 0)
                 .build();
     }
 }

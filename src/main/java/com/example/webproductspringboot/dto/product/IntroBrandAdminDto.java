@@ -25,7 +25,7 @@ public class IntroBrandAdminDto {
                 .name(entity.getName())
                 .phoneNumber(entity.getPhoneNumber())
                 .email(entity.getEmail())
-                .countProducts(entity.getLstCollectionBrandEntities().size())
+                .countProducts(entity.getLstCollectionBrandEntities() != null ? entity.getLstCollectionBrandEntities().size() : 0)
                 .build();
     }
 }

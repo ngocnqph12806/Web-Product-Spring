@@ -16,7 +16,7 @@ public interface IUserService {
 
     FormUserAdminDto findByUserName(String userNameStaff);
 
-    FormUserAdminDto saveInfoStaff(FormUserAdminDto formUserAdminDto);
+    IntroStaffAdminDto saveInfoStaff(FormUserAdminDto formUserAdminDto);
 
     List<IntroVisitAdminDto> findAllIntroVisit();
 
