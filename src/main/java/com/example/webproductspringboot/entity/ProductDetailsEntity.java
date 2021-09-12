@@ -3,9 +3,8 @@ package com.example.webproductspringboot.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "product_details")
 @Data
 public class ProductDetailsEntity {
@@ -18,14 +17,13 @@ public class ProductDetailsEntity {
     private ProductEntity idProduct;
     @ManyToOne
     @JoinColumn
-    private AttributeValueEntity idAttributeValue;
-    @Column
-    private Long price;
-    @Column
-    private Integer quantity;
-    @Column(nullable = false, length = 100)
-    private String location;
-    @OneToMany(mappedBy = "idProductDetails")
-    private List<OrderDetailsEntity> lstOrderDtailsEntities;
+    private ValueDetailsEntity idValueDetails;
+    @Column(nullable = false, length = 150)
+    private String title;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false, length = 150)
+    private String pathBanner;
+
 
 }

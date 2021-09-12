@@ -18,6 +18,9 @@ public class CategoryEntity {
     private String name;
     @Column(nullable = false)
     private String banner;
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idUrl;
     @Column(nullable = false, length = 100)
     private String pathUrl;
     @Column

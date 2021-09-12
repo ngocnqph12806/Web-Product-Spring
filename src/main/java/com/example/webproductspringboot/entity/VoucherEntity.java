@@ -20,7 +20,7 @@ public class VoucherEntity {
     private String title;
     @ManyToOne
     @JoinColumn
-    private StaffEntity idStaff;
+    private UserEntity idStaff;
     @Column
     private Integer quantity;
     @Column

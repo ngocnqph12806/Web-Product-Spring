@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
+     aria-labelledby="product-shipping-link" th:fragment="details-product-tab-3-web">
+    <div class="product-desc-content">
+        <div class="container">
+            <h2 class="text-center mb-3">Bạn hoàn toàn có thể yên tâm</h2>
+            <div class="row d-flex">
+                <th:block th:each="detailProduct : ${product.detailsProduct}" th:object="${detailProduct}"
+                          th:if="${detailProduct.idValueDetails == '3'}">
+                    <div class="col-lg-6">
+                        <div class="card" style="background: #011e41; height: 300px;">
+                            <div class="mx-5 mt-4">
+                                <h3 class="text-white mb-2" th:text="*{title}">Chế độ bảo hành</h3>
+                                <p class="text-white mb-1" th:utext="*{description}">2 năm bảo hành tổng quát cho tủ
+                                    lạnh</p>
+                                <p class="text-white mb-1">Nếu bạn đã là khách hàng của Electrolux, vui lòng
+                                    <a href="#signin-modal" data-toggle="modal" class="text-white">đăng nhập</a>
+                                </p>
+                                <a href="#" class="text-white h5 mb-3">Tìm hiểu về đăng ký bảo hành</a><br/>
+                                <a href="#" class="btn mt-3" style="color: #011e41;font-size: 17px ;background: white">Đăng
+                                    ký bảo hành</a>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <div class="col-lg-6">
+                    <div class="card" style="background: #011e41; height: 300px;">
+                        <div class="mx-5 mt-7">
+                            <h3 class="text-white mb-2">FAQ</h3>
+                            <p class="text-white mb-1">Bạn có thắc mắc về sản phẩm mình vừa mua ? Hãy tìm câu trả lời ở
+                                đây
+                                nhé.</p>
+                            <a href="#" class="btn mt-3" style="color: #011e41;font-size: 17px ;background: white">Đọc
+                                thêm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End .container -->
+    </div><!-- End .product-desc-content -->
+</div><!-- .End .tab-pane -->
+</body>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
@@ -22,8 +23,6 @@ class WebProductSpringBootApplicationTests {
 
     @Test
     void contextLoads() {
-        List<ProductEntity> lst = iProductReponsitory.findBestSallers();
-        System.out.println(lst.size());
     }
 
 }

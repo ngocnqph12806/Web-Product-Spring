@@ -3,6 +3,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
+<!--    <meta th:name="_csrf" th:content="${_csrf.token}"/>-->
+    <!-- default header name is X-CSRF-TOKEN -->
+<!--    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>-->
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta content="A premium admin dashboard template by mannatthemes" name="description">
     <meta content="Mannatthemes" name="author">
@@ -11,12 +14,14 @@
 <!--    <link href="/web-admin/plugin/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">-->
 <!--    <link href="/web-admin/plugin/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">&lt;!&ndash; App css &ndash;&gt;-->
 
-    <link href="/web-admin/plugin/jquery-jvectormap-2.0.2.css" rel="stylesheet" type="text/css"><!-- DataTables -->
-    <link href="/web-admin/plugin/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="/web-admin/plugin/icons.css"  rel="stylesheet" type="text/css">
-    <link href="/web-admin/plugin/style.css" rel="stylesheet" type="text/css">
-
+    <link href="/web-admin/css/jquery-jvectormap-2.0.2.css" rel="stylesheet" type="text/css"><!-- DataTables -->
+    <link href="/web-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/web-admin/css/icons.css"  rel="stylesheet" type="text/css">
+    <link href="/web-admin/css/style.css" rel="stylesheet" type="text/css">
     <title layout:fragment="title">START</title>
+    <div layout:fragment="css-admin">START</div>
+    <!--    SEETALERT-->
+    <link href="/web-admin/css/sweetalert2.min.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>
@@ -29,8 +34,13 @@
         <div th:replace="/layout/admin/footer.html :: footer-admin"></div>
     </div>
 </div>
-<script th:src="@{'/web-admin/plugin/jquery.min.js'}"></script>
-<script th:src="@{'/web-admin/plugin/bootstrap.bundle.min.js'}"></script>
+<!-- Sweet-Alert  -->
+<script src="/web-admin/js/sweetalert2.min.js"></script>
+<script src="/web-admin/js/jquery.sweet-alert.init.js"></script>
+<script src="/web-admin/validate-data-admin.js"></script>
+
+<script th:src="@{'/web-admin/js/jquery.min.js'}"></script>
+<script th:src="@{'/web-admin/js/bootstrap.bundle.min.js'}"></script>
 <!--<script src="/web-admin/plugin/waves.min.js" ></script>-->
 <!--<script src="/web-admin/plugin/jquery.slimscroll.min.js"></script>-->
 <!--<script src="/web-admin/plugin/jquery-jvectormap-2.0.2.min.js"></script>-->
@@ -40,10 +50,16 @@
 <!--<script src="/web-admin/plugin/irregular-data-series.js"></script>-->
 <!--<script src="/web-admin/plugin/series1000.js"></script>-->
 <!--<script src="/web-admin/plugin/ohlc.js"></script>-->
-<script th:src="@{'/web-admin/plugin/jquery.dashboard.init.js'}"></script>
+<script th:src="@{'/web-admin/js/jquery.dashboard.init.js'}"></script>
 <!-- App js -->
-<script th:src="@{'/web-admin/plugin/app.js'}"></script>
+<script th:src="@{'/web-admin/js/app.js'}"></script>
 <div layout:fragment="script-admin"></div>
+<script th:src="@{/web-admin/load-api.js}"></script>
+<script>
+    $(document).ready(function () {
+        getLinkGithub();
+    })
+</script>
 </body>
 </html>
 

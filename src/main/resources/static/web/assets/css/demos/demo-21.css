@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,900&display=swap");
 
 .menu .megamenu.demo {
     height: 68vh
@@ -78,7 +78,7 @@
     margin-left: .2rem;
     margin-top: .1rem;
     color: #fff;
-    background-color: #66f
+    background-color: #011e41
 }
 
 .cart-dropdown {
@@ -90,7 +90,7 @@
 }
 
 .cart-dropdown .cart-count {
-    background-color: #66f
+    background-color: #011e41
 }
 
 .search-toggle {
@@ -265,7 +265,7 @@
 }
 
 .btn-outline-primary-2 i {
-    color: #66f
+    color: #011e41
 }
 
 .btn-outline-primary-2:hover i, .btn-outline-primary-2:focus i {
@@ -307,7 +307,7 @@
 }
 
 .col-pd1:hover .action a, .col-pd1:focus .action a {
-    color: #66f;
+    color: #011e41;
     background-color: #fff
 }
 
@@ -320,7 +320,7 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background-color: #66f;
+    background-color: #011e41;
     opacity: 0;
     transition: all .3s;
     top: 0;
@@ -384,7 +384,7 @@
 }
 
 .logos .owl-simple .owl-nav [class*='owl-']:not(.disabled):hover {
-    color: #66f;
+    color: #011e41;
     background: transparent;
     text-decoration: none
 }
@@ -392,8 +392,8 @@
 .btn-primary {
     color: #fff;
     font-size: 1.4rem;
-    background-color: #66f;
-    border-color: #66f;
+    background-color: #011e41;
+    border-color: #011e41;
     box-shadow: none
 }
 
@@ -413,7 +413,7 @@
 }
 
 .btn-demoprimary:hover, .btn-demoprimary:focus {
-    color: #66f;
+    color: #011e41;
     background-color: #fff
 }
 
@@ -427,8 +427,8 @@
 
 .btn-viewMore:hover, .btn-viewMore:focus {
     color: #fff;
-    background-color: #66f;
-    border-color: #66f
+    background-color: #011e41;
+    border-color: #011e41
 }
 
 .heading .title {
@@ -503,7 +503,7 @@
 }
 
 .btn-product {
-    color: #66f;
+    color: #011e41;
     position: relative;
     display: flex;
     align-items: center;
@@ -516,12 +516,12 @@
     margin: 1rem;
     flex-grow: 1;
     flex-basis: 0;
-    border: 1px solid #66f;
+    border: 1px solid #011e41;
     transition: all .35s ease
 }
 
 .btn-product span {
-    color: #66f;
+    color: #011e41;
     font-weight: 400;
     font-size: 1.3rem;
     letter-spacing: -.01em;
@@ -529,7 +529,7 @@
 }
 
 .btn-product:hover, .btn-product:focus {
-    background-color: #66f;
+    background-color: #011e41;
     color: #fff
 }
 
@@ -672,7 +672,7 @@
     color: #ebebeb;
     font-weight: 400;
     font-size: 1.2rem;
-    font-family: 'Poppins';
+    font-family: 'Roboto';
     letter-spacing: 0em;
     margin-top: 1.8rem;
     margin-bottom: .8rem
@@ -733,7 +733,7 @@
 }
 
 .category-banner .row > div:hover .action, .category-banner .row > div:focus .action {
-    color: #66f;
+    color: #011e41;
     border-bottom-width: .1rem
 }
 
@@ -761,7 +761,7 @@
     color: #777;
     padding-bottom: .3rem;
     letter-spacing: -.01em;
-    border-bottom: 0.1rem solid #66f;
+    border-bottom: 0.1rem solid #011e41;
     border-bottom-width: 0;
     transition: all .2s
 }
@@ -799,13 +799,13 @@
 }
 
 .new-arrivals .btn-viewMore:hover, .new-arrivals .btn-viewMore:focus {
-    border-color: #66f
+    border-color: #011e41
 }
 
 .nav.nav-pills .nav-item.show .nav-link.active, .nav.nav-pills .nav-item .nav-link.active {
     color: #fff;
     border: none;
-    background-color: #66f
+    background-color: #011e41
 }
 
 .newsletter .background {
@@ -869,16 +869,16 @@
 }
 
 .newsletter .btn-subscribe {
-    background-color: #66f;
+    background-color: #011e41;
     color: white;
-    border-color: #66f;
+    border-color: #011e41;
     padding: .6rem 2rem .6rem 2rem;
     min-width: unset;
     text-transform: uppercase
 }
 
 .newsletter .btn-subscribe:hover, .newsletter .btn-subscribe:focus {
-    color: #66f;
+    color: #011e41;
     background-color: #fff;
     border-color: #fff
 }
@@ -962,7 +962,7 @@ footer.footer .widget-title {
 }
 
 footer.footer a:hover, footer.footer a:focus {
-    color: #66f
+    color: #011e41
 }
 
 .instagram-feed {
@@ -978,7 +978,7 @@ footer.footer a:hover, footer.footer a:focus {
 }
 
 .instagram-feed a:hover, .instagram-feed a:focus {
-    color: #66f
+    color: #011e41
 }
 
 .mmenu-active .mobile-menu-container {

@@ -16,13 +16,13 @@ public class OrderEntity {
     private String id;
     @ManyToOne
     @JoinColumn
-    private VisitEntity idVisit;
+    private UserEntity idVisit;
     @ManyToOne
     @JoinColumn
-    private StaffEntity staffCreate;
+    private UserEntity staffCreate;
     @ManyToOne
     @JoinColumn
-    private StaffEntity staffSales;
+    private UserEntity staffSales;
     @Column(nullable = false, length = 50)
     private String paymentMethod;
     @Column(columnDefinition = "bit default 0")

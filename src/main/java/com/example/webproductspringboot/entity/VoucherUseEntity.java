@@ -18,7 +18,7 @@ public class VoucherUseEntity {
     private VoucherEntity idVoucher;
     @ManyToOne
     @JoinColumn
-    private VisitEntity idVisit;
+    private UserEntity idVisit;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")

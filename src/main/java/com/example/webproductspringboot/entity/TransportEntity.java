@@ -18,7 +18,7 @@ public class TransportEntity {
     private OrderEntity idOrder;
     @ManyToOne
     @JoinColumn
-    private VisitEntity idVisitOrder;
+    private UserEntity idVisitOrder;
     @Column(nullable = false, length = 50)
     private String fullName;
     @Column(nullable = false, length = 15)

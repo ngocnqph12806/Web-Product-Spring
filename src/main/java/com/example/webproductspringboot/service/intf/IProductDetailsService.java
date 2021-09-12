@@ -1,4 +1,4 @@
 package com.example.webproductspringboot.service.intf;
 
-public interface IProductDetailsService  {
+public interface IProductDetailsService {
 }

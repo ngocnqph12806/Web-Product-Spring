@@ -15,7 +15,7 @@ public class HistoryEntity {
     private String id;
     @ManyToOne
     @JoinColumn
-    private StaffEntity idStaff;
+    private UserEntity idStaff;
     @Column(nullable = false)
     private String details;
     @Column(columnDefinition="timestamp default current_timestamp")

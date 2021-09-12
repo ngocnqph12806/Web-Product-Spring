@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+</head>
+<body>
+<div class="tab-pane fade" id="product-review-tab" role="tabpanel"
+     aria-labelledby="product-review-link" th:fragment="details-product-tab-4-web">
+    <div class="reviews">
+        <div class="container">
+            <h3 th:text="'Đánh giá (' + ${#lists.size(product.reviewProduct)}+')'"></h3>
+            <th:block th:each="review : ${product.reviewProduct}" th:object="${review}">
+                <div class="review">
+                    <div class="row no-gutters">
+                        <div class="col-auto">
+                            <h4><a href="#" th:text="*{fullName}">Samanta J.</a></h4>
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" th:style="'width: '+*{point}+'%;'"></div>
+                                    <!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                            </div><!-- End .rating-container -->
+                        </div><!-- End .col -->
+                        <div class="col">
+                            <p class="review-date" th:text="*{#dates.format(created, 'dd-MM-yyyy hh:mm:ss a')}">6 days ago</p>
+                            <div class="review-content">
+                                <p th:text="*{description}"></p>
+                            </div><!-- End .review-content -->
+<!--                            <div class="review-action">-->
+<!--                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>-->
+<!--                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>-->
+<!--                            </div>&lt;!&ndash; End .review-action &ndash;&gt;-->
+                        </div><!-- End .col-auto -->
+                    </div><!-- End .row -->
+                </div><!-- End .review -->
+            </th:block>
+        </div><!-- End .container -->
+    </div><!-- End .reviews -->
+</div><!-- .End .tab-pane -->
+</body>
+</html>

@@ -16,10 +16,10 @@ public class InvoiceEntity {
     private String id;
     @ManyToOne
     @JoinColumn
-    private StaffEntity idStaffCreate;
+    private UserEntity idStaffCreate;
     @ManyToOne
     @JoinColumn
-    private StaffEntity idStaffCheck;
+    private UserEntity idStaffCheck;
     @Column
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")

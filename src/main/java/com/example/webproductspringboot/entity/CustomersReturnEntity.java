@@ -19,10 +19,10 @@ public class CustomersReturnEntity {
     private OrderEntity idOrder;
     @ManyToOne
     @JoinColumn
-    private VisitEntity idVisit;
+    private UserEntity idVisit;
     @ManyToOne
     @JoinColumn
-    private StaffEntity idStaff;
+    private UserEntity idStaff;
     @Column
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")

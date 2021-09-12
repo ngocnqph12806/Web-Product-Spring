@@ -56,7 +56,7 @@
                                         <div class="product product-7 text-center">
                                             <figure class="product-media">
                                                 <span class="product-label label-new" th:text="*{nameBrand}">New</span>
-                                                <a href="product.html">
+                                                <a th:href="@{'/product/'+*{idUrl}+'/'+*{pathUrl}+'.html'}">
                                                     <img src="/web/assets/images/products/product-4.jpg" alt="Product image" class="product-image">
                                                 </a>
                                                 <div class="product-action-vertical">
@@ -71,10 +71,10 @@
 
                                             <div class="product-body">
                                                 <div class="product-cat">
-                                                    <a href="#" th:text="*{nameCategory}">Women</a>
+                                                    <a th:href="@{'/category/'+*{idUrlCategory} +'/'+*{pathCategory}+'.html'}" th:text="*{nameCategory}">Women</a>
                                                 </div><!-- End .product-cat -->
                                                 <h3 class="product-title">
-                                                    <a href="product.html" th:text="*{nameProduct}">Brown paperbag waist pencil skirt</a>
+                                                    <a th:href="@{'/product/'+*{idUrl}+'/'+*{pathUrl}+'.html'}" th:text="*{nameProduct}">Brown paperbag waist pencil skirt</a>
                                                 </h3><!-- End .product-title -->
                                                 <div class="product-price" th:text="*{#numbers.formatDecimal(price, 0, 'COMMA', 0, 'POINT') + '₫'}">
                                                     $60.00
@@ -85,8 +85,6 @@
                                                     </div><!-- End .ratings -->
                                                     <span class="ratings-text">( 2 Reviews )</span>
                                                 </div><!-- End .rating-container -->
-
-
                                             </div><!-- End .product-body -->
                                         </div><!-- End .product -->
                                     </div><!-- End .col-sm-6 col-lg-4 -->
