@@ -23,8 +23,8 @@ public class DetailsProductValueDto {
         if (entity == null) return null;
         return DetailsProductValueDto.builder()
                 .idProductDetails(entity.getId())
-                .idValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getId() : null)
-                .nameValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getName() : null)
+                .idValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getId() : "")
+                .nameValueDetails(entity.getIdValueDetails() != null ? entity.getIdValueDetails().getName() : "")
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .pathBanner(entity.getPathBanner())

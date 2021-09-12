@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,13 +32,15 @@ public class ReviewDto {
         return ReviewDto.builder()
                 .id(entity.getId())
                 .point(entity.getPoint())
-                .idVisit(entity.getIdVisit().getId())
-                .fullName(entity.getIdVisit().getFullName())
-                .email(entity.getIdVisit().getEmail())
+                .idVisit(entity.getIdVisit() != null ? entity.getIdVisit().getId() : "")
+                .fullName(entity.getIdVisit() != null ? entity.getIdVisit().getFullName() : "")
+                .email(entity.getIdVisit() != null ? entity.getIdVisit().getEmail() : "")
                 .description(entity.getDescription())
                 .introduce(entity.getIntroduce())
                 .dateCreated(entity.getCreated())
-                .lstPathImages(entity.getLstReviewImageEntities().stream().map(e -> e.getPathImage()).collect(Collectors.toList()))
+                .lstPathImages(entity.getLstReviewImageEntities() != null
+                        ? entity.getLstReviewImageEntities().stream().map(e -> e.getPathImage()).collect(Collectors.toList())
+                        : new ArrayList<>())
                 .build();
     }
 }

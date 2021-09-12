@@ -49,7 +49,9 @@ public class DetailsProductDto {
                 .priceSale(entity.getPriceSale())
                 .pathUserManual(entity.getPathUserManual())
                 .description(entity.getDescription())
-                .pointReview((int) entity.getLstReviewProductEntities().stream().mapToDouble(e -> e.getPoint()).average().orElse(0.0))
+                .pointReview(entity.getLstReviewProductEntities() != null
+                        ? (int) entity.getLstReviewProductEntities().stream().mapToDouble(e -> e.getPoint()).average().orElse(0.0)
+                        : 0)
                 .lstPathImages(entity.getLstProductImageEntities() != null
                         ? entity.getLstProductImageEntities().stream().map(e -> e.getPath()).collect(Collectors.toList())
                         : null)
