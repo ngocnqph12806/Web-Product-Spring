@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class IntroProductDto {
+public class IntroProductWebDto {
 
     private String idProduct;
     private String nameProduct;
@@ -32,9 +31,10 @@ public class IntroProductDto {
     private Integer pointReview;
     private List<PathImageProductDto> pathImageProduct;
 
-    public static IntroProductDto toDto(ProductEntity entity) {
+    public static IntroProductWebDto toDto(ProductEntity entity) {
         if (entity == null) return null;
-        return IntroProductDto.builder()
+//        System.out.println(entity);
+        return IntroProductWebDto.builder()
                 .idProduct(entity.getId())
                 .nameProduct(entity.getName())
                 .idCategory(entity.getIdCategory() != null ? entity.getIdCategory().getId() : "")
@@ -53,7 +53,7 @@ public class IntroProductDto {
                 .description(entity.getDescription())
                 .pathImageProduct(entity.getLstProductImageEntities() != null
                         ? entity.getLstProductImageEntities().stream().map(PathImageProductDto::toDto).collect(Collectors.toList())
-                        : new ArrayList<>())
+                        : null)
                 .build();
     }
 

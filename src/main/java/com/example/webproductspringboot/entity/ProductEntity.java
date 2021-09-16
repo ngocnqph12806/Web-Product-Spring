@@ -35,7 +35,6 @@ public class ProductEntity {
     @Column(nullable = false)
     private String location;
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idUrl;
     @Column(nullable = false)
     private String pathUrl;
@@ -57,5 +56,4 @@ public class ProductEntity {
     private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ReviewProductEntity> lstReviewProductEntities;
-
 }

@@ -39,36 +39,39 @@ function loadDataAdmin(index, url_page) {
     });
 }
 
-function submitFormDataAdmin(formData, url, urlSuccess) {
-    $.ajax({
-        url: url,
-        type: "PUT",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        enctype: 'multipart/form-data',
-        // beforeSend: function (xhr) {
-        //     xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
-        // },
-        success: function (data) {
-            console.log(data)
-            if (data.result) {
-                swal("Thành công", data.message, "success").then((function (t) {
-                    if (t) window.location = urlSuccess
-                }))
-            } else {
-                swal("Thất bại", data.message, "warning")
+function saveWithAPI(formData, url, urlSuccess, method) {
+    if (method === 'POST' || method === 'PUT') {
+        $.ajax({
+            url: url,
+            type: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: 'multipart/form-data',
+            // beforeSend: function (xhr) {
+            //     xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+            // },
+            success: function (data) {
+                console.log(data)
+                if (data.result) {
+                    swal("Thành công", data.message, "success").then((function (t) {
+                        urlSuccess = urlSuccess.substring(0, urlSuccess.lastIndexOf('#'))
+                        if (t) window.location = urlSuccess
+                    }))
+                } else {
+                    swal("Thất bại", data.message, "warning")
+                }
+            },
+            error: function (data) {
+                swal("Thất bại", data.responseJSON.message, "warning")
             }
-        },
-        error: function (data) {
-            swal("Thất bại", data.responseJSON.message, "warning")
-        }
-    });
+        });
+    }
 }
 
 // WEB

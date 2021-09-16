@@ -21,8 +21,18 @@ public class CollectionsApi {
         return ResponseEntity.ok(_iCollectionService.findIntroCollectionById(idCollection));
     }
 
+    
+    @PostMapping
+    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping
-    public ResponseEntity<?> saveCollection(@RequestBody IntroCollectionAdminDto dto, Errors errors){
+    public ResponseEntity<?> updateCollection(@RequestBody IntroCollectionAdminDto dto, Errors errors){
         System.out.println(dto);
         if(errors.hasErrors()){
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());

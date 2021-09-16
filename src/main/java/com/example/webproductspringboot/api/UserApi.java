@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,8 +36,18 @@ public class UserApi {
         }
     }
 
+    
+    @PostMapping
+    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping
-    public ResponseEntity<?> saveStaff(@RequestBody @Valid FormUserAdminDto formUserAdminDto, Errors errors) {
+    public ResponseEntity<?> updateStaff(@RequestBody @Valid FormUserAdminDto formUserAdminDto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }

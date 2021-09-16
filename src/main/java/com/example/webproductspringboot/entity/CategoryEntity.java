@@ -1,6 +1,10 @@
 package com.example.webproductspringboot.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,6 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "category")
 @Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryEntity {
 
     @Id
@@ -19,7 +26,6 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String banner;
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idUrl;
     @Column(nullable = false, length = 100)
     private String pathUrl;

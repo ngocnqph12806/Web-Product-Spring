@@ -28,8 +28,18 @@ public class VoucherApi {
         return ResponseEntity.ok(_iVoucherService.findIntroById(id));
     }
 
+    
+    @PostMapping
+    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping
-    public ResponseEntity<?> save(@Validated @RequestBody FormVoucherDto dto, Errors errors) {
+    public ResponseEntity<?> update(@Validated @RequestBody FormVoucherDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }

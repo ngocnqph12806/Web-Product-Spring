@@ -3,12 +3,18 @@ package com.example.webproductspringboot.reponsitory;
 import com.example.webproductspringboot.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public interface IProductReponsitory extends JpaRepository<ProductEntity, String> {
+
+    @Override
+    @Query(value = "select p from ProductEntity p where p.status = true")
+    List<ProductEntity> findAll();
 
     @Query(value = "select p from ProductEntity p, " +
             "OrderDetailsEntity od " +

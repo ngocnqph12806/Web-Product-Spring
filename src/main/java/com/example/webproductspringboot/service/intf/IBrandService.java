@@ -11,4 +11,6 @@ public interface IBrandService  {
     IntroBrandAdminDto save(FormBrandAdminDto dto);
 
     IntroBrandAdminDto findIntroById(String id);
+
+    FormBrandAdminDto findFormById(String id);
 }

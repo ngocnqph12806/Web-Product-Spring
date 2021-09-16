@@ -1,20 +1,19 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.product.DetailsProductDto;
-import com.example.webproductspringboot.dto.product.FilterPriceProductDto;
-import com.example.webproductspringboot.dto.product.FormProductDto;
-import com.example.webproductspringboot.dto.product.IntroProductDto;
+import com.example.webproductspringboot.dto.product.*;
 
 import java.util.List;
 import java.util.Set;
 
 public interface IProductService  {
 
-    List<IntroProductDto> findBestSallers();
+    List<IntroProductWebDto> findBestSallers();
 
-    List<IntroProductDto> findAll();
+    List<IntroProductWebDto> findAllIntroWeb();
 
-    List<IntroProductDto> findByIdCategory(String idCategory);
+    List<IntroProductAdminDto> findAllIntroAdmin();
+
+    List<IntroProductWebDto> findByIdCategory(String idCategory);
 
     DetailsProductDto findByPath(Long idUrl,String pathUrl);
 
@@ -24,7 +23,11 @@ public interface IProductService  {
 
     FilterPriceProductDto getMinMaxPrice();
 
-    IntroProductDto findIntroById(String id);
+    IntroProductWebDto findIntroById(String id);
 
-    IntroProductDto save(FormProductDto dto);
+    FormProductDto findFormById(String id);
+
+    IntroProductWebDto save(FormProductDto dto);
+
+    boolean changeStatus(String id, Boolean reuslt);
 }

@@ -22,10 +22,10 @@ public class CategoryAdmin {
 
     @GetMapping("category")
     public String homeCategory(Model model) {
-        model.addAttribute("lstCategories", _iCategoryService.findAllIntroCategoryAdmin());
+        model.addAttribute("lstCategoriesAndBrand", _iCategoryService.findAllIntroCategoryAdmin());
         model.addAttribute("lstCollections", _iCollectionService.findAllIntroCollectionsAdmin());
         model.addAttribute("isCategory", true);
-        return "page/admin/product/index-category";
+        return "page/admin/product/index-category-brand-collection";
     }
 
     @GetMapping("brand")
@@ -33,7 +33,7 @@ public class CategoryAdmin {
         model.addAttribute("lstCategoriesAndBrand", _iBrandService.findAllIntroBrandAdmin());
         model.addAttribute("lstCollections", _iCollectionService.findAllIntroCollectionsAdmin());
         model.addAttribute("isCategory", false);
-        return "page/admin/product/index-category";
+        return "page/admin/product/index-category-brand-collection";
     }
 
 }

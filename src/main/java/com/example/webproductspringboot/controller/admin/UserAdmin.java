@@ -1,6 +1,7 @@
 package com.example.webproductspringboot.controller.admin;
 
 import com.example.webproductspringboot.service.intf.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,24 +10,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/")
 public class UserAdmin {
 
-    private final IUserService _iUserService;
-
-    public UserAdmin(IUserService iUserService) {
-        _iUserService = iUserService;
-    }
+    @Autowired
+    private IUserService _iUserService;
 
     @GetMapping("staff")
     public String homeStaff(Model model) {
         model.addAttribute("lstUser", _iUserService.findAllIntroStaff());
         model.addAttribute("isStaff", true);
-        return "page/admin/person/index";
+        return "page/admin/user/index";
     }
 
     @GetMapping("visit")
     public String homeVisit(Model model) {
         model.addAttribute("lstUser", _iUserService.findAllIntroVisit());
         model.addAttribute("isStaff", false);
-        return "page/admin/person/index";
+        return "page/admin/user/index";
     }
 
 }

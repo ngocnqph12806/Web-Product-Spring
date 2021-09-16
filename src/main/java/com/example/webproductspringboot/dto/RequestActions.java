@@ -9,7 +9,7 @@ public class RequestActions {
 
 //    private Boolean add;
 //    private Boolean edit;
-    private Boolean block;
-    private Boolean status;
+    private String block;
+    private String status;
 
 }

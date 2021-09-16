@@ -79,12 +79,12 @@
                         </h3>
                         <a th:if="${isCategory}" class="btn btn-primary" href="#modal-input-category"
                            data-toggle="modal" data-animation="bounce"
-                           onclick="getCategory(this)" data-username="-1">
+                           onclick="getCategory(this)" data-id="-1">
                             Thêm loại sản phẩm
                         </a>
                         <a th:unless="${isCategory}" class="btn btn-primary" href="#modal-input-brand"
                            data-toggle="modal" data-animation="bounce"
-                           onclick="getBrand(this)" data-username="-1">
+                           onclick="getBrand(this)" data-id="-1">
                             Thêm thương hiệu
                         </a>
                     </div>
@@ -151,22 +151,47 @@
                     </div>
                     <div class="modal-body">
                         <form id="form-input-category">
-                            <input type="hidden" name="idUser"/>
+                            <input type="hidden" name="id"/>
                             <div class="form-group row">
-                                <label for="username" class="col-sm-2 col-form-label text-right">
-                                    Tên đăng nhập
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Tên loại
                                 </label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="text" placeholder="Nhập tên đăng nhập"
-                                           name="userName"
-                                           maxlength="32" id="username">
+                                    <input class="form-control" type="text" placeholder="Nhập tên loại"
+                                           name="name" maxlength="50" id="name-category">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Đường dẫn
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" placeholder="Nhập đường dẫn"
+                                           name="pathUrl" maxlength="32" id="path-url">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">Ảnh banner</label>
+                                <div class="col-sm-10">
+                                    <input type="file" id="input-file-now-custom-2" name="banner"
+                                           class="dropify" accept="image/png, image/gif, image/jpeg"
+                                           onchange="onChangeFile(this)" data-oldimg="" data-height="200">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Mô tả
+                                </label>
+                                <div class="col-sm-10">
+                               <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                         placeholder="Nhập mô tả"></textarea>
                                 </div>
                             </div>
                         </form>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
                             </button>
-                            <button type="button" onclick="saveStaff()"
+                            <button type="button" id="btn-input-category"
                                     class="btn btn-primary waves-effect waves-light">
                                 Lưu lại
                             </button>
@@ -188,14 +213,50 @@
                     </div>
                     <div class="modal-body">
                         <form id="form-input-brand">
-                            <input type="hidden" name="idUser"/>
+                            <input type="hidden" name="id"/>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label text-right">
-                                    Tên đăng nhập
+                                    Tên thương hiệu
                                 </label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="text" placeholder="Nhập tên đăng nhập"
-                                           name="userName" maxlength="32">
+                                    <input class="form-control" type="text" placeholder="Nhập tên thương hiệu"
+                                           name="name" maxlength="100">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Số điện thoại
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" placeholder="Nhập số điện thoại"
+                                           name="phoneNumber" maxlength="15">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Email
+                                </label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" placeholder="Nhập tên địa chỉ email"
+                                           name="email" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Địa chỉ
+                                </label>
+                                <div class="col-sm-10">
+                               <textarea id="textarea" class="form-control" name="address" maxlength="100" rows="3"
+                                         placeholder="Nhập địa chỉ"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label text-right">
+                                    Mô tả
+                                </label>
+                                <div class="col-sm-10">
+                               <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                         placeholder="Nhập mô tả"></textarea>
                                 </div>
                             </div>
                         </form>
@@ -203,7 +264,7 @@
                             <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
                                 Huỷ bỏ
                             </button>
-                            <button type="button" class="btn btn-primary waves-effect waves-light">
+                            <button type="button" id="btn-input-brand" class="btn btn-primary waves-effect waves-light">
                                 Lưu lại
                             </button>
                         </div>
@@ -214,8 +275,118 @@
     </th:block>
 </div>
 <th:block layout:fragment="script-admin">
-    <script>
 
+    <th:block th:if="${isCategory}">
+        <!--    UPLOAD-->
+        <script src="/web-admin/js/dropify.min.js"></script>
+        <script src="/web-admin/js/jquery.form-upload.init.js"></script>
+        <script>
+            var objFileAvatar = {
+                targetFileAvatar: null,
+                nameFile: null,
+            }
+
+            function onChangeFile(e) {
+                objFileAvatar.targetFileAvatar = e
+                console.log(objFileAvatar.targetFileAvatar)
+            }
+
+            $('#btn-input-category').click(function () {
+                let data = JSON.parse(JSON.stringify($("#form-input-category").serializeArray()))
+                let obj = {};
+                for (let i = 0; i < data.length; i++) {
+                    let name = data[i].name;
+                    let value = data[i].value;
+                    if (name === 'name' && !checkName(value, 'Tên loại')) return;
+                    if (name === 'pathUrl' && !checkPath(value)) return;
+                    // if (name === 'banner' && !checkImage(value, 'Banner')) return;
+                    obj[name] = value;
+                }
+                if (objFileAvatar.targetFileAvatar !== null && objFileAvatar.targetFileAvatar !== undefined) {
+                    objFileAvatar.nameFile = writeFileGitHub(objFileAvatar.targetFileAvatar)
+                    objFileAvatar.targetFileAvatar = null
+                }
+                if (!checkImage(objFileAvatar.nameFile, 'Ảnh banner')) {
+                    return
+                } else {
+                    obj['banner'] = objFileAvatar.nameFile
+                }
+                console.log(obj)
+                setTimeout(function () {
+                    saveWithAPI(JSON.stringify(obj), '/api/categories', window.location.href, 'PUT')
+                }, 10)
+            })
+
+            function getCategory(e) {
+                let id = e.dataset.id;
+                if (id !== null && id !== undefined && id !== '') {
+                    $.ajax({
+                        url: '/api/categories/' + id + '?modal=true',
+                        type: 'GET',
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log(response)
+                            appendFormdata('form-input-category', response, objFileAvatar)
+                            console.log(objFileAvatar.nameFile)
+                        }
+                    });
+                }
+            }
+
+            $('#name-category').change(function (e) {
+                $('#path-url').val(strToPath($('#name-category').val()) + '.html')
+            });
+
+            $('#path-url').change(function (e) {
+                let pathUrl = strToPath($('#path-url').val())
+                if (!pathUrl.endsWith('.html')) {
+                    pathUrl = pathUrl + '.html'
+                }
+                console.log(pathUrl)
+                $('#path-url').val(pathUrl)
+            })
+        </script>
+    </th:block>
+
+    <th:block th:unless="${isCategory}">
+        <script>
+            $('#btn-input-brand').click(function () {
+                let data = $("#form-input-brand").serializeArray()
+                // let data = JSON.parse(JSON.stringify($("#form-input-brand").serializeArray()))
+                let obj = {};
+                for (let i = 0; i < data.length; i++) {
+                    let name = data[i].name;
+                    let value = data[i].value;
+                    if (name === 'name' && !checkName(value, 'Tên thương hiệu')) return;
+                    if (name === 'phoneNumber' && !checkPhoneNumber(value)) return;
+                    if (name === 'email' && !checkEmail(value)) return;
+                    if (name === 'address' && !checkAddress(value)) return;
+                    obj[name] = value;
+                }
+                console.log(obj)
+                setTimeout(function () {
+                    saveWithAPI(JSON.stringify(obj), '/api/brand', window.location.href, 'PUT')
+                }, 10)
+            })
+
+            function getBrand(e) {
+                let id = e.dataset.id;
+                if (id !== null && id !== undefined && id !== '') {
+                    $.ajax({
+                        url: '/api/brand/' + id + '?modal=true',
+                        type: 'GET',
+                        contentType: 'application/json',
+                        success: function (response) {
+                            console.log(response)
+                            appendFormdata('form-input-brand', response)
+                        }
+                    });
+                }
+            }
+        </script>
+    </th:block>
+
+    <script>
         $('#btn-input-collection').click(function () {
             let data = JSON.parse(JSON.stringify($("#form-input-collection").serializeArray()))
             let obj = {};
@@ -227,7 +398,7 @@
             }
             console.log(obj)
             setTimeout(function () {
-                submitFormDataAdmin(JSON.stringify(obj), '/api/collections', window.location.href)
+                saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'PUT')
             }, 10)
         })
 
@@ -252,7 +423,10 @@
     </script>
 </th:block>
 <th:block layout:fragment="css-admin">
-
+    <th:block th:if="${isCategory}">
+        <!--    UPLOAD-->
+        <link href="/web-admin/css/dropify.min.css" type="text/css" rel="stylesheet">
+    </th:block>
 </th:block>
 </body>
 </html>

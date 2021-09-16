@@ -1,0 +1,107 @@
+@font-face {
+    font-family: 'molla';
+    src: url("/web/assets/fonts/molla0ab2.eot?74273691");
+    src: url("/web/assets/fonts/molla0ab2.eot?74273691#iefix") format("embedded-opentype"), url("/web/assets/fonts/molla0ab2.woff2?74273691") format("woff2"), url("/web/assets/fonts/molla0ab2.woff?74273691") format("woff"), url("/web/assets/molla0ab2.ttf?74273691") format("truetype"), url("/web/assets/fonts/molla0ab2.svg?74273691#molla") format("svg");
+    font-weight: normal;
+    font-style: normal
+}
+
+.ratings-container {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.7rem;
+    line-height: 1;
+    white-space: nowrap
+}
+
+.ratings {
+    position: relative;
+    color: #cccccc
+}
+
+.ratings, .ratings-val {
+    display: inline-block;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    font-family: "molla"
+}
+
+.ratings:before, .ratings-val:before {
+    content: "\f318" "\f318" "\f318" "\f318" "\f318"
+}
+
+.ratings-val {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #fcb941
+}
+
+.ratings-primary .ratings-val {
+    color: #011e41
+}
+
+.ratings-text {
+    color: #cccccc;
+    letter-spacing: -.01em;
+    margin-left: .8rem
+}
+
+.ratings-text a {
+    color: inherit
+}
+
+.ratings-text a:hover, .ratings-text a:focus {
+    color: #011e41
+}
+
+.product.text-center .product-price, .product.text-center .ratings-container, .product.text-center .product-nav, .product.text-center .product-size {
+    justify-content: center
+}
+
+.product.product-2 .ratings-container:last-child {
+    margin-bottom: 1.6rem
+}
+
+.product.product-4 .ratings-container {
+    margin-bottom: 0
+}
+
+.product.product-5 .ratings-container {
+    margin-bottom: 0
+}
+
+.product.product-5 .ratings-container + .product-nav {
+    margin-top: 1.7rem
+}
+
+.product.product-8 .ratings-container {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.2rem;
+    margin-bottom: 0;
+    transition: all .35s ease
+}
+
+.product.product-8:hover .ratings-container {
+    opacity: 1
+}
+
+.product.product-list .ratings-container {
+    margin-bottom: 2.6rem
+}
+
+.product-details .ratings-container {
+    margin-bottom: 1.3rem
+}
+
+.review .ratings-container {
+    padding-top: .7rem;
+    margin-bottom: .5rem
+}

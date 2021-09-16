@@ -26,11 +26,21 @@ public class CategoryApi {
 
     @GetMapping("/{id-category}")
     public ResponseEntity<?> getById(@PathVariable("id-category") String id) {
-        return ResponseEntity.ok(_iCategoryService.findIntroById(id));
+        return ResponseEntity.ok(_iCategoryService.findFormById(id));
+    }
+
+    
+    @PostMapping
+    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping
-    public ResponseEntity<?> save(@Validated @RequestBody FormCategoryAdminDto dto, Errors errors) {
+    public ResponseEntity<?> update(@Validated @RequestBody FormCategoryAdminDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }

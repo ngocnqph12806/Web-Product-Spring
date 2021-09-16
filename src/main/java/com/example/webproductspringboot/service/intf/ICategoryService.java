@@ -16,4 +16,6 @@ public interface ICategoryService  {
     IntroCategoryAdminDto save(FormCategoryAdminDto dto);
 
     IntroCategoryAdminDto findIntroById(String id);
+
+    FormCategoryAdminDto findFormById(String id);
 }

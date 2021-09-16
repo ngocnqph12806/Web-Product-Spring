@@ -1,15 +1,15 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.product.DetailsProductDto;
-import com.example.webproductspringboot.dto.product.FilterPriceProductDto;
-import com.example.webproductspringboot.dto.product.FormProductDto;
-import com.example.webproductspringboot.dto.product.IntroProductDto;
+import com.example.webproductspringboot.dto.product.*;
+import com.example.webproductspringboot.entity.ProductEntity;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,18 +20,23 @@ public class ProductService implements IProductService {
     private IProductReponsitory _iProductReponsitory;
 
     @Override
-    public List<IntroProductDto> findBestSallers() {
-        return _iProductReponsitory.findBestSallers().stream().map(IntroProductDto::toDto).collect(Collectors.toList());
+    public List<IntroProductWebDto> findBestSallers() {
+        return _iProductReponsitory.findBestSallers().stream().map(IntroProductWebDto::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<IntroProductDto> findAll() {
-        return _iProductReponsitory.findAll().stream().map(IntroProductDto::toDto).collect(Collectors.toList());
+    public List<IntroProductWebDto> findAllIntroWeb() {
+        return _iProductReponsitory.findAll().stream().map(IntroProductWebDto::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<IntroProductDto> findByIdCategory(String idCategory) {
-        return _iProductReponsitory.findByIdCategory(idCategory).stream().map(IntroProductDto::toDto).collect(Collectors.toList());
+    public List<IntroProductAdminDto> findAllIntroAdmin() {
+        return _iProductReponsitory.findAll().stream().map(IntroProductAdminDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IntroProductWebDto> findByIdCategory(String idCategory) {
+        return _iProductReponsitory.findByIdCategory(idCategory).stream().map(IntroProductWebDto::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -64,13 +69,32 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public IntroProductDto findIntroById(String id) {
+    public IntroProductWebDto findIntroById(String id) {
         return null;
     }
 
     @Override
-    public IntroProductDto save(FormProductDto dto) {
+    public FormProductDto findFormById(String id) {
         return null;
+    }
+
+    @Override
+    public IntroProductWebDto save(FormProductDto dto) {
+        return null;
+    }
+
+    @Override
+    public boolean changeStatus(String id, Boolean reuslt) {
+        Optional<ProductEntity> optional = _iProductReponsitory.findById(id);
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Sản phẩm không tồn tại");
+        }
+        ProductEntity productEntity = optional.get();
+        productEntity.setStatus(reuslt);
+        if (_iProductReponsitory.save(productEntity) != null) {
+            return true;
+        }
+        return false;
     }
 
 
