@@ -1,13 +1,15 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.product.IntroCollectionAdminDto;
+import com.example.webproductspringboot.dto.CollectionDto;
 
 import java.util.List;
 
-public interface ICollectionService  {
-    List<IntroCollectionAdminDto> findAllIntroCollectionsAdmin();
+public interface ICollectionService {
 
-    IntroCollectionAdminDto findIntroCollectionById(String idCollection);
+    List<CollectionDto> findAll();
 
-    IntroCollectionAdminDto saveCollection(IntroCollectionAdminDto dto);
+    CollectionDto findById(String id);
+
+    CollectionDto save(CollectionDto dto);
+
 }

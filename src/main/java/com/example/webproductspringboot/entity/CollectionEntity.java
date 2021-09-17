@@ -28,9 +28,9 @@ public class CollectionEntity {
     private Boolean status;
     @Column(columnDefinition="timestamp default current_timestamp")
     private Date created;
-    @OneToMany(mappedBy = "idCollection")
-    private List<CollectionBrandEntity> lstCollectionBrandEntities;
-    @OneToMany(mappedBy = "idCollection")
-    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
+//    @OneToMany(mappedBy = "idCollection")
+//    private List<CollectionBrandEntity> lstCollectionBrandEntities;
+//    @OneToMany(mappedBy = "idCollection")
+//    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
 
 }

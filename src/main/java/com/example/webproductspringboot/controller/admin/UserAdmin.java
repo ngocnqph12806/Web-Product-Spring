@@ -15,14 +15,14 @@ public class UserAdmin {
 
     @GetMapping("staff")
     public String homeStaff(Model model) {
-        model.addAttribute("lstUser", _iUserService.findAllIntroStaff());
+        model.addAttribute("lstUser", _iUserService.findAll());
         model.addAttribute("isStaff", true);
         return "page/admin/user/index";
     }
 
     @GetMapping("visit")
     public String homeVisit(Model model) {
-        model.addAttribute("lstUser", _iUserService.findAllIntroVisit());
+        model.addAttribute("lstUser", _iUserService.findAll());
         model.addAttribute("isStaff", false);
         return "page/admin/user/index";
     }

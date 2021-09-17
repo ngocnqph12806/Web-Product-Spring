@@ -1,9 +1,7 @@
 package com.example.webproductspringboot.api;
 
+import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.partner.FormBrandAdminDto;
-import com.example.webproductspringboot.dto.partner.IntroBrandAdminDto;
-import com.example.webproductspringboot.dto.staff.FormUserAdminDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +23,9 @@ public class BrandApi {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/{id-brand}")
-    public ResponseEntity<?> getById(@PathVariable("id-brand") String id,
-                                     @RequestParam(name = "modal", defaultValue = "") String getForModal) {
-        if (getForModal != null && !getForModal.isEmpty() && !getForModal.isBlank() && getForModal.equals("true")) {
-            try {
-                return ResponseEntity.ok(_iBrandService.findFormById(id));
-            } catch (Exception e) {
-                return ResponseEntity.ok(new FormBrandAdminDto());
-            }
-        } else {
-            return ResponseEntity.ok(_iBrandService.findFormById(id));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") String id) {
+        return ResponseEntity.ok(_iBrandService.findById(id));
     }
 
     
@@ -50,12 +39,12 @@ public class BrandApi {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody FormBrandAdminDto dto, Errors errors) {
+    public ResponseEntity<?> update(@Validated @RequestBody BrandDto dto, Errors errors) {
         System.out.println(dto);
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<IntroBrandAdminDto> result = new ResultDto<>(true, "Lưu thành công", _iBrandService.save(dto));
+        ResultDto<BrandDto> result = new ResultDto<>(true, "Lưu thành công", _iBrandService.save(dto));
         return ResponseEntity.ok(result);
     }
 

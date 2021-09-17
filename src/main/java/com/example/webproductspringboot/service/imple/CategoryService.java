@@ -1,9 +1,7 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.partner.IntroBrandAdminDto;
-import com.example.webproductspringboot.dto.product.FormCategoryAdminDto;
-import com.example.webproductspringboot.dto.product.IntroCategoryAdminDto;
-import com.example.webproductspringboot.dto.product.SearchCategoryDto;
+import com.example.webproductspringboot.dto.BrandDto;
+import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.entity.BrandEntity;
 import com.example.webproductspringboot.entity.CategoryEntity;
 import com.example.webproductspringboot.exception.InternalServerException;
@@ -23,60 +21,80 @@ public class CategoryService implements ICategoryService {
     private ICategoryReponsitory _iCategoryReponsitory;
 
     @Override
-    public SearchCategoryDto findById(String category) {
-        return SearchCategoryDto.toDto(_iCategoryReponsitory.findById(category).orElse(null));
-    }
-
-    @Override
-    public SearchCategoryDto findByIdAndPath(String idCategory, String pathUrl) {
-        return SearchCategoryDto.toDto(_iCategoryReponsitory.findByIdAndPath(idCategory, pathUrl).orElse(null));
-    }
-
-    @Override
-    public List<IntroCategoryAdminDto> findAllIntroCategoryAdmin() {
-        return _iCategoryReponsitory.findAll().stream().map(IntroCategoryAdminDto::toDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public IntroCategoryAdminDto save(FormCategoryAdminDto dto) {
-        CategoryEntity categoryEntity = dto.toEntity();
-        if (categoryEntity.getId() == null || categoryEntity.getId().isBlank() || categoryEntity.getId().isEmpty()) {
-            categoryEntity = categoryEntity.toBuilder()
-                    .id(UUID.randomUUID().toString())
-                    .idUrl(new Random().nextLong())
-                    .status(true)
-                    .created(new Date(System.currentTimeMillis()))
-                    .build();
-        } else {
-            Optional<CategoryEntity> entity = _iCategoryReponsitory.findById(categoryEntity.getId());
-            if (entity.isEmpty()) {
-                throw new NotFoundException("Thương hiệu không tồn tại");
-            }
-            CategoryEntity fake = entity.get();
-            categoryEntity = categoryEntity.toBuilder()
-                    .idUrl(fake.getIdUrl())
-                    .status(fake.getStatus())
-                    .created(fake.getCreated())
-                    .build();
-        }
-        categoryEntity = _iCategoryReponsitory.save(categoryEntity);
-        if (categoryEntity == null) {
-            throw new InternalServerException("Lưu thất bại");
-        }
-        return IntroCategoryAdminDto.toDto(categoryEntity);
-    }
-
-    @Override
-    public IntroCategoryAdminDto findIntroById(String id) {
+    public CategoryDto findById(String category) {
+//        return CategoryDto.toDto(_iCategoryReponsitory.findById(category).orElse(null));
         return null;
     }
 
     @Override
-    public FormCategoryAdminDto findFormById(String id) {
-        Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(id);
-        if (optional.isEmpty()) {
-            throw new NotFoundException("Loại sản phẩm không tồn tại");
-        }
-        return FormCategoryAdminDto.toDto(optional.get());
+    public CategoryDto findByIdAndPath(String idCategory, String pathUrl) {
+//        return CategoryDto.toDto(_iCategoryReponsitory.findByIdAndPath(idCategory, pathUrl).orElse(null));
+        return null;
     }
+
+    @Override
+    public List<CategoryDto> findAllIntroCategoryAdmin() {
+//        return _iCategoryReponsitory.findAll().stream().map(CategoryDto::toDto).collect(Collectors.toList());
+        return null;
+    }
+
+    @Override
+    public CategoryDto save(CategoryDto dto) {
+//        CategoryEntity categoryEntity = dto.toEntity();
+//        if (categoryEntity.getId() == null || categoryEntity.getId().isBlank() || categoryEntity.getId().isEmpty()) {
+//            categoryEntity = categoryEntity.toBuilder()
+//                    .id(UUID.randomUUID().toString())
+//                    .idUrl(new Random().nextLong())
+//                    .status(true)
+//                    .created(new Date(System.currentTimeMillis()))
+//                    .build();
+//        } else {
+//            Optional<CategoryEntity> entity = _iCategoryReponsitory.findById(categoryEntity.getId());
+//            if (entity.isEmpty()) {
+//                throw new NotFoundException("Thương hiệu không tồn tại");
+//            }
+//            CategoryEntity fake = entity.get();
+//            categoryEntity = categoryEntity.toBuilder()
+//                    .idUrl(fake.getIdUrl())
+//                    .status(fake.getStatus())
+//                    .created(fake.getCreated())
+//                    .build();
+//        }
+//        categoryEntity = _iCategoryReponsitory.save(categoryEntity);
+//        if (categoryEntity == null) {
+//            throw new InternalServerException("Lưu thất bại");
+//        }
+//        return CategoryDto.toDto(categoryEntity);
+        return null;
+    }
+
+    @Override
+    public CategoryDto findIntroById(String id) {
+        return null;
+    }
+
+    @Override
+    public CategoryDto findFormById(String id) {
+//        Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(id);
+//        if (optional.isEmpty()) {
+//            throw new NotFoundException("Loại sản phẩm không tồn tại");
+//        }
+//        return CategoryDto.toDto(optional.get());
+        return null;
+    }
+
+    private Object toObj(Object data) {
+        if (data == null) return null;
+        if (data instanceof CategoryDto) {
+            CategoryDto dto = (CategoryDto) data;
+            return CategoryEntity.builder()
+                    .build();
+        } else if (data instanceof CategoryEntity) {
+            CategoryEntity entity = (CategoryEntity) data;
+            return CategoryDto.builder()
+                    .build();
+        }
+        return null;
+    }
+
 }

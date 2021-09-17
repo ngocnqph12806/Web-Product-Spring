@@ -23,15 +23,15 @@ public class CategoryAdmin {
     @GetMapping("category")
     public String homeCategory(Model model) {
         model.addAttribute("lstCategoriesAndBrand", _iCategoryService.findAllIntroCategoryAdmin());
-        model.addAttribute("lstCollections", _iCollectionService.findAllIntroCollectionsAdmin());
+        model.addAttribute("lstCollections", _iCollectionService.findAll());
         model.addAttribute("isCategory", true);
         return "page/admin/product/index-category-brand-collection";
     }
 
     @GetMapping("brand")
     public String homeBrand(Model model) {
-        model.addAttribute("lstCategoriesAndBrand", _iBrandService.findAllIntroBrandAdmin());
-        model.addAttribute("lstCollections", _iCollectionService.findAllIntroCollectionsAdmin());
+        model.addAttribute("lstCategoriesAndBrand", _iBrandService.findAll());
+        model.addAttribute("lstCollections", _iCollectionService.findAll());
         model.addAttribute("isCategory", false);
         return "page/admin/product/index-category-brand-collection";
     }

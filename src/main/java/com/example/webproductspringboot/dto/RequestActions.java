@@ -7,8 +7,8 @@ import lombok.ToString;
 @ToString
 public class RequestActions {
 
-//    private Boolean add;
-//    private Boolean edit;
+    private Boolean add;
+    private Boolean edit;
     private String block;
     private String status;
 

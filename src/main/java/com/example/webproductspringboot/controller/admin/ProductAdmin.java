@@ -16,7 +16,7 @@ public class ProductAdmin {
 
     @GetMapping("product")
     public String listProduct(Model model) {
-        model.addAttribute("lstProduct", _iProductService.findAllIntroAdmin());
+        model.addAttribute("lstProduct", _iProductService.findAll());
         return "page/admin/product/index-product";
     }
 

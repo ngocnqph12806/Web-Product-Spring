@@ -74,6 +74,21 @@ function saveWithAPI(formData, url, urlSuccess, method) {
     }
 }
 
+function getWithAPI(obj, path) {
+    $.ajax({
+        url: '/api/' + path,
+        type: 'GET',
+        data: obj,
+        contentType: 'application/json',
+        success: function (response) {
+            obj = response;
+        },
+        error: function (response) {
+            obj = response;
+        }
+    });
+}
+
 // WEB
 function loadDataWeb(index, url_page) {
     let token = $("meta[name='_csrf']").attr("content");

@@ -1,50 +1,29 @@
 package com.example.webproductspringboot.api;
 
-import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.transaction.FormInvoiceAdminDto;
-import com.example.webproductspringboot.dto.transaction.IntroInvoiceAdminDto;
-import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.service.intf.IInvoiceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/invoices")
+@RequestMapping("/api/")
 public class InvoiceApi {
-
-    @Autowired
-    private IInvoiceService _iInvoiceService;
-
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(null);
+        return null;
     }
 
-    @GetMapping("/{id-invoice}")
-    public ResponseEntity<?> getById(@PathVariable("id-invoice") String id) {
-        return ResponseEntity.ok(_iInvoiceService.findIntroById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") String id) {
+        return null;
     }
 
-    
     @PostMapping
-    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
-        if (errors.hasErrors()) {
-            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        }
-        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> save() {
+        return null;
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody FormInvoiceAdminDto dto, Errors errors) {
-        if (errors.hasErrors()) {
-            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        }
-        ResultDto<IntroInvoiceAdminDto> result = new ResultDto<>(true, "Lưu thành công", _iInvoiceService.save(dto));
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> update() {
+        return null;
     }
 
 }

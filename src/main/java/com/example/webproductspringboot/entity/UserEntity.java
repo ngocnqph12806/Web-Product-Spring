@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
@@ -47,28 +47,27 @@ public class UserEntity {
 
 //    @OneToMany(mappedBy = "idStaff")
 //    private List<VoucherUseEntity> lstVoucherUseEntities;
-    @OneToMany(mappedBy = "idStaffCreate")
-    private List<InvoiceEntity> lstInvoiceEntitiesCreate;
-    @OneToMany(mappedBy = "idStaffCheck")
-    private List<InvoiceEntity> lstInvoiceEntitiesCheck;
-    @OneToMany(mappedBy = "staffCreate")
-    private List<OrderEntity> lstOrderEntitiesCreate;
-    @OneToMany(mappedBy = "staffSales")
-    private List<OrderEntity> lstOrderEntitieSale;
-    @OneToMany(mappedBy = "idStaff")
-    private List<HistoryEntity> lstHistoryEntities;
-    @OneToMany(mappedBy = "idStaff")
-    private List<CustomersReturnEntity> lstCustomersReturnEntitiesWithStaff;
+//    @OneToMany(mappedBy = "idStaffCreate")
+//    private List<InvoiceEntity> lstInvoiceEntitiesCreate;
+//    @OneToMany(mappedBy = "idStaffCheck")
+//    private List<InvoiceEntity> lstInvoiceEntitiesCheck;
+//    @OneToMany(mappedBy = "staffCreate")
+//    private List<OrderEntity> lstOrderEntitiesCreate;
+//    @OneToMany(mappedBy = "staffSales")
+//    private List<OrderEntity> lstOrderEntitieSale;
+//    @OneToMany(mappedBy = "idStaff")
+//    private List<HistoryEntity> lstHistoryEntities;
+//    @OneToMany(mappedBy = "idStaff")
+//    private List<CustomersReturnEntity> lstCustomersReturnEntitiesWithStaff;
 
     //VISIT
     @OneToMany(mappedBy = "idVisit")
     private List<ReviewProductEntity> lstReviewProductEntities;
-    @OneToMany(mappedBy = "idVisit")
-    private List<VoucherUseEntity> lstVoucherUseEntityList;
+//    @OneToMany(mappedBy = "idVisit")
+//    private List<VoucherUseEntity> lstVoucherUseEntityList;
     @OneToMany(mappedBy = "idVisit")
     private List<OrderEntity> lstOrderEntities;
     @OneToMany(mappedBy = "idVisit")
     private List<CustomersReturnEntity> lstCustomersReturnEntitiesWithVisit;
-    @OneToMany(mappedBy = "idVisitOrder")
-    private List<TransportEntity> lstTransportEntities;
+
 }

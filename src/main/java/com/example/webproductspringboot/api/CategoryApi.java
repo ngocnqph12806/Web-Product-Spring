@@ -1,8 +1,7 @@
 package com.example.webproductspringboot.api;
 
+import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.product.FormCategoryAdminDto;
-import com.example.webproductspringboot.dto.product.IntroCategoryAdminDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class CategoryApi {
 
     @GetMapping("/{id-category}")
     public ResponseEntity<?> getById(@PathVariable("id-category") String id) {
-        return ResponseEntity.ok(_iCategoryService.findFormById(id));
+        return ResponseEntity.ok(_iCategoryService.findById(id));
     }
 
     
@@ -40,11 +39,11 @@ public class CategoryApi {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody FormCategoryAdminDto dto, Errors errors) {
+    public ResponseEntity<?> update(@Validated @RequestBody CategoryDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<IntroCategoryAdminDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.save(dto));
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.save(dto));
         return ResponseEntity.ok(result);
     }
 

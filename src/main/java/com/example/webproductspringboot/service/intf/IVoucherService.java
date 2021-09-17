@@ -1,10 +1,11 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.partner.FormVoucherDto;
-import com.example.webproductspringboot.dto.partner.IntroVoucherDto;
+import com.example.webproductspringboot.dto.VoucherDto;
 
 public interface IVoucherService {
-    IntroVoucherDto findIntroById(String id);
 
-    IntroVoucherDto save(FormVoucherDto dto);
+    VoucherDto findIntroById(String id);
+
+    VoucherDto save(VoucherDto dto);
+
 }

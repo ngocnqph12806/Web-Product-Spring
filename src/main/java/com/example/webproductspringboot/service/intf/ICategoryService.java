@@ -1,21 +1,20 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.product.FormCategoryAdminDto;
-import com.example.webproductspringboot.dto.product.IntroCategoryAdminDto;
-import com.example.webproductspringboot.dto.product.SearchCategoryDto;
+import com.example.webproductspringboot.dto.CategoryDto;
 
 import java.util.List;
 
-public interface ICategoryService  {
-    SearchCategoryDto findById(String category);
+public interface ICategoryService {
 
-    SearchCategoryDto findByIdAndPath(String idCategory, String pathUrl);
+    CategoryDto findById(String category);
 
-    List<IntroCategoryAdminDto> findAllIntroCategoryAdmin();
+    CategoryDto save(CategoryDto dto);
 
-    IntroCategoryAdminDto save(FormCategoryAdminDto dto);
+    CategoryDto findByIdAndPath(String idCategory, String pathUrl);
 
-    IntroCategoryAdminDto findIntroById(String id);
+    List<CategoryDto> findAllIntroCategoryAdmin();
 
-    FormCategoryAdminDto findFormById(String id);
+    CategoryDto findIntroById(String id);
+
+    CategoryDto findFormById(String id);
 }

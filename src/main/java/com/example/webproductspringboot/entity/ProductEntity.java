@@ -50,10 +50,10 @@ public class ProductEntity {
     private List<ProductDetailsEntity> lstProductDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ProductImageEntity> lstProductImageEntities;
-    @OneToMany(mappedBy = "idProduct")
-    private List<OrderDetailsEntity> lstOrderDetailsEntities;
-    @OneToMany(mappedBy = "idProduct")
-    private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
+//    @OneToMany(mappedBy = "idProduct")
+//    private List<OrderDetailsEntity> lstOrderDetailsEntities;
+//    @OneToMany(mappedBy = "idProduct")
+//    private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ReviewProductEntity> lstReviewProductEntities;
 }

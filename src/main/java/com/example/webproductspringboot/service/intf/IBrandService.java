@@ -1,16 +1,14 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.partner.FormBrandAdminDto;
-import com.example.webproductspringboot.dto.partner.IntroBrandAdminDto;
+import com.example.webproductspringboot.dto.BrandDto;
 
 import java.util.List;
 
-public interface IBrandService  {
-    List<IntroBrandAdminDto> findAllIntroBrandAdmin();
+public interface IBrandService {
 
-    IntroBrandAdminDto save(FormBrandAdminDto dto);
+    List<BrandDto> findAll();
 
-    IntroBrandAdminDto findIntroById(String id);
+    BrandDto save(BrandDto dto);
 
-    FormBrandAdminDto findFormById(String id);
+    BrandDto findById(String id);
 }

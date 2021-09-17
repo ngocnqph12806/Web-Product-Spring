@@ -1,10 +1,8 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.partner.FormTransportDto;
-import com.example.webproductspringboot.dto.partner.IntroTransprotDto;
+import com.example.webproductspringboot.dto.TransportDto;
 
-public interface ITransportService  {
-    IntroTransprotDto findIntroById(String id);
+public interface ITransportService {
 
-    IntroTransprotDto save(FormTransportDto dto);
+
 }

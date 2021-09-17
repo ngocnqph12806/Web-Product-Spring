@@ -1,7 +1,6 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.partner.FormVoucherDto;
-import com.example.webproductspringboot.dto.partner.IntroVoucherDto;
+import com.example.webproductspringboot.dto.VoucherDto;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +8,12 @@ import org.springframework.stereotype.Service;
 public class VoucherService implements IVoucherService {
 
     @Override
-    public IntroVoucherDto findIntroById(String id) {
+    public VoucherDto findIntroById(String id) {
         return null;
     }
 
     @Override
-    public IntroVoucherDto save(FormVoucherDto dto) {
+    public VoucherDto save(VoucherDto dto) {
         return null;
     }
 }

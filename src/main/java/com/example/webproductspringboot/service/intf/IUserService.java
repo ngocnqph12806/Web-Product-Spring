@@ -1,23 +1,22 @@
 package com.example.webproductspringboot.service.intf;
 
-import com.example.webproductspringboot.dto.staff.FormUserAdminDto;
-import com.example.webproductspringboot.dto.staff.IntroStaffAdminDto;
-import com.example.webproductspringboot.dto.staff.IntroVisitAdminDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.dto.UserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
 public interface IUserService {
 
-    List<IntroStaffAdminDto> findAllIntroStaff();
-    
-    Boolean changeStatusStaff(String userNameStaff);
+    List<UserDto> findAll();
 
-    Boolean changeBlockStaff(String userNameStaff);
+    PageDto<List<UserDto>> findAll(Integer page, Integer size);
 
-    FormUserAdminDto findByUserName(String userNameStaff);
+    UserDto findById(String id);
 
-    IntroStaffAdminDto saveInfoStaff(FormUserAdminDto formUserAdminDto);
+    UserDto save(UserDto dto);
 
-    List<IntroVisitAdminDto> findAllIntroVisit();
+    UserDto update(UserDto dto);
 
 }

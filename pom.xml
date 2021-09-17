@@ -23,6 +23,11 @@
 <!--            <artifactId>json</artifactId>-->
 <!--            <version>20180813</version>-->
 <!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--            <version>2.5.0</version>-->
+<!--        </dependency>-->
         <!-- Thymeleaf Dialect -->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
