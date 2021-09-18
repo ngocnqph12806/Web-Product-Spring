@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class ProductService implements IProductService {
+public class ProductService extends AbstractService  implements IProductService {
 
     @Autowired
     private IProductReponsitory _iProductReponsitory;

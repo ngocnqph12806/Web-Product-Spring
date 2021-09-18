@@ -8,7 +8,7 @@ public interface IBrandService {
 
     List<BrandDto> findAll();
 
-    BrandDto save(BrandDto dto);
-
     BrandDto findById(String id);
+
+    BrandDto save(BrandDto dto);
 }

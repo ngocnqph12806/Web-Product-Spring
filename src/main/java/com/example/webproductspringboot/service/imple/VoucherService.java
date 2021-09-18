@@ -4,11 +4,19 @@ import com.example.webproductspringboot.dto.VoucherDto;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class VoucherService implements IVoucherService {
+public class VoucherService extends AbstractService  implements IVoucherService {
+
 
     @Override
-    public VoucherDto findIntroById(String id) {
+    public List<VoucherDto> findAll() {
+        return null;
+    }
+
+    @Override
+    public VoucherDto findById(String id) {
         return null;
     }
 
@@ -16,4 +24,5 @@ public class VoucherService implements IVoucherService {
     public VoucherDto save(VoucherDto dto) {
         return null;
     }
+
 }

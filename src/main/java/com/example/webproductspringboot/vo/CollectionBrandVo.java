@@ -10,4 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CollectionBrandVo {
+
+    private String id;
+    private String idBrand;
+    private String nameBrand;
+    private String idCollection;
+    private String nameCollection;
+
 }

@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class BrandService implements IBrandService {
+public class BrandService extends AbstractService  implements IBrandService {
 
     @Autowired
     private IBrandReponsitory _iBrandReponsitory;
@@ -26,7 +26,7 @@ public class BrandService implements IBrandService {
     @Override
     public List<BrandDto> findAll() {
 //        return _iBrandReponsitory.findAll().stream().map(BrandDto::toDto).collect(Collectors.toList());
-    return null;
+        return null;
     }
 
     @Override
@@ -63,21 +63,21 @@ public class BrandService implements IBrandService {
         if (brandEntity.isEmpty()) {
             throw new NotFoundException("Thương hiệu không tồn tại");
         }
-        return (BrandDto) toObj(brandEntity.get());
+        return (BrandDto) map(brandEntity.get());
     }
 
-    private Object toObj(Object data) {
-        if (data == null) return null;
-        if (data instanceof BrandDto) {
-            BrandDto dto = (BrandDto) data;
-            return BrandEntity.builder()
-                    .build();
-        } else if (data instanceof BrandEntity) {
-            BrandEntity entity = (BrandEntity) data;
-            return BrandDto.builder()
-                    .build();
-        }
-        return null;
-    }
+//    private Object toObj(Object data) {
+//        if (data == null) return null;
+//        if (data instanceof BrandDto) {
+//            BrandDto dto = (BrandDto) data;
+//            return BrandEntity.builder()
+//                    .build();
+//        } else if (data instanceof BrandEntity) {
+//            BrandEntity entity = (BrandEntity) data;
+//            return BrandDto.builder()
+//                    .build();
+//        }
+//        return null;
+//    }
 
 }

@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/reviews")
 public class ReviewApi {
     @GetMapping
     public ResponseEntity<?> getAll() {

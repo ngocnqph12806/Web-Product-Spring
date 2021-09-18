@@ -30,7 +30,7 @@ public class CollectionEntity {
     private Date created;
 //    @OneToMany(mappedBy = "idCollection")
 //    private List<CollectionBrandEntity> lstCollectionBrandEntities;
-//    @OneToMany(mappedBy = "idCollection")
-//    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
+    @OneToMany(mappedBy = "idCollection")
+    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
 
 }

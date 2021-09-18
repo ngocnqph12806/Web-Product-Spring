@@ -13,7 +13,7 @@ public class ReturnDetailDto {
 
     private String id;
     private String idReturn;
-    private String idOrder;
-    private String quantity;
+    private String idOrderDetail;
+    private Integer quantity;
 
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +22,7 @@ public class BrandDto {
     private String address;
     private String description;
     private Boolean status;
-    private String dateCreated;
+    private Date dateCreated;
     private Integer countProducts;
     private List<CollectionBrandVo> collectionBrands;
 

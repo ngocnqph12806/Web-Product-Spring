@@ -18,14 +18,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements IUserService {
+public class UserService extends AbstractService  implements IUserService {
 
     @Autowired
     private IUserReponsitory _iUserReponsitory;
 
     @Override
     public List<UserDto> findAll() {
-        return _iUserReponsitory.findAll().stream().map(e -> (UserDto) toObj(e)).collect(Collectors.toList());
+        return _iUserReponsitory.findAll().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserService implements IUserService {
         Pageable pageable = PageRequest.of(page + 1, size);
         Page<UserEntity> entities = _iUserReponsitory.findAll(pageable);
         return new PageDto<List<UserDto>>(entities.getTotalPages(), entities.getTotalPages(),
-                entities.getContent().stream().map(e -> (UserDto) toObj(e)).collect(Collectors.toList()));
+                entities.getContent().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
     }
 
     @Override
@@ -42,12 +42,12 @@ public class UserService implements IUserService {
         if (optional.isEmpty()) {
             throw new InternalServerException("Người dùng không tồn tại");
         }
-        return (UserDto) toObj(optional.get());
+        return (UserDto) map(optional.get());
     }
 
     @Override
     public UserDto save(UserDto dto) {
-        UserEntity entity = (UserEntity) toObj(dto);
+        UserEntity entity = (UserEntity) map(dto);
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setBlock(false);
@@ -55,12 +55,12 @@ public class UserService implements IUserService {
         if (_iUserReponsitory.save(entity) == null) {
             throw new InternalServerException("Lưu thất bại");
         }
-        return (UserDto) toObj(entity);
+        return (UserDto) map(entity);
     }
 
     @Override
     public UserDto update(UserDto dto) {
-        UserEntity entity = (UserEntity) toObj(dto);
+        UserEntity entity = (UserEntity) map(dto);
         if (entity.getId() == null || entity.getId().isEmpty() || entity.getId().isBlank()) {
             throw new BadRequestException("Người dùng không đúng");
         }
@@ -70,44 +70,44 @@ public class UserService implements IUserService {
         if (_iUserReponsitory.save(entity) == null) {
             throw new InternalServerException("Lưu thất bại");
         }
-        return (UserDto) toObj(entity);
+        return (UserDto) map(entity);
     }
 
-    private Object toObj(Object data) {
-        if (data == null) return null;
-        if (data instanceof UserDto) {
-            UserDto dto = (UserDto) data;
-            return UserEntity.builder()
-                    .id(dto.getId())
-                    .fullName(dto.getFullName())
-                    .dateOfBirth(dto.getDateOfBirth())
-                    .phoneNumber(dto.getPhoneNumber())
-                    .email(dto.getEmail())
-                    .username(dto.getUsername())
-                    .address(dto.getAddress())
-                    .avatar(dto.getAvatar())
-                    .role(dto.getRole())
-                    .status(dto.getStatus())
-                    .block(dto.getBlock())
-                    .build();
-        } else if (data instanceof UserEntity) {
-            UserEntity entity = (UserEntity) data;
-            return UserDto.builder()
-                    .id(entity.getId())
-                    .fullName(entity.getFullName())
-                    .dateOfBirth(entity.getDateOfBirth())
-                    .phoneNumber(entity.getPhoneNumber())
-                    .email(entity.getEmail())
-                    .username(entity.getUsername())
-                    .address(entity.getAddress())
-                    .avatar(entity.getAvatar())
-                    .role(entity.getRole())
-                    .status(entity.getStatus())
-                    .block(entity.getBlock())
-                    .dateCreated(entity.getCreated())
-                    .build();
-        }
-        return null;
-    }
+//    private Object toObj(Object data) {
+//        if (data == null) return null;
+//        if (data instanceof UserDto) {
+//            UserDto dto = (UserDto) data;
+//            return UserEntity.builder()
+//                    .id(dto.getId())
+//                    .fullName(dto.getFullName())
+//                    .dateOfBirth(dto.getDateOfBirth())
+//                    .phoneNumber(dto.getPhoneNumber())
+//                    .email(dto.getEmail())
+//                    .username(dto.getUsername())
+//                    .address(dto.getAddress())
+//                    .avatar(dto.getAvatar())
+//                    .role(dto.getRole())
+//                    .status(dto.getStatus())
+//                    .block(dto.getBlock())
+//                    .build();
+//        } else if (data instanceof UserEntity) {
+//            UserEntity entity = (UserEntity) data;
+//            return UserDto.builder()
+//                    .id(entity.getId())
+//                    .fullName(entity.getFullName())
+//                    .dateOfBirth(entity.getDateOfBirth())
+//                    .phoneNumber(entity.getPhoneNumber())
+//                    .email(entity.getEmail())
+//                    .username(entity.getUsername())
+//                    .address(entity.getAddress())
+//                    .avatar(entity.getAvatar())
+//                    .role(entity.getRole())
+//                    .status(entity.getStatus())
+//                    .block(entity.getBlock())
+//                    .dateCreated(entity.getCreated())
+//                    .build();
+//        }
+//        return null;
+//    }
 
 }

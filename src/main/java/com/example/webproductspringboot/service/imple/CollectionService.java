@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class CollectionService implements ICollectionService {
+public class CollectionService extends AbstractService  implements ICollectionService {
 
     @Autowired
     private ICollectionReponsitory _iCollectionReponsitory;

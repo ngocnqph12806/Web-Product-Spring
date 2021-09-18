@@ -22,7 +22,7 @@ public class CategoryAdmin {
 
     @GetMapping("category")
     public String homeCategory(Model model) {
-        model.addAttribute("lstCategoriesAndBrand", _iCategoryService.findAllIntroCategoryAdmin());
+        model.addAttribute("lstCategoriesAndBrand", _iCategoryService.findAll());
         model.addAttribute("lstCollections", _iCollectionService.findAll());
         model.addAttribute("isCategory", true);
         return "page/admin/product/index-category-brand-collection";

@@ -6,15 +6,9 @@ import java.util.List;
 
 public interface ICategoryService {
 
-    CategoryDto findById(String category);
+    List<CategoryDto> findAll();
+
+    CategoryDto findById(String id);
 
     CategoryDto save(CategoryDto dto);
-
-    CategoryDto findByIdAndPath(String idCategory, String pathUrl);
-
-    List<CategoryDto> findAllIntroCategoryAdmin();
-
-    CategoryDto findIntroById(String id);
-
-    CategoryDto findFormById(String id);
 }

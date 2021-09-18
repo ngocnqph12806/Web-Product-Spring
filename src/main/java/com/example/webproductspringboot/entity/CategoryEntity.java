@@ -37,7 +37,7 @@ public class CategoryEntity {
     private Date created;
     @OneToMany(mappedBy = "idCategory")
     private List<ProductEntity> lstProductEntities;
-//    @OneToMany(mappedBy = "idCategory")
-//    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
+    @OneToMany(mappedBy = "idCategory")
+    private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
 
 }

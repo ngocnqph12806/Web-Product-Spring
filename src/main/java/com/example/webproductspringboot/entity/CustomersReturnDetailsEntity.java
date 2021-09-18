@@ -1,12 +1,18 @@
 package com.example.webproductspringboot.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "customer_return_details")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomersReturnDetailsEntity {
 
     @Id

@@ -26,12 +26,12 @@ public class UserApi {
     @Autowired
     private IUserService _iUserService;
 
-    @GetMapping("users/{id}")
+    @GetMapping("/{id}")
     public UserDto getById(@PathVariable("id") String id) {
         return _iUserService.findById(id);
     }
 
-    @GetMapping(path = "users")
+    @GetMapping(path = "")
     public List<UserDto> getAll(SearchUserVo searchUserVo) {
         System.out.println(searchUserVo);
         List<UserDto> lst = _iUserService.findAll();
@@ -49,7 +49,7 @@ public class UserApi {
         return lst;
     }
 
-    @PostMapping("users")
+    @PostMapping("")
     public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
@@ -58,7 +58,7 @@ public class UserApi {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("users")
+    @PutMapping("")
     public ResponseEntity<?> update(@RequestBody @Valid UserDto formUserAdminDto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());

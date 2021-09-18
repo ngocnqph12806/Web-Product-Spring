@@ -1,4 +1,4 @@
-package com.example.webproductspringboot.vo;
+package com.example.webproductspringboot.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceDetailVo {
+public class InvoiceDetailDto {
 
     private String id;
+    private String idInvoice;
+    private String idProduct;
     private String nameProduct;
-    private String price;
-    private String quantity;
+    private Long price;
+    private Integer quantity;
 
 }

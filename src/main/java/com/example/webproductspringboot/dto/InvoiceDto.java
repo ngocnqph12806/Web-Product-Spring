@@ -1,6 +1,5 @@
 package com.example.webproductspringboot.dto;
 
-import com.example.webproductspringboot.vo.InvoiceDetailVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,13 +15,13 @@ import java.util.List;
 public class InvoiceDto {
 
     private String id;
-    private UserDto idCreator;
-    private UserDto nameCreator;
-    private UserDto idChecker;
-    private UserDto nameChecker;
+    private String idCreator;
+    private String nameCreator;
+    private String idChecker;
+    private String nameChecker;
     private String description;
-    private boolean status;
+    private Boolean status;
     private Date dateCreated;
-    private List<InvoiceDetailVo> invoiceDetails;
+    private List<InvoiceDetailDto> invoiceDetails;
 
 }
