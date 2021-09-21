@@ -33,16 +33,27 @@
                                     <th th:text="*{countProducts}">Tổng sản phẩm</th>
                                     <td>
                                         <div class="dropdown d-inline-block float-right">
-                                            <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
+                                            <a class="nav-link dropdown-toggle arrow-none" id="editCollection"
                                                data-toggle="dropdown" href="#" role="button"
                                                aria-haspopup="false" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v font-20 text-muted"></i>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
+                                            <div class="dropdown-menu dropdown-menu-right"
+                                                 aria-labelledby="editCollection">
                                                 <a class="dropdown-item" href="#modal-input-collection"
                                                    data-toggle="modal" data-animation="bounce"
                                                    onclick="getCollection(this)" th:data-id="*{id}">
                                                     Chỉnh sửa
+                                                </a>
+                                                <a th:if="*{status}" class="dropdown-item" href="#"
+                                                   onclick="changeStatus(this)"
+                                                   th:data-id="*{id}" data-method="status" data-method-data="false">
+                                                    Huỷ kích hoạt
+                                                </a>
+                                                <a th:unless="*{status}" class="dropdown-item" href="#"
+                                                   onclick="changeStatus(this)"
+                                                   th:data-id="*{id}" data-method="status" data-method-data="true">
+                                                    Kích hoạt
                                                 </a>
                                             </div>
                                         </div>
@@ -107,7 +118,7 @@
                                 <tr>
                                     <td th:text="${theCount.index +1}"></td>
                                     <td th:if="${isCategory}" th:text="*{name}">Tên loại</td>
-                                    <td th:if="${isCategory}" th:text="*{pathCategory}">Đường dẫn</td>
+                                    <td th:if="${isCategory}" th:text="*{path}">Đường dẫn</td>
                                     <td th:unless="${isCategory}" th:text="*{name}">Tên thương hiệu</td>
                                     <td th:unless="${isCategory}" th:text="*{phoneNumber}">Điện thoại</td>
                                     <td th:unless="${isCategory}" th:text="*{email}">Email</td>
@@ -167,7 +178,7 @@
                                 </label>
                                 <div class="col-sm-10">
                                     <input class="form-control" type="text" placeholder="Nhập đường dẫn"
-                                           name="pathUrl" maxlength="32" id="path-url">
+                                           name="path" maxlength="32" id="path-url">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -298,7 +309,7 @@
                     let name = data[i].name;
                     let value = data[i].value;
                     if (name === 'name' && !checkName(value, 'Tên loại')) return;
-                    if (name === 'pathUrl' && !checkPath(value)) return;
+                    if (name === 'path' && !checkPath(value)) return;
                     // if (name === 'banner' && !checkImage(value, 'Banner')) return;
                     obj[name] = value;
                 }
@@ -313,7 +324,11 @@
                 }
                 console.log(obj)
                 setTimeout(function () {
-                    saveWithAPI(JSON.stringify(obj), '/api/categories', window.location.href, 'PUT')
+                    if (obj.id === null || obj.id === undefined || obj.id === '') {
+                        saveWithAPI(JSON.stringify(obj), '/api/categories', window.location.href, 'POST')
+                    } else {
+                        saveWithAPI(JSON.stringify(obj), '/api/categories', window.location.href, 'PUT')
+                    }
                 }, 10)
             })
 
@@ -321,30 +336,26 @@
                 let id = e.dataset.id;
                 if (id !== null && id !== undefined && id !== '') {
                     $.ajax({
-                        url: '/api/categories/' + id + '?modal=true',
+                        url: '/api/categories/' + id + '?modal',
                         type: 'GET',
                         contentType: 'application/json',
                         success: function (response) {
-                            console.log(response)
-                            appendFormdata('form-input-category', response, objFileAvatar)
-                            console.log(objFileAvatar.nameFile)
+                            let obj = response.data;
+                            appendFormdata('form-input-category', obj, objFileAvatar)
                         }
                     });
                 }
             }
 
             $('#name-category').change(function (e) {
-                $('#path-url').val(strToPath($('#name-category').val()) + '.html')
+                $('#path-url').val(strToPath($('#name-category').val()))
             });
 
             $('#path-url').change(function (e) {
                 let pathUrl = strToPath($('#path-url').val())
-                if (!pathUrl.endsWith('.html')) {
-                    pathUrl = pathUrl + '.html'
-                }
-                console.log(pathUrl)
                 $('#path-url').val(pathUrl)
             })
+
         </script>
     </th:block>
 
@@ -352,7 +363,6 @@
         <script>
             $('#btn-input-brand').click(function () {
                 let data = $("#form-input-brand").serializeArray()
-                // let data = JSON.parse(JSON.stringify($("#form-input-brand").serializeArray()))
                 let obj = {};
                 for (let i = 0; i < data.length; i++) {
                     let name = data[i].name;
@@ -365,7 +375,11 @@
                 }
                 console.log(obj)
                 setTimeout(function () {
-                    saveWithAPI(JSON.stringify(obj), '/api/brand', window.location.href, 'PUT')
+                    if (obj.id === null || obj.id === undefined || obj.id === '') {
+                        saveWithAPI(JSON.stringify(obj), '/api/brand', window.location.href, 'POST')
+                    } else {
+                        saveWithAPI(JSON.stringify(obj), '/api/brand', window.location.href, 'PUT')
+                    }
                 }, 10)
             })
 
@@ -373,12 +387,12 @@
                 let id = e.dataset.id;
                 if (id !== null && id !== undefined && id !== '') {
                     $.ajax({
-                        url: '/api/brand/' + id + '?modal=true',
+                        url: '/api/brand/' + id + '?modal',
                         type: 'GET',
                         contentType: 'application/json',
                         success: function (response) {
-                            console.log(response)
-                            appendFormdata('form-input-brand', response)
+                            let obj = response.data
+                            appendFormdata('form-input-brand', obj)
                         }
                     });
                 }
@@ -398,9 +412,37 @@
             }
             console.log(obj)
             setTimeout(function () {
-                saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'PUT')
+                if (obj.id === null || obj.id === undefined || obj.id === '') {
+                    saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'POST')
+                } else {
+                    saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'PUT')
+                }
             }, 10)
         })
+
+        function changeStatus(e) {
+            let method = e.dataset.method;
+            let data = e.dataset.methodData;
+            let id = e.dataset.id;
+            $.ajax({
+                url: '/api/collections/' + id,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (method === 'status') {
+                        let obj = response.data;
+                        console.log(obj)
+                        obj.status = data
+                        saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'PUT')
+                    } else {
+                        swal('Hmmm!', 'Đừng sửa code...', 'warning')
+                    }
+                },
+                error: function (response) {
+                    swal('Thất bại', response.responseJSON.message, 'error')
+                }
+            });
+        }
 
         function getCollection(e) {
             let id = e.dataset.id
@@ -410,11 +452,11 @@
                     type: 'GET',
                     contentType: 'application/json',
                     success: function (response) {
-                        appendFormdata('form-input-collection', response)
+                        let obj = response.data;
+                        appendFormdata('form-input-collection', obj)
                         $('#btn-input-collection').html('Chỉnh sửa')
                     },
                     error: function (response) {
-                        console.log(response)
                         swal("Lỗi", response.responseJSON.message, "error")
                     }
                 });

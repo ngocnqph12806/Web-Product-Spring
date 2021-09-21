@@ -25,6 +25,40 @@ function checkPath(value) {
     return false;
 }
 
+function checkCode(value, title) {
+    const REGEX_CODE = /^[a-zA-Z0-9]+$/
+    if (value === null || value === '') {
+        toastDanger(title + ' không được để trống', 'Lỗi');
+        return false;
+    }
+    if (value.trim().length < 5) {
+        toastWarning(title + ' phải từ 5 ký tự', 'Lỗi');
+        return false
+    }
+    if (REGEX_CODE.test(value)) {
+        return true
+    }
+    toastWarning(title + ' không đúng', 'Lỗi');
+    return false;
+}
+
+function checkQuantity(value, title) {
+    const REGEX_QUANTITY = /^[0-9]+$/
+    if (value === null || value === '') {
+        toastDanger(title + ' không được để trống', 'Lỗi');
+        return false;
+    }
+    if (Number(value) < 0) {
+        toastWarning(title + ' phải lớn hơn 0', 'Lỗi');
+        return false
+    }
+    if (REGEX_QUANTITY.test(value)) {
+        return true
+    }
+    toastWarning(title + ' không đúng', 'Lỗi');
+    return false;
+}
+
 function checkName(value, title) {
     const REGEX_NAME = /^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ \-\.]+$/
     if (value === null || value === '') {

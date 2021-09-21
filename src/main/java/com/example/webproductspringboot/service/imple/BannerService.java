@@ -2,7 +2,6 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.BannerDto;
 import com.example.webproductspringboot.entity.BannerEntity;
-import com.example.webproductspringboot.entity.BrandEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
@@ -56,30 +55,4 @@ public class BannerService extends AbstractService implements IBannerService {
         if (_iBannerReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
         return (BannerDto) map(entity);
     }
-
-//    private Object toObj(Object data) {
-//        if (data == null) return null;
-//        if (data instanceof BannerDto) {
-//            BannerDto dto = (BannerDto) data;
-//            return BannerEntity.builder()
-//                    .id(dto.getId())
-//                    .title(dto.getTitle())
-//                    .pathImage(dto.getPathImage())
-//                    .pathLink(dto.getLink())
-//                    .description(dto.getDescription())
-//                    .status(dto.getStatus())
-//                    .build();
-//        } else if (data instanceof BrandEntity) {
-//            BannerEntity entity = (BannerEntity) data;
-//            return BannerDto.builder()
-//                    .id(entity.getId())
-//                    .title(entity.getTitle())
-//                    .pathImage(entity.getPathImage())
-//                    .link(entity.getPathLink())
-//                    .status(entity.getStatus())
-//                    .dateCreated(entity.getCreated())
-//                    .build();
-//        }
-//        return null;
-//    }
 }

@@ -11,4 +11,6 @@ public interface ICategoryService {
     CategoryDto findById(String id);
 
     CategoryDto save(CategoryDto dto);
+
+    CategoryDto update(CategoryDto dto);
 }

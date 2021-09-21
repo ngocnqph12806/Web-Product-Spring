@@ -108,16 +108,16 @@
             startDate: moment().startOf("hour"),
             endDate: moment().startOf("hour").add(32, "hour"),
             locale: {format: "M/DD hh:mm A"}
-        }), n('input[name="dateOfBirth"]').daterangepicker({
+        }), n('input[data-type="date"]').daterangepicker({
             singleDatePicker: !0,
             showDropdowns: !0,
             minYear: 1901,
             maxYear: parseInt(moment().format("YYYY"), 10)
         }, function (t, e, a) {
-            var n = moment().diff(t, "years") + '';
-            if (Number(n) < 18) {
-                swal("Lỗi", "Bạn chưa đủ 18 tuổi", "warning")
-            }
+            // var n = moment().diff(t, "years") + '';
+            // if (Number(n) < 18) {
+            //     swal("Lỗi", "Bạn chưa đủ 18 tuổi", "warning")
+            // }
             // alert("You are " + n + " years old!")
         });
         var t = moment().subtract(29, "days"), e = moment();

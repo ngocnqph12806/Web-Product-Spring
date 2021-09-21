@@ -12,4 +12,5 @@ public interface IVoucherService {
 
     VoucherDto save(VoucherDto dto);
 
+    VoucherDto update(VoucherDto dto);
 }

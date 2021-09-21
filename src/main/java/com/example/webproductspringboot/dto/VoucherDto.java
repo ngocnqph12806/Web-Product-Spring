@@ -25,5 +25,6 @@ public class VoucherDto {
     private String description;
     private Boolean status;
     private Date dateCreated;
+    private Integer quantityUsed;
 
 }

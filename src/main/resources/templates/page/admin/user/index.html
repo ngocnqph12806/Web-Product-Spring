@@ -53,7 +53,7 @@
                             <td th:text="*{fullName}"></td>
                             <td th:text="*{#dates.format(dateOfBirth, 'dd-MM-yyyy')}"></td>
                             <td th:text="*{phoneNumber}"></td>
-                            <td th:text="*{userName}"></td>
+                            <td th:text="*{username}"></td>
                             <td th:text="*{email}"></td>
                             <td th:if="${isStaff}">
                                 <span th:unless="*{role == 'SUPPER_ADMIN'}" class="badge badge-success"
@@ -78,19 +78,22 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
                                         <a class="dropdown-item" href="#modal-input-staff"
                                            data-toggle="modal" data-animation="bounce"
-                                           onclick="getStaff(this)" th:data-username="*{userName}">
+                                           onclick="getStaff(this)" th:data-id="*{id}">
                                             Chỉnh sửa
                                         </a>
-                                        <a th:unless="*{block}" class="dropdown-item"
-                                           th:href="@{'/api/users/block/'+*{userName}}">
+                                        <a th:unless="*{block}" class="dropdown-item" href="#"
+                                           data-method="block" data-method-data="true"
+                                           th:data-id="*{id}" onclick="changeStaff(this)">
                                             Khoá
                                         </a>
-                                        <a th:if="*{block}" class="dropdown-item"
-                                           th:href="@{'/api/users/block/'+*{userName}}">
+                                        <a th:if="*{block}" class="dropdown-item" href="#"
+                                           data-method="block" data-method-data="false"
+                                           th:data-id="*{id}" onclick="changeStaff(this)">
                                             Mở khoá
                                         </a>
-                                        <a th:unless="*{status}" class="dropdown-item"
-                                           th:href="@{'/api/users/status/'+*{userName}}">
+                                        <a th:unless="*{status}" class="dropdown-item" href="#"
+                                           data-method="status" data-method-data="true"
+                                           th:data-id="*{id}" onclick="changeStaff(this)">
                                             Kích hoạt
                                         </a>
                                     </div>
@@ -121,14 +124,23 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-input-staff">
-                        <input type="hidden" name="idUser"/>
+                        <input type="hidden" name="id"/>
                         <div class="form-group row">
                             <label for="username" class="col-sm-2 col-form-label text-right">
                                 Tên đăng nhập
                             </label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" placeholder="Nhập tên đăng nhập" name="userName"
+                                <input class="form-control" type="text" placeholder="Nhập tên đăng nhập" name="username"
                                        maxlength="32" id="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-sm-2 col-form-label text-right">
+                                Mật khẩu
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="password" placeholder="Mật khẩu" name="password"
+                                       maxlength="32" id="password">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -139,10 +151,10 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="dateofbirth" class="col-sm-2 col-form-label text-right">Ngày sinh</label>
+                            <label for="dateOfBirth" class="col-sm-2 col-form-label text-right">Ngày sinh</label>
                             <div class="col-sm-10">
-                                <input type="text" id="dateofbirth" class="form-control" name="dateOfBirth"
-                                       value="01/01/2000">
+                                <input type="text" id="dateOfBirth" class="form-control" name="dateOfBirth"
+                                       data-type="date" value="01/01/2000">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -198,7 +210,8 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
+    <!-- /.modal -->
 </div>
 <th:block layout:fragment="script-admin">
     <script>
@@ -231,6 +244,7 @@
                     }
                 }
                 if (name === 'userName' && !checkUserName(value)) return;
+                if (name === 'password' && !checkPassword(value)) return;
                 if (name === 'email' && !checkEmail(value)) return;
                 if (name === 'phoneNumber' && !checkPhoneNumber(value)) return;
                 if (name === 'address' && !checkAddress(value)) return;
@@ -245,10 +259,10 @@
                 obj['role'] = role
             }
             // if (objFileAvatar.nameFile === null || objFileAvatar.nameFile === undefined || objFileAvatar.nameFile === '') {
-                if (objFileAvatar.targetFileAvatar !== null && objFileAvatar.targetFileAvatar !== undefined) {
-                    objFileAvatar.nameFile = writeFileGitHub(objFileAvatar.targetFileAvatar)
-                    objFileAvatar.targetFileAvatar = null
-                }
+            if (objFileAvatar.targetFileAvatar !== null && objFileAvatar.targetFileAvatar !== undefined) {
+                objFileAvatar.nameFile = writeFileGitHub(objFileAvatar.targetFileAvatar)
+                objFileAvatar.targetFileAvatar = null
+            }
             // }
             // avatar đúng định dạng hình ảnh
             if (!checkImage(objFileAvatar.nameFile, 'Ảnh đại diện')) {
@@ -256,52 +270,54 @@
             } else {
                 obj['avatar'] = objFileAvatar.nameFile
             }
+            console.log(obj)
             setTimeout(function () {
-                saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                console.log(obj.id)
+                if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
+                    saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                } else {
+                    saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'POST')
+                }
             }, 10)
         }
 
         function getStaff(e) {
-            let username = e.dataset.username
             $.ajax({
-                url: '/api/users/' + username + '?modal=true',
+                url: '/api/users/' + e.dataset.id + '?modal',
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (response) {
-                    // let {data} = response
-                    console.log(response)
-                    appendFormdata('form-input-staff', response, objFileAvatar)
-                    console.log(objFileAvatar.nameFile)
+                    appendFormdata('form-input-staff', response.data, objFileAvatar)
                 }
             });
         }
 
-        $('a').click(function (e) {
-            let getUrl = e.target.href + '';
-            if (getUrl !== null && getUrl !== undefined && getUrl !== '') {
-                if (getUrl.includes('/block/') || getUrl.includes('/status/')) {
-                    e.preventDefault()
-                    $.ajax({
-                        url: getUrl,
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.result) {
-                                swal("Thành công", data.message, "success").then(function (t) {
-                                    if (t.value) {
-                                        window.location = window.location.href;
-                                    }
-                                })
-                            } else {
-                                swal("Thất bại", data.message, "warning")
-                            }
-                        },
-                        error: function (data) {
-                            swal("Thất bại", data.responseJSON.message, "warning")
-                        }
-                    });
+        function changeStaff(e) {
+            let method = e.dataset.method;
+            let data = e.dataset.methodData;
+            let id = e.dataset.id;
+            $.ajax({
+                url: '/api/users/' + id,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (method === 'status') {
+                        let obj = response.data;
+                        obj.status = data
+                        saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                    } else if (method === 'block') {
+                        let obj = response.data;
+                        obj.block = data
+                        saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                    } else {
+                        swal('Hmmm!', 'Đừng sửa code...', 'warning')
+                    }
+                },
+                error: function (response) {
+                    swal('Thất bại', response.responseJSON.message, 'error')
                 }
-            }
-        })
+            });
+        }
 
     </script>
     <script src="/web-admin/js/daterangepicker.js"></script>

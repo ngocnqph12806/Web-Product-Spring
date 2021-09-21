@@ -1,23 +1,37 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.ProductDto;
+import com.example.webproductspringboot.entity.ProductEntity;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class ProductService extends AbstractService  implements IProductService {
+public class ProductService extends AbstractService implements IProductService {
 
     @Autowired
     private IProductReponsitory _iProductReponsitory;
 
     @Override
     public List<ProductDto> findAll() {
-        return null;
+        List<ProductEntity> lst = _iProductReponsitory.findAll();
+        Collections.reverse(lst);
+        return lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductDto findById(String id) {
+        Optional<ProductEntity> optional = _iProductReponsitory.findById(id);
+        if (optional.isEmpty()) throw new NotFoundException("Sản phẩm không tồn tại");
+        return (ProductDto) map(optional.get());
     }
 
     @Override
@@ -37,12 +51,17 @@ public class ProductService extends AbstractService  implements IProductService 
     }
 
     @Override
-    public ProductDto getMinMaxPrice() {
+    public ProductDto save(ProductDto dto) {
         return null;
     }
 
     @Override
-    public ProductDto save(ProductDto dto) {
+    public ProductDto update(ProductDto dto) {
+        return null;
+    }
+
+    @Override
+    public ProductDto getMinMaxPrice() {
         return null;
     }
 //

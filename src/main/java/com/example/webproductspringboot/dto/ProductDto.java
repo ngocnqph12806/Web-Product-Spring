@@ -35,6 +35,7 @@ public class ProductDto {
     private String description;
     private Boolean status;
     private Date dateCreated;
+    private Double pointReview;
     private List<ProductDetailsVo> details;
     private List<ProductImageVo> images;
     private List<ReviewDto> reviews;

@@ -390,6 +390,11 @@ public abstract class AbstractService {
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
+                    .pointReview(entity.getLstReviewProductEntities() != null
+                            ? entity.getLstReviewProductEntities().stream()
+                            .mapToInt(e -> e.getPoint())
+                            .summaryStatistics().getAverage()
+                            : 0)
                     .details(entity.getLstProductDetailsEntities() != null
                             ? entity.getLstProductDetailsEntities().stream()
                             .map(e -> (ProductDetailsVo) map(e)).collect(Collectors.toList())
@@ -475,6 +480,22 @@ public abstract class AbstractService {
                             .map(e -> (ReviewDto) map(e)).collect(Collectors.toList())
                             : null)
                     .build();
+        } else if (data instanceof ChangeUserDto) {
+            ChangeUserDto dto = (ChangeUserDto) data;
+            return UserEntity.builder()
+                    .id(dto.getId())
+                    .fullName(dto.getFullName())
+                    .dateOfBirth(dto.getDateOfBirth())
+                    .phoneNumber(dto.getPhoneNumber())
+                    .email(dto.getEmail())
+                    .username(dto.getUsername())
+                    .address(dto.getAddress())
+                    .avatar(dto.getAvatar())
+                    .role(dto.getRole())
+                    .password(dto.getPassword())
+                    .block(dto.getBlock())
+                    .status(dto.getStatus())
+                    .build();
         }
         //  VOUCHER
         else if (data instanceof VoucherDto) {
@@ -509,6 +530,8 @@ public abstract class AbstractService {
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
+                    .quantityUsed(entity.getLstVoucherUseEntities() != null
+                            ? entity.getLstVoucherUseEntities().size() : 0)
                     .build();
         }
         // REVIEW

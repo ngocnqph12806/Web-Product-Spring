@@ -2,60 +2,62 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.entity.CategoryEntity;
+import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class CategoryService extends AbstractService  implements ICategoryService {
+public class CategoryService extends AbstractService implements ICategoryService {
 
     @Autowired
     private ICategoryReponsitory _iCategoryReponsitory;
 
     @Override
     public List<CategoryDto> findAll() {
-        return null;
+        List<CategoryEntity> lst = _iCategoryReponsitory.findAll();
+        Collections.reverse(lst);
+        return lst.stream().map(e -> (CategoryDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
     public CategoryDto findById(String id) {
-        return null;
+        Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(id);
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Loại sản phẩm không tồn tại");
+        }
+        return (CategoryDto) map(optional.get());
     }
 
     @Override
     public CategoryDto save(CategoryDto dto) {
-        return null;
+        CategoryEntity entity = (CategoryEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        entity.setId(UUID.randomUUID().toString());
+        entity.setCreated(new Date(System.currentTimeMillis()));
+        if (_iCategoryReponsitory.save(entity) == null) throw new IllegalStateException("Lưu thất bại");
+        return (CategoryDto) map(entity);
     }
 
-//    private Object toObj(Object data) {
-//        if (data == null) return null;
-//        if (data instanceof CategoryDto) {
-//            CategoryDto dto = (CategoryDto) data;
-//            return CategoryEntity.builder()
-//                    .id(dto.getId())
-//                    .name(dto.getName())
-//                    .banner(dto.getBanner())
-//                    .pathUrl(dto.getPath())
-//                    .description(dto.getDescription())
-//                    .status(dto.getStatus())
-//                    .build();
-//        } else if (data instanceof CategoryEntity) {
-//            CategoryEntity entity = (CategoryEntity) data;
-//            return CategoryDto.builder()
-//                    .id(entity.getId())
-//                    .name(entity.getName())
-//                    .banner(entity.getBanner())
-//                    .path(entity.getPathUrl())
-//                    .description(entity.getDescription())
-//                    .status(entity.getStatus())
-//                    .dateCreated(entity.getCreated())
-//                    .countProducts(entity.getLstProductEntities() != null
-//                            ? entity.getLstProductEntities().size() : 0)
-//                    .build();
-//        }
-//        return null;
-//    }
+    @Override
+    public CategoryDto update(CategoryDto dto) {
+        CategoryEntity entity = (CategoryEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Loại sản phẩm không tồn tại");
+        CategoryEntity fake = optional.get();
+        if (entity.getStatus() == null) {
+            entity.setStatus(fake.getStatus());
+        }
+        entity.setIdUrl(fake.getIdUrl());
+        entity.setCreated(fake.getCreated());
+        if (_iCategoryReponsitory.save(entity) == null) throw new IllegalStateException("Lưu thất bại");
+        return (CategoryDto) map(entity);
+    }
+
 }

@@ -11,4 +11,6 @@ public interface IBrandService {
     BrandDto findById(String id);
 
     BrandDto save(BrandDto dto);
+
+    BrandDto update(BrandDto dto);
 }

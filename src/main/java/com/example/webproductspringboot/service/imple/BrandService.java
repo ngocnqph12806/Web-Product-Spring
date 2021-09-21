@@ -1,9 +1,8 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.BrandDto;
-import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.entity.BrandEntity;
-import com.example.webproductspringboot.entity.UserEntity;
+import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBrandReponsitory;
@@ -11,50 +10,20 @@ import com.example.webproductspringboot.service.intf.IBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class BrandService extends AbstractService  implements IBrandService {
+public class BrandService extends AbstractService implements IBrandService {
 
     @Autowired
     private IBrandReponsitory _iBrandReponsitory;
 
     @Override
     public List<BrandDto> findAll() {
-//        return _iBrandReponsitory.findAll().stream().map(BrandDto::toDto).collect(Collectors.toList());
-        return null;
-    }
-
-    @Override
-    public BrandDto save(BrandDto dto) {
-//        BrandEntity brandEntity = dto.toEntity();
-//        if (brandEntity.getId() == null || brandEntity.getId().isBlank() || brandEntity.getId().isEmpty()) {
-//            brandEntity = brandEntity.toBuilder()
-//                    .id(UUID.randomUUID().toString())
-//                    .status(true)
-//                    .created(new Date(System.currentTimeMillis()))
-//                    .build();
-//        } else {
-//            Optional<BrandEntity> entity = _iBrandReponsitory.findById(brandEntity.getId());
-//            if (entity.isEmpty()) {
-//                throw new NotFoundException("Thương hiệu không tồn tại");
-//            }
-//            BrandEntity fake = entity.get();
-//            brandEntity = brandEntity.toBuilder()
-//                    .status(fake.getStatus())
-//                    .created(fake.getCreated())
-//                    .build();
-//        }
-//        brandEntity = _iBrandReponsitory.save(brandEntity);
-//        if (brandEntity == null) {
-//            throw new InternalServerException("Lưu thất bại");
-//        }
-//        return BrandDto.toDto(brandEntity);
-        return null;
+        List<BrandEntity> lst = _iBrandReponsitory.findAll();
+        Collections.reverse(lst);
+        return lst.stream().map(e -> (BrandDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
@@ -66,18 +35,30 @@ public class BrandService extends AbstractService  implements IBrandService {
         return (BrandDto) map(brandEntity.get());
     }
 
-//    private Object toObj(Object data) {
-//        if (data == null) return null;
-//        if (data instanceof BrandDto) {
-//            BrandDto dto = (BrandDto) data;
-//            return BrandEntity.builder()
-//                    .build();
-//        } else if (data instanceof BrandEntity) {
-//            BrandEntity entity = (BrandEntity) data;
-//            return BrandDto.builder()
-//                    .build();
-//        }
-//        return null;
-//    }
+    @Override
+    public BrandDto save(BrandDto dto) {
+        BrandEntity entity = (BrandEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        entity.setId(UUID.randomUUID().toString());
+        entity.setStatus(true);
+        entity.setCreated(new Date(System.currentTimeMillis()));
+        if (_iBrandReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        return (BrandDto) map(entity);
+    }
+
+    @Override
+    public BrandDto update(BrandDto dto) {
+        BrandEntity entity = (BrandEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        Optional<BrandEntity> optional = _iBrandReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Thương hiệu không tồn tại");
+        BrandEntity fake = optional.get();
+        if (entity.getStatus() == null) {
+            entity.setStatus(fake.getStatus());
+        }
+        entity.setCreated(fake.getCreated());
+        if (_iBrandReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        return (BrandDto) map(entity);
+    }
 
 }

@@ -12,4 +12,6 @@ public interface ICollectionService {
 
     CollectionDto save(CollectionDto dto);
 
+    CollectionDto updare(CollectionDto dto);
+
 }

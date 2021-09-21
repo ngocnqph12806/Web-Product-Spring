@@ -9,11 +9,16 @@ public interface IProductService {
 
     List<ProductDto> findAll();
 
+    ProductDto findById(String id);
+
     ProductDto save(ProductDto dto);
+
+    ProductDto update(ProductDto dto);
 
     Set<String> getSetCategoryDetailsByIdCategory(String idCategory);
 
     Set<String> getSetColorByIdCategory(String idCategory);
 
     ProductDto getMinMaxPrice();
+
 }

@@ -18,25 +18,27 @@ public class CollectionsApi {
 
     @GetMapping("/{id-collection}")
     public ResponseEntity<?> getColletionById(@PathVariable("id-collection") String idCollection) {
-        return ResponseEntity.ok(_iCollectionService.findById(idCollection));
+        ResultDto<CollectionDto> result = new ResultDto<>(true, "", _iCollectionService.findById(idCollection));
+        return ResponseEntity.ok(result);
     }
 
-    
+
     @PostMapping
-    public ResponseEntity<?> save( @RequestBody Object dto, Errors errors) {
+    public ResponseEntity<?> save(@RequestBody CollectionDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        ResultDto<CollectionDto> result = new ResultDto<>(true, "Lưu thành công", _iCollectionService.save(dto));
         return ResponseEntity.ok(result);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateCollection(@RequestBody CollectionDto dto, Errors errors){
-        if(errors.hasErrors()){
+    public ResponseEntity<?> updateCollection(@RequestBody CollectionDto dto, Errors errors) {
+        System.out.println(dto);
+        if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CollectionDto> result = new ResultDto<>(true, "Đã lưu danh mục", _iCollectionService.save(dto));
+        ResultDto<CollectionDto> result = new ResultDto<>(true, "Đã lưu danh mục", _iCollectionService.updare(dto));
         return ResponseEntity.ok(result);
     }
 

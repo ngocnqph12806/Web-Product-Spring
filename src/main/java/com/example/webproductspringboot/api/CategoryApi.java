@@ -23,18 +23,28 @@ public class CategoryApi {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/{id-category}")
-    public ResponseEntity<?> getById(@PathVariable("id-category") String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") String id) {
         return ResponseEntity.ok(_iCategoryService.findById(id));
     }
 
-    
+    @GetMapping(value = "/{id}", params = "modal")
+    public ResponseEntity<ResultDto<CategoryDto>> getByIdWithModal(@PathVariable("id") String id) {
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "", null);
+        try {
+            result.setData(_iCategoryService.findById(id));
+        } catch (Exception e) {
+            result.setData(new CategoryDto());
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping
-    public ResponseEntity<?> save(@Validated @RequestBody Object dto, Errors errors) {
+    public ResponseEntity<?> save(@Validated @RequestBody CategoryDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<Object> result = new ResultDto<>(true, "Lưu thành công", null);
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -43,7 +53,7 @@ public class CategoryApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.save(dto));
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.update(dto));
         return ResponseEntity.ok(result);
     }
 
