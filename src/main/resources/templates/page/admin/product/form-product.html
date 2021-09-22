@@ -19,7 +19,7 @@
                 </a>
             </div>
             <div class="container">
-                <form id="form-input-category">
+                <form id="form-input-category" th:object="${product}">
                     <input type="hidden" name="id"/>
                     <div class="form-group row">
                         <strong class="col-sm-2 col-form-label text-right">
@@ -27,7 +27,7 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập tên sản phẩm"
-                                   name="name" maxlength="50">
+                                   name="name" maxlength="50" th:value="*{name}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -36,7 +36,7 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập đường dẫn" name="path"
-                                   maxlength="32">
+                                   maxlength="32" th:value="*{path}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,10 +46,12 @@
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" name="idBrand"
                                     style="width: 100%; height:36px;">
-                                <option value="USER" selected>KHÁCH HÀNG</option>
-                                <option value="STAFF">NHÂN VIÊN</option>
-                                <option value="ADMIN">QUẢN LÝ</option>
-                                <option value="SUPPER_ADMIN">QUẢN TRỊ VIÊN</option>
+                                <th:block th:each="brand:${lstBrands}" th:object="${brand}">
+                                    <option th:if="${product.idBrand == brand.id}" th:value="*{id}" selected
+                                            th:text="*{name}"></option>
+                                    <option th:unless="${product.idBrand == brand.id}" th:value="*{id}"
+                                            th:text="*{name}"></option>
+                                </th:block>
                             </select>
                         </div>
                     </div>
@@ -60,10 +62,12 @@
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" name="idCategory"
                                     style="width: 100%; height:36px;">
-                                <option value="USER" selected>KHÁCH HÀNG</option>
-                                <option value="STAFF">NHÂN VIÊN</option>
-                                <option value="ADMIN">QUẢN LÝ</option>
-                                <option value="SUPPER_ADMIN">QUẢN TRỊ VIÊN</option>
+                                <th:block th:each="category:${lstCategories}" th:object="${category}">
+                                    <option th:if="${product.idCategory == category.id}" th:value="*{id}" selected
+                                            th:text="*{name}"></option>
+                                    <option th:unless="${product.idCategory == category.id}" th:value="*{id}"
+                                            th:text="*{name}"></option>
+                                </th:block>
                             </select>
                         </div>
                     </div>
@@ -73,7 +77,8 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập giá bán ra"
-                                   name="price" maxlength="32">
+                                   name="price" maxlength="32"
+                                   th:value="*{price}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -82,7 +87,8 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập giá giảm"
-                                   name="priceSale" maxlength="32">
+                                   name="priceSale" maxlength="32"
+                                   th:value="*{priceSale}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -91,7 +97,8 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập số lượng"
-                                   name="quantity" maxlength="32">
+                                   name="quantity" maxlength="32"
+                                   th:value="*{quantity}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -100,7 +107,7 @@
                         </strong>
                         <div class="col-sm-10">
                             <input class="form-control" type="text" placeholder="Nhập màu sắc" name="color"
-                                   maxlength="32">
+                                   maxlength="32" th:value="*{color}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -109,120 +116,9 @@
                         </strong>
                         <div class="col-sm-10">
                             <textarea class="form-control" name="description" maxlength="255" rows="3"
-                                      placeholder="Nhập mô tả"></textarea>
+                                      placeholder="Nhập mô tả" th:text="*{description}"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Bảo hành
-                        </strong>
-                        <div class="col-sm-10 row">
-                            <div class="col-12 mb-3">
-                                <label class="control-label">Tiêu đề bảo hành</label>
-                                <input class="form-control" type="text"
-                                       placeholder="Nhập tiêu đề bảo hành" name="quantity" maxlength="32">
-                            </div>
-                            <div class="col-12">
-                                <label class="control-label">Thời gian bảo hành</label>
-                                <input class="form-control" type="text"
-                                       placeholder="Nhập thời gian bảo hành" name="quantity" maxlength="32">
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
-                    <!-- <fieldset> -->
-                    <div class="benefit-show-hiden">
-                        <div data-repeater-list="car">
-                            <div data-repeater-item="">
-                                <div class="form-group row">
-                                    <strong class="col-sm-2 col-form-label text-right">
-                                        Lợi ích
-                                    </strong>
-                                    <div class="col-sm-9">
-                                        <div class="col-12 mb-3">
-                                            <label class="control-label">Tiêu đề</label>
-                                            <input class="form-control" type="text"
-                                                   placeholder="Nhập số lượng" name="quantity" maxlength="32">
-                                        </div>
-                                        <div class="col-12 mb-3">
-                                            <label class="control-label">Mô tả</label>
-                                            <textarea class="form-control" name="description"
-                                                      maxlength="255" rows="3"
-                                                      placeholder="Nhập mô tả"></textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="control-label">Ảnh banner</label>
-                                            <input class="form-control" type="text"
-                                                   placeholder="Nhập đường dẫn" name="quantity" maxlength="150">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <span data-repeater-delete="" class="btn btn-danger btn-sm">
-                                            <span class="far fa-trash-alt mr-1"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <hr/>
-                            </div>
-                            <!--end /div-->
-                        </div>
-                        <!--end repet-list-->
-                        <div class="form-group row mb-0">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <span data-repeater-create="" class="btn btn-light btn-md">
-                                    <span class="fa fa-plus"></span>
-                                    Thêm lợi ích
-                                </span>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </div>
-                    <hr/>
-                    <div class="parameter-show-hide mb-3">
-                        <div data-repeater-list="car">
-                            <div data-repeater-item="">
-                                <div class="form-group row">
-                                    <strong class="col-sm-2 col-form-label text-right">
-                                        Thông số
-                                    </strong>
-                                    <div class="col-sm-9 row">
-                                        <div class="col-12 mb-3">
-                                            <label class="control-label">Tiêu đề</label>
-                                            <input class="form-control" type="text"
-                                                   placeholder="Nhập số lượng" name="quantity" maxlength="32">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="control-label">Giá trị</label>
-                                            <input class="form-control" type="text"
-                                                   placeholder="Nhập số lượng" name="quantity" maxlength="32">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <span data-repeater-delete="" class="btn btn-danger btn-sm">
-                                            <span class="far fa-trash-alt mr-1"> </span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <hr/>
-                            </div>
-                            <!--end /div-->
-                        </div>
-                        <!--end repet-list-->
-                        <div class="form-group row mb-0">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <span data-repeater-create="" class="btn btn-light btn-md">
-                                    <span class="fa fa-plus"></span>
-                                    Thêm thông số
-                                </span>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </div>
-                    <!-- </fieldset> -->
                     <div class="form-group row">
                         <strong class="col-sm-2 col-form-label text-right">
                             Hướng dẫn sử dụng
@@ -255,14 +151,41 @@
                 show: function () {
                     $(this).slideDown()
                 }, hide: function (e) {
-                    confirm("Bạn có chắc muốn xoá 1 thuộc tính thông số không?") && $(this).slideUp(e)
+                    let parameter = $(this);
+                    let up = e;
+                    swal({
+                        title: "Cảnh báo!",
+                        text: "Bạn có chắc muốn xoá 1 thuộc tính thông số không?",
+                        type: "warning",
+                        showCancelButton: !0,
+                        confirmButtonClass: "btn btn-success",
+                        cancelButtonClass: "btn btn-danger ml-2"
+                    }).then((function (t) {
+                        if (t.value) {
+                            parameter.slideUp(up)
+                        }
+                    }))
                 }
             })
             $(".benefit-show-hiden").repeater({
                 show: function () {
                     $(this).slideDown()
                 }, hide: function (e) {
-                    confirm("Bạn có chắc muốn xoá 1 thuộc tính lợi ích không?") && $(this).slideUp(e)
+                    let benefit = $(this);
+                    let up = e;
+                    swal({
+                        title: "Cảnh báo!",
+                        text: "Bạn có chắc muốn xoá 1 thuộc tính lợi ích không?",
+                        type: "warning",
+                        showCancelButton: !0,
+                        confirmButtonClass: "btn btn-success",
+                        cancelButtonClass: "btn btn-danger ml-2"
+                    }).then((function (t) {
+                        if (t.value) {
+                            benefit.slideUp(up)
+                        }
+                    }))
+                    // confirm("Bạn có chắc muốn xoá 1 thuộc tính lợi ích không?") && $(this).slideUp(e)
                 }
             })
         });

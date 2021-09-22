@@ -1,6 +1,8 @@
 package com.example.webproductspringboot.controller.admin;
 
 import com.example.webproductspringboot.dto.ProductDto;
+import com.example.webproductspringboot.service.intf.IBrandService;
+import com.example.webproductspringboot.service.intf.ICategoryService;
 import com.example.webproductspringboot.service.intf.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,10 @@ public class ProductAdmin {
 
     @Autowired
     private IProductService _iProductService;
+    @Autowired
+    private IBrandService _iBrandService;
+    @Autowired
+    private ICategoryService _iCategoryService;
 
     @GetMapping("product")
     public String listProduct(Model model) {
@@ -34,7 +40,12 @@ public class ProductAdmin {
     }
 
     @GetMapping(value = {"product/edit", "product/add"})
-    public String formProduct() {
+    public String formProduct(Model model) {
+        if (model.getAttribute("product") == null) {
+            model.addAttribute("product", new ProductDto());
+        }
+        model.addAttribute("lstBrands", _iBrandService.findAll());
+        model.addAttribute("lstCategories", _iCategoryService.findAll());
         return "page/admin/product/form-product";
     }
 
