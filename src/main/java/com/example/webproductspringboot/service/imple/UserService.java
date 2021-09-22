@@ -6,23 +6,54 @@ import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.InternalServerException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService extends AbstractService implements IUserService {
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class UserService extends AbstractService implements IUserService, UserDetailsService {
 
     @Autowired
     private IUserReponsitory _iUserReponsitory;
+    @Autowired
+    private PasswordEncoder _passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserEntity> optional = _iUserReponsitory.findByUserNameOrEmail(username);
+        if (optional.isEmpty()) {
+            log.error("User not fount in the database");
+            throw new NotFoundException("Người dùng không tồn tại");
+        } else {
+            log.error("User fount in the database: {}", username);
+        }
+        UserEntity user = optional.get();
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        return new User(user.getUsername(), user.getPassword(), authorities);
+    }
 
     @Override
     public List<UserDto> findAll() {
@@ -67,7 +98,7 @@ public class UserService extends AbstractService implements IUserService {
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setBlock(false);
-        entity.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
+        entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
         entity.setCreated(new Date());
         if (_iUserReponsitory.save(entity) == null) {
             throw new InternalServerException("Lưu thất bại");
@@ -94,10 +125,23 @@ public class UserService extends AbstractService implements IUserService {
         if (entity.getPassword() == null || entity.getPassword().isEmpty() || entity.getPassword().isBlank()) {
             entity.setPassword(entityFake.getPassword());
         } else {
-            entity.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+            entity.setPassword(_passwordEncoder.encode(dto.getPassword()));
         }
         if (_iUserReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
         return (UserDto) map(entity);
     }
+
+    @Override
+    public UserDto findByUserName(String username) {
+        Optional<UserEntity> optional = _iUserReponsitory.findByUserName(username);
+        if (optional.isEmpty()) {
+            log.error("User not fount in the database");
+            throw new NotFoundException("Người dùng không tồn tại");
+        } else {
+            log.error("User fount in the database: {}", username);
+        }
+        return (UserDto) map(optional.get());
+    }
+
 
 }

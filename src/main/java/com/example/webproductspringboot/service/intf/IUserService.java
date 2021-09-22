@@ -22,4 +22,5 @@ public interface IUserService {
 
     UserDto update(ChangeUserDto dto);
 
+    UserDto findByUserName(String username);
 }

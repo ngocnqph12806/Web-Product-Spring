@@ -19,4 +19,7 @@ public interface IUserReponsitory extends JpaRepository<UserEntity, String> {
 
     @Query(value = "select s from UserEntity s where s.role not like '" + ContainsUtils.ROLE_USER + "'")
     List<UserEntity> findAllStaff();
+
+    @Query(value = "select s from UserEntity s where s.username = ?1 or s.email = ?1")
+    Optional<UserEntity> findByUserNameOrEmail(String username);
 }

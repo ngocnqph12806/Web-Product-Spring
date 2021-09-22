@@ -3,20 +3,21 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
-<!--    <meta th:name="_csrf" th:content="${_csrf.token}"/>-->
     <!-- default header name is X-CSRF-TOKEN -->
-<!--    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta content="A premium admin dashboard template by mannatthemes" name="description">
     <meta content="Mannatthemes" name="author">
     <!-- App favicon -->
-<!--    <link rel="/web-admin/plugin/shortcut icon" href="favicon.ico">-->
-<!--    <link href="/web-admin/plugin/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">-->
-<!--    <link href="/web-admin/plugin/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">&lt;!&ndash; App css &ndash;&gt;-->
+    <!--    <link rel="/web-admin/plugin/shortcut icon" href="favicon.ico">-->
+    <!--    <link href="/web-admin/plugin/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">-->
+    <!--    <link href="/web-admin/plugin/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">&lt;!&ndash; App css &ndash;&gt;-->
 
     <link href="/web-admin/css/jquery-jvectormap-2.0.2.css" rel="stylesheet" type="text/css"><!-- DataTables -->
     <link href="/web-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="/web-admin/css/icons.css"  rel="stylesheet" type="text/css">
+    <link href="/web-admin/css/icons.css" rel="stylesheet" type="text/css">
     <link href="/web-admin/css/style.css" rel="stylesheet" type="text/css">
     <title layout:fragment="title">START</title>
     <div layout:fragment="css-admin">START</div>
@@ -59,6 +60,12 @@
 <script>
     $(document).ready(function () {
         getLinkGithub();
+        // let access_token = window.localStorage.getItem('access_token');
+        // if (access_token === null || access_token === undefined || access_token === '') {
+        //     window.location = '/login'
+        // } else {
+        //     // $("meta[name='Authorization']").attr("content").text(access_token);
+        // }
     })
 </script>
 </body>

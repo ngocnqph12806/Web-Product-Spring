@@ -2,7 +2,6 @@
 function getLinkGithub() {
     let fileGithub = $('.file-github')
     for (let i = 0; i < fileGithub.length; i++) {
-        console.log(fileGithub[i])
         if (fileGithub[i].dataset.fileGithub !== undefined
             && fileGithub[i].dataset.fileGithub !== null) {
             fileGithub[i].src = 'https://raw.githubusercontent.com/ngocnqph12806/Repo_File/main/' + fileGithub[i].dataset.fileGithub
@@ -53,9 +52,9 @@ function saveWithAPI(formData, url, urlSuccess, method) {
             contentType: false,
             processData: false,
             enctype: 'multipart/form-data',
-            // beforeSend: function (xhr) {
-            //     xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
-            // },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+            },
             success: function (data) {
                 console.log(data)
                 if (data.result) {
