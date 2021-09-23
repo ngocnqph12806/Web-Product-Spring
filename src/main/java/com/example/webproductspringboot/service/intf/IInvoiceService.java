@@ -13,4 +13,5 @@ public interface IInvoiceService {
 
     InvoiceDto save(InvoiceDto dto);
 
+    InvoiceDto update(InvoiceDto dto);
 }

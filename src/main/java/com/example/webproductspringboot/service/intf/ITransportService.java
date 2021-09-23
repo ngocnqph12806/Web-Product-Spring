@@ -12,4 +12,5 @@ public interface ITransportService {
 
     TransportDto save(TransportDto dto);
 
+    TransportDto update(TransportDto dto);
 }

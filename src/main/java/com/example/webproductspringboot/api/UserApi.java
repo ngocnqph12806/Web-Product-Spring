@@ -79,9 +79,7 @@ public class UserApi {
 
     @PostMapping("")
     public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
-        if (errors.hasErrors()) {
-            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        }
+        if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         ResultDto<UserDto> result = new ResultDto<>(true, "Lưu thành công", _iUserService.save(dto));
         return ResponseEntity.ok(result);
     }

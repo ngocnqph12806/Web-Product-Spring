@@ -2,11 +2,9 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.InvoiceDto;
 import com.example.webproductspringboot.dto.OrderDto;
+import com.example.webproductspringboot.dto.ReviewDto;
 import com.example.webproductspringboot.dto.TransportDto;
-import com.example.webproductspringboot.entity.InvoiceEntity;
-import com.example.webproductspringboot.entity.OrderEntity;
-import com.example.webproductspringboot.entity.TransportEntity;
-import com.example.webproductspringboot.entity.UserEntity;
+import com.example.webproductspringboot.entity.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ITransportReponsitory;
@@ -47,6 +45,21 @@ public class TransportService extends AbstractService implements ITransportServi
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iTransportReponsitory.save(entity);
         saveHistory(userEntity, "Thêm hoá đơn vận chuyển : \n" + entity);
+        return (TransportDto) map(entity);
+    }
+
+    @Override
+    public TransportDto update(TransportDto dto) {
+        TransportEntity entity = (TransportEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        Optional<TransportEntity> optional = _iTransportReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn vận chuyển không tồn tại");
+        TransportEntity fake = optional.get();
+        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        entity.setCreated(fake.getCreated());
+        _iTransportReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa hoá đơn vận chuyển: \n" + fake + "\n" + entity);
         return (TransportDto) map(entity);
     }
 }

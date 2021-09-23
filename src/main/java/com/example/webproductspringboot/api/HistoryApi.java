@@ -17,14 +17,4 @@ public class HistoryApi {
         return null;
     }
 
-    @PostMapping
-    public ResponseEntity<?> save() {
-        return null;
-    }
-
-    @PutMapping
-    public ResponseEntity<?> update() {
-        return null;
-    }
-
 }

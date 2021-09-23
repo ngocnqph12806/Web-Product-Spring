@@ -46,4 +46,20 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
         saveHistory(userEntity, "Thêm hoá đơn nhập hàng: \n" + entity);
         return (InvoiceDto) map(entity);
     }
+
+    @Override
+    public InvoiceDto update(InvoiceDto dto) {
+        InvoiceEntity entity = (InvoiceEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        Optional<InvoiceEntity> optional = _invoiceReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn nhập hàng không tồn tại");
+        InvoiceEntity fake = optional.get();
+        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        entity.setCreated(fake.getCreated());
+        entity.setIdStaffCreate(fake.getIdStaffCreate());
+        _invoiceReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa hoá đơn nhập hàng: \n" + fake + "\n" + entity);
+        return (InvoiceDto) map(entity);
+    }
 }

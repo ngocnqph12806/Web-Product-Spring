@@ -13,4 +13,5 @@ public interface IOrderService {
 
     OrderDto save(OrderDto dto);
 
+    OrderDto update(OrderDto dto);
 }

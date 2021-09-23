@@ -36,13 +36,30 @@ public class CustomersReturnService extends AbstractService implements ICustomer
     @Override
     public ReturnDto save(ReturnDto dto) {
         CustomersReturnEntity entity = (CustomersReturnEntity) map(dto);
-        if(entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
+        entity.setIdStaff(userEntity);
         _iCustomersReturnReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm hoá đơn khách trả: \n"+entity);
+        saveHistory(userEntity, "Thêm hoá đơn khách trả: \n" + entity);
+        return (ReturnDto) map(entity);
+    }
+
+    @Override
+    public ReturnDto update(ReturnDto dto) {
+        CustomersReturnEntity entity = (CustomersReturnEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        Optional<CustomersReturnEntity> optional = _iCustomersReturnReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Hoá đươn khách trả không tồn tại");
+        CustomersReturnEntity fake = optional.get();
+        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        entity.setCreated(fake.getCreated());
+        entity.setIdStaff(fake.getIdStaff());
+        _iCustomersReturnReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa hoá đơn khach trả: \n" + fake + "\n" + entity);
         return (ReturnDto) map(entity);
     }
 }

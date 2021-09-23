@@ -48,4 +48,20 @@ public class OrderService extends AbstractService implements IOrderService {
         saveHistory(userEntity, "Thêm hoá đơn đặt hàng: \n" + entity);
         return (OrderDto) map(entity);
     }
+
+    @Override
+    public OrderDto update(OrderDto dto) {
+        OrderEntity entity = (OrderEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        Optional<OrderEntity> optional = _iOrderReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn đặt hàng không tồn tại");
+        OrderEntity fake = optional.get();
+        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        entity.setCreated(fake.getCreated());
+        entity.setStaffCreate(fake.getStaffCreate());
+        _iOrderReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa hoá đơn đặt hàng: \n" + fake + "\n" + entity);
+        return (OrderDto) map(entity);
+    }
 }

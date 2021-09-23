@@ -12,4 +12,5 @@ public interface ICustomersReturnService {
 
     ReturnDto save(ReturnDto dto);
 
+    ReturnDto update(ReturnDto dto);
 }
