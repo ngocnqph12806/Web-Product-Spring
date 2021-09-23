@@ -59,7 +59,7 @@ public class ProductWeb {
 
     @GetMapping("/product")
     public String showList(Model model) {
-        model.addAttribute("listProduct", _iProductService.findAll());
+        model.addAttribute("listProduct", _iProductService.findAllProduct());
         model.addAttribute("title", "Danh sách sản phẩm");
         model.addAttribute("filterCategoryProduct", _iProductService.getSetCategoryDetailsByIdCategory(null));
         model.addAttribute("filterColorProduct", _iProductService.getSetColorByIdCategory(null));

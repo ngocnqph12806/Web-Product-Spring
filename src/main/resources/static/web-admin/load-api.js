@@ -176,15 +176,25 @@ function loadLinkSidebar() {
 
 // GITHUB
 // save file to github
-let today = new Date();
-today = '[' + String(today.getDate()).padStart(2, '0') + '-'
-    + String(today.getMonth() + 1).padStart(2, '0') + '-'
-    + today.getFullYear() + ' '
-    + today.toTimeString() + ']' + ' == '
-    + String(today.getMilliseconds()).padStart(3, '0') + '.';
+// let today = new Date();
+// today = '[' + String(today.getDate()).padStart(2, '0') + '-'
+//     + String(today.getMonth() + 1).padStart(2, '0') + '-'
+//     + today.getFullYear() + ' '
+//     + today.toTimeString() + ']' + ' == '
+//     + String(today.getMilliseconds()).padStart(3, '0') + '.';
 const nameOwner = 'ngocnqph12806';
 const nameRepo = 'Repo_File';
 const token = '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';
+
+function getNameTime() {
+    let today = new Date();
+    today = '[' + String(today.getDate()).padStart(2, '0') + '-'
+        + String(today.getMonth() + 1).padStart(2, '0') + '-'
+        + today.getFullYear() + ' '
+        + today.toTimeString() + ']' + ' == '
+        + String(today.getMilliseconds()).padStart(3, '0') + '.';
+    return today
+}
 
 function readFileGithub(fileName, tagImg) {
     $.ajax({
@@ -199,18 +209,16 @@ function readFileGithub(fileName, tagImg) {
     });
 }
 
-function writeFileGitHub(target) {
-    console.log(target)
+function writeFileGitHub(target, fileName) {
     if (target.files && target.files[0]) {
         let reader = new FileReader();
-        let fileName = today + target.files[0].name
+        // let fileName = today + target.files[0].name
         reader.onloadend = function () {
             let base64result = reader.result.substr(reader.result.indexOf(',') + 1);
-            saveFileGitHub(fileName, "uploading a file in date: " + today, base64result)
+            saveFileGitHub(fileName, "uploading a file in date: " + getNameTime(), base64result)
         }
-        console.log(fileName)
         reader.readAsDataURL(target.files[0]);
-        return fileName
+        // return fileName
     }
 }
 

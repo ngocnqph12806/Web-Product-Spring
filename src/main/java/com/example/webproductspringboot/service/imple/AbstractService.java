@@ -2,11 +2,43 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.entity.*;
+import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.reponsitory.IHistoryReponsitory;
+import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.vo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
 public abstract class AbstractService {
+
+    @Autowired
+    private IUserReponsitory _iUserReponsitory;
+    @Autowired
+    private IHistoryReponsitory _iHistoryReponsitory;
+
+    protected void saveHistory(UserEntity user, String details) {
+        HistoryEntity entity = HistoryEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .idStaff(user)
+                .details(details)
+                .created(new Date(System.currentTimeMillis()))
+                .build();
+        _iHistoryReponsitory.save(entity);
+    }
+
+    protected UserEntity getUserLogin() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<UserEntity> optional = _iUserReponsitory.findByUserNameOrEmail(username);
+        if (optional.isEmpty()) throw new NotFoundException("Vui lòng đăng nhập trước khi thao tác");
+        return optional.get();
+    }
 
     protected Object map(Object data) {
         if (data == null) return null;
@@ -362,6 +394,7 @@ public abstract class AbstractService {
                     .pathUrl(dto.getPath())
                     .idUrl(dto.getIdPath())
                     .pathUserManual(dto.getPathUserManual())
+                    .description(dto.getDescription())
                     .status(dto.getStatus())
                     .created(dto.getDateCreated())
                     .build();
@@ -395,10 +428,10 @@ public abstract class AbstractService {
                             .mapToInt(e -> e.getPoint())
                             .summaryStatistics().getAverage()
                             : 0)
-                    .details(entity.getLstProductDetailsEntities() != null
-                            ? entity.getLstProductDetailsEntities().stream()
-                            .map(e -> (ProductDetailsVo) map(e)).collect(Collectors.toList())
-                            : null)
+//                    .details(entity.getLstProductDetailsEntities() != null
+//                            ? entity.getLstProductDetailsEntities().stream()
+//                            .map(e -> (ProductDetailsVo) map(e)).collect(Collectors.toList())
+//                            : null)
                     .images(entity.getLstProductImageEntities() != null
                             ? entity.getLstProductImageEntities().stream()
                             .map(e -> (ProductImageVo) map(e)).collect(Collectors.toList())
@@ -407,6 +440,23 @@ public abstract class AbstractService {
                             ? entity.getLstReviewProductEntities().stream()
                             .map(e -> (ReviewDto) map(e)).collect(Collectors.toList())
                             : null)
+                    .build();
+        }
+//        PRODUCT IMAGE
+        else if (data instanceof ProductImageVo) {
+            ProductImageVo dto = (ProductImageVo) data;
+            return ProductImageEntity.builder()
+                    .id(dto.getId())
+                    .path(dto.getPath())
+                    .idProduct(ProductEntity.builder().id(dto.getIdProduct()).build())
+                    .build();
+        } else if (data instanceof ProductImageEntity) {
+            ProductImageEntity entity = (ProductImageEntity) data;
+            return ProductImageVo.builder()
+                    .id(entity.getId())
+                    .path(entity.getPath())
+                    .idProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getId() : null)
                     .build();
         }
 //         TRANSPORT

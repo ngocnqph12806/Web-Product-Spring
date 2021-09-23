@@ -11,7 +11,6 @@ import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +28,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserService extends AbstractService implements IUserService, UserDetailsService {
@@ -92,17 +89,29 @@ public class UserService extends AbstractService implements IUserService, UserDe
     }
 
     @Override
+    public UserDto findByUserName(String username) {
+        Optional<UserEntity> optional = _iUserReponsitory.findByUserName(username);
+        if (optional.isEmpty()) {
+            log.error("User not fount in the database");
+            throw new NotFoundException("Người dùng không tồn tại");
+        } else {
+            log.error("User fount in the database: {}", username);
+        }
+        return (UserDto) map(optional.get());
+    }
+
+    @Override
     public UserDto save(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setBlock(false);
         entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
         entity.setCreated(new Date());
-        if (_iUserReponsitory.save(entity) == null) {
-            throw new InternalServerException("Lưu thất bại");
-        }
+        _iUserReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm người dùng: \n" + entity);
         return (UserDto) map(entity);
     }
 
@@ -110,6 +119,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
     public UserDto update(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         if (entity.getId() == null || entity.getId().isEmpty() || entity.getId().isBlank())
             throw new BadRequestException("Người dùng không đúng");
         Optional<UserEntity> fake = _iUserReponsitory.findById(entity.getId());
@@ -127,21 +137,9 @@ public class UserService extends AbstractService implements IUserService, UserDe
         } else {
             entity.setPassword(_passwordEncoder.encode(dto.getPassword()));
         }
-        if (_iUserReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iUserReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa thông tin người dùng: \n" + fake + "\n" + entity);
         return (UserDto) map(entity);
     }
-
-    @Override
-    public UserDto findByUserName(String username) {
-        Optional<UserEntity> optional = _iUserReponsitory.findByUserName(username);
-        if (optional.isEmpty()) {
-            log.error("User not fount in the database");
-            throw new NotFoundException("Người dùng không tồn tại");
-        } else {
-            log.error("User fount in the database: {}", username);
-        }
-        return (UserDto) map(optional.get());
-    }
-
 
 }

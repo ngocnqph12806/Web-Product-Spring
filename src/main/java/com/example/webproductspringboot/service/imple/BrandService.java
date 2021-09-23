@@ -2,6 +2,7 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.entity.BrandEntity;
+import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
@@ -39,10 +40,12 @@ public class BrandService extends AbstractService implements IBrandService {
     public BrandDto save(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
-        if (_iBrandReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iBrandReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm thương hiệu: \n" + entity);
         return (BrandDto) map(entity);
     }
 
@@ -50,6 +53,7 @@ public class BrandService extends AbstractService implements IBrandService {
     public BrandDto update(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         Optional<BrandEntity> optional = _iBrandReponsitory.findById(entity.getId());
         if (optional.isEmpty()) throw new NotFoundException("Thương hiệu không tồn tại");
         BrandEntity fake = optional.get();
@@ -57,7 +61,8 @@ public class BrandService extends AbstractService implements IBrandService {
             entity.setStatus(fake.getStatus());
         }
         entity.setCreated(fake.getCreated());
-        if (_iBrandReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iBrandReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa thương hiệu: \n" + fake + "\n" + entity);
         return (BrandDto) map(entity);
     }
 

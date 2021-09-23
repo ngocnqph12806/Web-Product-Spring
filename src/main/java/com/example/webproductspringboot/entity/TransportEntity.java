@@ -32,7 +32,19 @@ public class TransportEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
+    @Override
+    public String toString() {
+        return "TransportEntity{" +
+                "id='" + id + '\'' +
+                ", idOrder=" + (idOrder != null ? idOrder.getId() : null) +
+                ", fullName='" + fullName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

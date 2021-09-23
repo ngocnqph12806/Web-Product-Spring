@@ -1,9 +1,9 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.VoucherDto;
+import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.entity.VoucherEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IVoucherReponsitory;
 import com.example.webproductspringboot.service.intf.IVoucherService;
@@ -37,10 +37,13 @@ public class VoucherService extends AbstractService implements IVoucherService {
     public VoucherDto save(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
+        entity.setIdStaff(userEntity);
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
-        if (_iVoucherReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iVoucherReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm mã giảm giá: \n" + entity);
         return (VoucherDto) map(entity);
     }
 
@@ -48,15 +51,17 @@ public class VoucherService extends AbstractService implements IVoucherService {
     public VoucherDto update(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
         if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findById(entity.getId());
         if (optional.isEmpty()) throw new NotFoundException("Mã giảm giá không tồn tại");
         VoucherEntity fake = optional.get();
-        if(entity.getStatus() == null){
+        if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
         }
         entity.setIdStaff(fake.getIdStaff());
         entity.setCreated(fake.getCreated());
-        if (_iVoucherReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iVoucherReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa mã giảm giá: \n" + fake + "\n" + entity);
         return (VoucherDto) map(entity);
     }
 

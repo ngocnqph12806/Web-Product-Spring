@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="banner")
+@Table(name = "banner")
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,7 +29,18 @@ public class BannerEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
+    @Override
+    public String toString() {
+        return "BannerEntity{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", pathImage='" + pathImage + '\'' +
+                ", pathLink='" + pathLink + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

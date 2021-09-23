@@ -20,17 +20,26 @@ public class CollectionEntity {
     @Id
     @Column(length = 64)
     private String id;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
     @Column
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
-//    @OneToMany(mappedBy = "idCollection")
+    //    @OneToMany(mappedBy = "idCollection")
 //    private List<CollectionBrandEntity> lstCollectionBrandEntities;
     @OneToMany(mappedBy = "idCollection")
     private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
 
+    @Override
+    public String toString() {
+        return "CollectionEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

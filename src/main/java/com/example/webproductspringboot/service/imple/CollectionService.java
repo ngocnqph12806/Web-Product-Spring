@@ -2,8 +2,8 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.CollectionDto;
 import com.example.webproductspringboot.entity.CollectionEntity;
+import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICollectionReponsitory;
 import com.example.webproductspringboot.service.intf.ICollectionService;
@@ -37,10 +37,12 @@ public class CollectionService extends AbstractService implements ICollectionSer
     public CollectionDto save(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
         if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
-        if (_iCollectionReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iCollectionReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm danh mục: \n" + entity);
         return (CollectionDto) map(entity);
     }
 
@@ -48,6 +50,7 @@ public class CollectionService extends AbstractService implements ICollectionSer
     public CollectionDto updare(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
         if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        UserEntity userEntity = getUserLogin();
         Optional<CollectionEntity> optional = _iCollectionReponsitory.findById(entity.getId());
         if (optional.isEmpty()) throw new NotFoundException("Danh mục không tồn tại");
         CollectionEntity fake = optional.get();
@@ -55,7 +58,8 @@ public class CollectionService extends AbstractService implements ICollectionSer
             entity.setStatus(fake.getStatus());
         }
         entity.setCreated(fake.getCreated());
-        if (_iCollectionReponsitory.save(entity) == null) throw new InternalServerException("Lưu thất bại");
+        _iCollectionReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa danh mục: \n" + fake + "\n" + entity);
         return (CollectionDto) map(entity);
     }
 }

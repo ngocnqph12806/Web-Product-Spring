@@ -1,19 +1,22 @@
 package com.example.webproductspringboot.service.intf;
 
 import com.example.webproductspringboot.dto.ProductDto;
+import com.example.webproductspringboot.vo.ProductImageVo;
 
 import java.util.List;
 import java.util.Set;
 
 public interface IProductService {
 
-    List<ProductDto> findAll();
+    List<ProductDto> findAllProduct();
 
-    ProductDto findById(String id);
+    ProductDto findProductById(String id);
 
-    ProductDto save(ProductDto dto);
+    ProductDto saveProduct(ProductDto dto);
 
-    ProductDto update(ProductDto dto);
+    ProductDto updateProduct(ProductDto dto);
+
+    ProductImageVo saveImageProduct(ProductImageVo vo);
 
     Set<String> getSetCategoryDetailsByIdCategory(String idCategory);
 
@@ -21,4 +24,5 @@ public interface IProductService {
 
     ProductDto getMinMaxPrice();
 
+    void deleteAllImagesByProductId(String id);
 }

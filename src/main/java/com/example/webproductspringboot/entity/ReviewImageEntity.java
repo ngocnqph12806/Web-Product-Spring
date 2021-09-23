@@ -19,4 +19,12 @@ public class ReviewImageEntity {
     @Column(nullable = false)
     private String pathImage;
 
+    @Override
+    public String toString() {
+        return "ReviewImageEntity{" +
+                "id='" + id + '\'' +
+                ", idReviewProduct=" + (idReviewProduct != null ? idReviewProduct.getId() : null) +
+                ", pathImage='" + pathImage + '\'' +
+                '}';
+    }
 }

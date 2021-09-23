@@ -32,7 +32,7 @@ public class TokenAPI {
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer  ")){
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer  ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -51,7 +51,7 @@ public class TokenAPI {
                 tokens.put("refresh_token", refresh_token);
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-            }catch (Exception e){
+            } catch (Exception e) {
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
 //                    response.sendError(FORBIDDEN.value());
@@ -60,7 +60,7 @@ public class TokenAPI {
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
-        }else{
+        } else {
             throw new RuntimeException("Refresh token is missing");
         }
     }

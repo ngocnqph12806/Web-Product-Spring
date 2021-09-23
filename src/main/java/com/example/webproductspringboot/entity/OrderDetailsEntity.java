@@ -34,4 +34,15 @@ public class OrderDetailsEntity {
     @OneToMany(mappedBy = "idOrderDtails")
     private List<CustomersReturnDetailsEntity> lstCustomersReturnDetailsEntities;
 
+    @Override
+    public String toString() {
+        return "OrderDetailsEntity{" +
+                "id='" + id + '\'' +
+                ", idOrder=" + (idOrder != null ? idOrder.getId() : null) +
+                ", idProduct=" + (idProduct != null ? idProduct.getId() : null) +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", priceSale=" + priceSale +
+                '}';
+    }
 }

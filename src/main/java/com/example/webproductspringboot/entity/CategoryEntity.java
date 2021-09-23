@@ -40,4 +40,16 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "idCategory")
     private List<CollectionCategoryEntity> lstCollectionCategoryEntities;
 
+    @Override
+    public String toString() {
+        return "CategoryEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", banner='" + banner + '\'' +
+                ", idUrl=" + idUrl +
+                ", pathUrl='" + pathUrl + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

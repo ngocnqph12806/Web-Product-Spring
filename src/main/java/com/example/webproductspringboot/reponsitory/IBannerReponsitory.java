@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface IBannerReponsitory extends JpaRepository<BannerEntity, String> {}
+public interface IBannerReponsitory extends JpaRepository<BannerEntity, String> {
+}

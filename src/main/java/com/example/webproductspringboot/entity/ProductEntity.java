@@ -50,16 +50,37 @@ public class ProductEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
-    @OneToMany(mappedBy = "idProduct")
-    private List<ProductDetailsEntity> lstProductDetailsEntities;
+    //    @OneToMany(mappedBy = "idProduct")
+//    private List<ProductDetailsEntity> lstProductDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ProductImageEntity> lstProductImageEntities;
-//    @OneToMany(mappedBy = "idProduct")
+    //    @OneToMany(mappedBy = "idProduct")
 //    private List<OrderDetailsEntity> lstOrderDetailsEntities;
 //    @OneToMany(mappedBy = "idProduct")
 //    private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ReviewProductEntity> lstReviewProductEntities;
+
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", idBrand=" + (idBrand != null ? idBrand.getId() : null) +
+                ", idCategory=" + (idCategory != null ? idCategory.getId() : null) +
+                ", price=" + price +
+                ", priceSale=" + priceSale +
+                ", quantity=" + quantity +
+                ", color='" + color + '\'' +
+                ", categoryDetails='" + categoryDetails + '\'' +
+                ", location='" + location + '\'' +
+                ", idUrl=" + idUrl +
+                ", pathUrl='" + pathUrl + '\'' +
+                ", pathUserManual='" + pathUserManual + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="review_product")
+@Table(name = "review_product")
 @Data
 @Builder
 @NoArgsConstructor
@@ -34,9 +34,21 @@ public class ReviewProductEntity {
     private Boolean introduce;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idReviewProduct")
     private List<ReviewImageEntity> lstReviewImageEntities;
 
+    @Override
+    public String toString() {
+        return "ReviewProductEntity{" +
+                "id='" + id + '\'' +
+                ", idProduct=" + (idProduct != null ? idProduct.getId() : null) +
+                ", idVisit=" + (idVisit != null ? idVisit.getId() : null) +
+                ", point=" + point +
+                ", description='" + description + '\'' +
+                ", introduce=" + introduce +
+                ", status=" + status +
+                '}';
+    }
 }

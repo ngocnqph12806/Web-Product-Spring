@@ -25,14 +25,16 @@ public class ProductAdmin {
 
     @GetMapping("product")
     public String listProduct(Model model) {
-        model.addAttribute("lstProduct", _iProductService.findAll());
+        model.addAttribute("lstProduct", _iProductService.findAllProduct());
+        model.addAttribute("lstBrands", _iBrandService.findAll());
+        model.addAttribute("lstCategories", _iCategoryService.findAll());
         return "page/admin/product/index-product";
     }
 
     @GetMapping(value = "product/edit", params = "id")
     public String editWithId(@RequestParam("id") String id, RedirectAttributes ra) {
         try {
-            ra.addFlashAttribute("product", _iProductService.findById(id));
+            ra.addFlashAttribute("product", _iProductService.findProductById(id));
         } catch (Exception e) {
             ra.addFlashAttribute("product", new ProductDto());
         }

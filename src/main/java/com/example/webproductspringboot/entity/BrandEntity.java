@@ -32,11 +32,23 @@ public class BrandEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idBrand")
     private List<ProductEntity> lstProduct;
     @OneToMany(mappedBy = "idBrand")
     private List<CollectionBrandEntity> lstCollectionBrandEntities;
 
+    @Override
+    public String toString() {
+        return "BrandEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

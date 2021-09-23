@@ -30,4 +30,14 @@ public class InvoiceDetailsEntity {
     @Column
     private Integer quantity;
 
+    @Override
+    public String toString() {
+        return "InvoiceDetailsEntity{" +
+                "id='" + id + '\'' +
+                ", idInvoice=" + (idInvoice != null ? idInvoice.getId() : null) +
+                ", idProduct=" + (idProduct != null ? idProduct.getId() : null) +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

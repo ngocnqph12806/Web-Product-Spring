@@ -24,7 +24,15 @@ public class HistoryEntity {
     private UserEntity idStaff;
     @Column(nullable = false)
     private String details;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
+    @Override
+    public String toString() {
+        return "HistoryEntity{" +
+                "id='" + id + '\'' +
+                ", idStaff=" + idStaff +
+                ", details='" + details + '\'' +
+                '}';
+    }
 }

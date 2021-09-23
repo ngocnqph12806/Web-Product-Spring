@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -15,10 +17,16 @@ import java.util.List;
 public class InvoiceDto {
 
     private String id;
+    @NotNull
+    @NotEmpty
     private String idCreator;
     private String nameCreator;
+    @NotNull
+    @NotEmpty
     private String idChecker;
     private String nameChecker;
+    @NotNull
+    @NotEmpty
     private String description;
     private Boolean status;
     private Date dateCreated;

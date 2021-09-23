@@ -27,6 +27,13 @@ public class CustomersReturnDetailsEntity {
     @Column
     private Integer quantity;
 
-
-
+    @Override
+    public String toString() {
+        return "CustomersReturnDetailsEntity{" +
+                "id='" + id + '\'' +
+                ", idCustomersReturn=" + (idCustomersReturn != null ? idCustomersReturn.getId() : null) +
+                ", idOrderDtails=" + (idOrderDtails != null ? idOrderDtails.getId() : null) +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

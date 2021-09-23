@@ -11,5 +11,5 @@ public interface ITransportService {
     TransportDto findById(String id);
 
     TransportDto save(TransportDto dto);
-    
+
 }

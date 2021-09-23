@@ -33,9 +33,20 @@ public class CustomersReturnEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idCustomersReturn")
     private List<CustomersReturnDetailsEntity> lstCustomersReturnDetailsEntities;
 
+    @Override
+    public String toString() {
+        return "CustomersReturnEntity{" +
+                "id='" + id + '\'' +
+                ", idOrder=" + (idOrder != null ? idOrder.getId() : null) +
+                ", idVisit=" + (idVisit != null ? idVisit.getId() : null) +
+                ", idStaff=" + (idStaff != null ? idStaff.getId() : null) +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -42,7 +42,7 @@ public class UserEntity {
     private Boolean status;
     @Column(nullable = false, columnDefinition = "bit default 0")
     private Boolean block;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
 //    @OneToMany(mappedBy = "idStaff")
@@ -63,11 +63,28 @@ public class UserEntity {
     //VISIT
     @OneToMany(mappedBy = "idVisit")
     private List<ReviewProductEntity> lstReviewProductEntities;
-//    @OneToMany(mappedBy = "idVisit")
+    //    @OneToMany(mappedBy = "idVisit")
 //    private List<VoucherUseEntity> lstVoucherUseEntityList;
     @OneToMany(mappedBy = "idVisit")
     private List<OrderEntity> lstOrderEntities;
     @OneToMany(mappedBy = "idVisit")
     private List<CustomersReturnEntity> lstCustomersReturnEntitiesWithVisit;
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", role='" + role + '\'' +
+                ", status=" + status +
+                ", block=" + block +
+                '}';
+    }
 }

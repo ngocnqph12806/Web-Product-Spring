@@ -19,118 +19,154 @@
                 </a>
             </div>
             <div class="container">
-                <form id="form-input-category" th:object="${product}">
-                    <input type="hidden" name="id"/>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Tên sản phẩm
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập tên sản phẩm"
-                                   name="name" maxlength="50" th:value="*{name}">
+                <div id="smart_wizard">
+                    <ul>
+                        <li><a href="#step-1">Nhập<br><small>Nhập thông tin sản phẩm</small></a></li>
+                        <li><a href="#step-2">Tải ảnh<br><small>Tải lên ảnh sản phẩm</small></a></li>
+                    </ul>
+                    <div class="p-3 sw-default-content mb-3">
+                        <div id="step-1" class="">
+                            <form id="form-input-product">
+                                <input type="hidden" name="id"/>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Tên sản phẩm
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập tên sản phẩm"
+                                               name="name" maxlength="50" id="name">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Đường dẫn
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập đường dẫn"
+                                               name="path" maxlength="32" id="path">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Thương hiệu
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <select class="select2 form-control custom-select" name="idBrand"
+                                                id="idBrand" style="width: 100%; height:36px;">
+                                            <th:block th:each="brand:${lstBrands}" th:object="${brand}">
+                                                <option th:value="*{id}" th:text="*{name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Loại sản phẩm
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <select class="select2 form-control custom-select" name="idCategory"
+                                                id="idCategory" style="width: 100%; height:36px;">
+                                            <th:block th:each="category:${lstCategories}" th:object="${category}">
+                                                <option th:value="*{id}" th:text="*{name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Giá bán ra
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập giá bán ra"
+                                               name="price" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Giá giảm
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập giá giảm"
+                                               name="priceSale" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Số lượng
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập số lượng"
+                                               name="quantity" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Màu sắc
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập màu sắc"
+                                               name="color" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Loại chi tiết
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Nhập loại chi tiết"
+                                               name="categoryDetails" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Vị trí
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text"
+                                               placeholder="Nhập vị trí đặt sản phẩm"
+                                               name="location" maxlength="32">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Mô tả
+                                    </strong>
+                                    <div class="col-sm-10">
+                                            <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                                      placeholder="Nhập mô tả"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <strong class="col-sm-2 col-form-label text-right">
+                                        Hướng dẫn sử dụng
+                                    </strong>
+                                    <div class="col-sm-10">
+                                        <input type="file" id="input-file-now-custom-2" name="pathUserManual"
+                                               class="file-user-manual dropify"
+                                               accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf"
+                                               onchange="onChangeFile(this)" data-oldfile="" data-height="200">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="step-2" class="">
+                            <form id="form-images-product">
+                                <input type="file" onchange="onChangeFile(this)" data-id="0"
+                                       name="images"/>
+                                <input type="file" onchange="onChangeFile(this)" data-id="1"
+                                       name="images"/>
+                            </form>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Đường dẫn
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập đường dẫn" name="path"
-                                   maxlength="32" th:value="*{path}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Thương hiệu
-                        </strong>
-                        <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" name="idBrand"
-                                    style="width: 100%; height:36px;">
-                                <th:block th:each="brand:${lstBrands}" th:object="${brand}">
-                                    <option th:if="${product.idBrand == brand.id}" th:value="*{id}" selected
-                                            th:text="*{name}"></option>
-                                    <option th:unless="${product.idBrand == brand.id}" th:value="*{id}"
-                                            th:text="*{name}"></option>
-                                </th:block>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Loại sản phẩm
-                        </strong>
-                        <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" name="idCategory"
-                                    style="width: 100%; height:36px;">
-                                <th:block th:each="category:${lstCategories}" th:object="${category}">
-                                    <option th:if="${product.idCategory == category.id}" th:value="*{id}" selected
-                                            th:text="*{name}"></option>
-                                    <option th:unless="${product.idCategory == category.id}" th:value="*{id}"
-                                            th:text="*{name}"></option>
-                                </th:block>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Giá bán ra
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập giá bán ra"
-                                   name="price" maxlength="32"
-                                   th:value="*{price}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Giá giảm
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập giá giảm"
-                                   name="priceSale" maxlength="32"
-                                   th:value="*{priceSale}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Số lượng
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập số lượng"
-                                   name="quantity" maxlength="32"
-                                   th:value="*{quantity}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Màu sắc
-                        </strong>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" placeholder="Nhập màu sắc" name="color"
-                                   maxlength="32" th:value="*{color}">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Mô tả
-                        </strong>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" name="description" maxlength="255" rows="3"
-                                      placeholder="Nhập mô tả" th:text="*{description}"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <strong class="col-sm-2 col-form-label text-right">
-                            Hướng dẫn sử dụng
-                        </strong>
-                        <div class="col-sm-10">
-                            <input type="file" id="input-file-now-custom-2" name="avatar"
-                                   class="file-avatar dropify"
-                                   accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf"
-                                   onchange="onChangeFileAvatar(this)" data-oldimg="" data-height="200">
-                        </div>
-                    </div>
-                </form>
+                    <!--end /div-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
+                    </button>
+                    <button type="button" onclick="saveProduct()" class="btn btn-primary waves-effect waves-light">
+                        Lưu lại
+                    </button>
+                </div>
                 <button class="btn btn-success float-right mt-3 mb-3">Lưu lại</button>
             </div>
         </div>
@@ -140,6 +176,8 @@
 </div>
 <th:block layout:fragment="script-admin">
     <script src="/web-admin/js/jquery.repeater.min.js"></script>
+    <script src="/web-admin/js/jquery.smartWizard.min.js"></script>
+    <script src="/web-admin/js/jquery.form-wizard.init.js"></script>
     <!--    <script src="/web-admin/js/jquery.form-repeater.js"></script>-->
     <!--    UPLOAD-->
     <script src="/web-admin/js/dropify.min.js"></script>
@@ -194,6 +232,12 @@
 <th:block layout:fragment="css-admin">
     <!--    UPLOAD-->
     <link href="/web-admin/css/dropify.min.css" type="text/css" rel="stylesheet">
+    <link href="/web-admin/css/smart_wizard.css"
+          rel="stylesheet" type="text/css">
+    <link href="/web-admin/css/smart_wizard_theme_arrows.css"
+          rel="stylesheet" type="text/css">
+    <link href="/web-admin/css/smart_wizard_theme_circles.css"
+          rel="stylesheet" type="text/css">
 </th:block>
 </body>
 </html>

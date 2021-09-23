@@ -52,4 +52,5 @@ public interface IProductReponsitory extends JpaRepository<ProductEntity, String
 
     @Query(value = "select max(p.price) as priceMax from ProductEntity p where p.status = true")
     Long findMaxPrice();
+
 }

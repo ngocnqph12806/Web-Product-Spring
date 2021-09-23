@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -18,20 +20,44 @@ import java.util.List;
 public class ProductDto {
 
     private String id;
+    @NotNull
+    @NotEmpty
     private String name;
+    @NotNull
+    @NotEmpty
     private String idBrand;
     private String nameBrand;
+    @NotNull
+    @NotEmpty
     private String idCategory;
     private String nameCategory;
+    @NotNull
+    @NotEmpty
     private Long price;
+    @NotNull
+    @NotEmpty
     private Long priceSale;
+    @NotNull
+    @NotEmpty
     private Integer quantity;
+    @NotNull
+    @NotEmpty
     private String color;
+    @NotNull
+    @NotEmpty
     private String categoryDetails;
+    @NotNull
+    @NotEmpty
     private String location;
+    @NotNull
+    @NotEmpty
     private String path;
     private Long idPath;
+    @NotNull
+    @NotEmpty
     private String pathUserManual;
+    @NotNull
+    @NotEmpty
     private String description;
     private Boolean status;
     private Date dateCreated;

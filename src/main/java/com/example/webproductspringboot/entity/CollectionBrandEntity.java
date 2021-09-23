@@ -25,4 +25,12 @@ public class CollectionBrandEntity {
     @JoinColumn
     private CollectionEntity idCollection;
 
+    @Override
+    public String toString() {
+        return "CollectionBrandEntity{" +
+                "id='" + id + '\'' +
+                ", idBrand=" + (idBrand != null ? idBrand.getId() : null) +
+                ", idCollection=" + (idCollection != null ? idCollection.getId() : null) +
+                '}';
+    }
 }

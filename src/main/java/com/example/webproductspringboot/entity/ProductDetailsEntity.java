@@ -25,5 +25,15 @@ public class ProductDetailsEntity {
     @Column(nullable = false, length = 150)
     private String pathBanner;
 
-
+    @Override
+    public String toString() {
+        return "ProductDetailsEntity{" +
+                "id='" + id + '\'' +
+                ", idProduct=" + (idProduct != null ? idProduct.getId() : null) +
+                ", idValueDetails=" + (idValueDetails != null ? idValueDetails.getId() : null) +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", pathBanner='" + pathBanner + '\'' +
+                '}';
+    }
 }

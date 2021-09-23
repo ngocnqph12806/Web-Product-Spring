@@ -21,7 +21,16 @@ public class VoucherUseEntity {
     private UserEntity idVisit;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
+    @Override
+    public String toString() {
+        return "VoucherUseEntity{" +
+                "id='" + id + '\'' +
+                ", idVoucher=" + (idVoucher != null ? idVoucher.getId() : null) +
+                ", idVisit=" + (idVisit != null ? idVisit.getId() : null) +
+                ", status=" + status +
+                '}';
+    }
 }

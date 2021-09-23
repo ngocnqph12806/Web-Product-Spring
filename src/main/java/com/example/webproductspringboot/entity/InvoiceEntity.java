@@ -30,9 +30,19 @@ public class InvoiceEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idInvoice")
     private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
 
+    @Override
+    public String toString() {
+        return "InvoiceEntity{" +
+                "id='" + id + '\'' +
+                ", idStaffCreate=" + (idStaffCreate != null ? idStaffCreate.getId() : null) +
+                ", idStaffCheck=" + (idStaffCheck != null ? idStaffCheck.getId() : null) +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

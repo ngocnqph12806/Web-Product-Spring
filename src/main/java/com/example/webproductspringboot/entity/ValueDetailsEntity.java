@@ -20,4 +20,11 @@ public class ValueDetailsEntity {
     @OneToMany(mappedBy = "idValueDetails")
     private List<ProductDetailsEntity> lstProductDetailsEntities;
 
+    @Override
+    public String toString() {
+        return "ValueDetailsEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

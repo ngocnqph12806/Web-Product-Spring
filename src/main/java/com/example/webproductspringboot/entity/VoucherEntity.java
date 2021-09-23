@@ -39,9 +39,24 @@ public class VoucherEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idVoucher")
     private List<VoucherUseEntity> lstVoucherUseEntities;
 
+    @Override
+    public String toString() {
+        return "VoucherEntity{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", title='" + title + '\'' +
+                ", idStaff=" + (idStaff != null ? idStaff.getId() : null) +
+                ", quantity=" + quantity +
+                ", priceSale=" + priceSale +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

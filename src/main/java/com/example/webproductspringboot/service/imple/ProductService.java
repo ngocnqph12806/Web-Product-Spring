@@ -2,16 +2,19 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.ProductDto;
 import com.example.webproductspringboot.entity.ProductEntity;
+import com.example.webproductspringboot.entity.ProductImageEntity;
+import com.example.webproductspringboot.entity.UserEntity;
+import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.reponsitory.IProductImageReponsitory;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
+import com.example.webproductspringboot.vo.ProductImageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,16 +22,18 @@ public class ProductService extends AbstractService implements IProductService {
 
     @Autowired
     private IProductReponsitory _iProductReponsitory;
+    @Autowired
+    private IProductImageReponsitory _iProductImageReponsitory;
 
     @Override
-    public List<ProductDto> findAll() {
+    public List<ProductDto> findAllProduct() {
         List<ProductEntity> lst = _iProductReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
-    public ProductDto findById(String id) {
+    public ProductDto findProductById(String id) {
         Optional<ProductEntity> optional = _iProductReponsitory.findById(id);
         if (optional.isEmpty()) throw new NotFoundException("Sản phẩm không tồn tại");
         return (ProductDto) map(optional.get());
@@ -51,42 +56,57 @@ public class ProductService extends AbstractService implements IProductService {
     }
 
     @Override
-    public ProductDto save(ProductDto dto) {
-        return null;
+    public ProductDto saveProduct(ProductDto dto) {
+        ProductEntity entity = (ProductEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        entity.setId(UUID.randomUUID().toString());
+        entity.setStatus(true);
+        entity.setIdUrl(new Random().nextLong());
+        entity.setCreated(new Date(System.currentTimeMillis()));
+        _iProductReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm sản phẩm: \n" + entity);
+        return (ProductDto) map(entity);
     }
 
     @Override
-    public ProductDto update(ProductDto dto) {
-        return null;
+    public ProductDto updateProduct(ProductDto dto) {
+        ProductEntity entity = (ProductEntity) map(dto);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        Optional<ProductEntity> optional = _iProductReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new NotFoundException("Sản phẩm không tồn tại");
+        ProductEntity fake = optional.get();
+        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        entity.setIdUrl(fake.getIdUrl());
+        entity.setCreated(fake.getCreated());
+        _iProductReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa sản phẩm: \n" + fake + "\n" + entity);
+        return (ProductDto) map(entity);
+    }
+
+    @Override
+    public ProductImageVo saveImageProduct(ProductImageVo vo) {
+        ProductImageEntity entity = (ProductImageEntity) map(vo);
+        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        UserEntity userEntity = getUserLogin();
+        entity.setId(UUID.randomUUID().toString());
+        _iProductImageReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm sảnh sản phẩm: \n" + entity);
+        return (ProductImageVo) map(entity);
     }
 
     @Override
     public ProductDto getMinMaxPrice() {
         return null;
     }
-//
-//    @Override
-//    public FilterPriceProductDto getMinMaxPrice() {
-//        return FilterPriceProductDto.builder()
-//                .min(_iProductReponsitory.findMinPrice())
-//                .max(_iProductReponsitory.findMaxPrice())
-//                .build();
-//    }
 
-
-//    @Override
-//    public boolean changeStatus(String id, Boolean reuslt) {
-//        Optional<ProductEntity> optional = _iProductReponsitory.findById(id);
-//        if (optional.isEmpty()) {
-//            throw new NotFoundException("Sản phẩm không tồn tại");
-//        }
-//        ProductEntity productEntity = optional.get();
-//        productEntity.setStatus(reuslt);
-//        if (_iProductReponsitory.save(productEntity) != null) {
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public void deleteAllImagesByProductId(String id) {
+        UserEntity userEntity = getUserLogin();
+        _iProductImageReponsitory.deleteAllImagesByProductId(id);
+        saveHistory(userEntity, "Xoá toàn bộ ảnh sản phẩm: " + id);
+    }
 
 
 }

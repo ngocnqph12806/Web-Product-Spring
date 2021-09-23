@@ -25,4 +25,12 @@ public class CollectionCategoryEntity {
     @JoinColumn
     private CollectionEntity idCollection;
 
+    @Override
+    public String toString() {
+        return "CollectionCategoryEntity{" +
+                "id='" + id + '\'' +
+                ", idCategory=" + (idCategory != null ? idCategory.getId() : null) +
+                ", idCollection=" + (idCollection != null ? idCollection.getId() : null) +
+                '}';
+    }
 }

@@ -2,6 +2,7 @@ package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.entity.CategoryEntity;
+import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
@@ -38,9 +39,11 @@ public class CategoryService extends AbstractService implements ICategoryService
     public CategoryDto save(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
         if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
-        if (_iCategoryReponsitory.save(entity) == null) throw new IllegalStateException("Lưu thất bại");
+        _iCategoryReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm loại sản phẩm: \n" + entity);
         return (CategoryDto) map(entity);
     }
 
@@ -48,6 +51,7 @@ public class CategoryService extends AbstractService implements ICategoryService
     public CategoryDto update(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
         if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        UserEntity userEntity = getUserLogin();
         Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(entity.getId());
         if (optional.isEmpty()) throw new NotFoundException("Loại sản phẩm không tồn tại");
         CategoryEntity fake = optional.get();
@@ -56,7 +60,8 @@ public class CategoryService extends AbstractService implements ICategoryService
         }
         entity.setIdUrl(fake.getIdUrl());
         entity.setCreated(fake.getCreated());
-        if (_iCategoryReponsitory.save(entity) == null) throw new IllegalStateException("Lưu thất bại");
+        _iCategoryReponsitory.save(entity);
+        saveHistory(userEntity, "Sửa loại sản phẩm: \n" + fake + "\n" + entity);
         return (CategoryDto) map(entity);
     }
 

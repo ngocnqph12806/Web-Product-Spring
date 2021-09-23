@@ -16,7 +16,7 @@ public class HomeWeb {
     private IProductService _iProductService;
 
     @GetMapping({"", "/index.html"})
-    public String home(Model model){
+    public String home(Model model) {
         model.addAttribute("sellerProduct", null);
         return "page/web/index";
     }

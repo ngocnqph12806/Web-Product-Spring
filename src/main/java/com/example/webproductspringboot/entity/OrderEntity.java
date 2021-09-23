@@ -37,11 +37,24 @@ public class OrderEntity {
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
-    @Column(columnDefinition="timestamp default current_timestamp")
+    @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
     @OneToMany(mappedBy = "idOrder")
     private List<OrderDetailsEntity> lstOrderDetailsEntities;
     @OneToMany(mappedBy = "idOrder")
     private List<TransportEntity> lstTransportEntities;
 
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "id='" + id + '\'' +
+                ", idVisit=" + (idVisit != null ? idVisit.getId() : null) +
+                ", staffCreate=" + (staffCreate != null ? staffCreate.getId() : null) +
+                ", staffSales=" + (staffSales != null ? staffSales.getId() : null) +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", paymentStatus=" + paymentStatus +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

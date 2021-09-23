@@ -18,9 +18,11 @@ public interface IUserService {
 
     UserDto findById(String id);
 
+    UserDto findByUserName(String username);
+
     UserDto save(ChangeUserDto dto);
 
     UserDto update(ChangeUserDto dto);
 
-    UserDto findByUserName(String username);
+
 }

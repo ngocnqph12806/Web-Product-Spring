@@ -140,6 +140,19 @@ function checkImage(image, title) {
     return false;
 }
 
+function checkFileDoc(file, title) {
+    let REGEX_DOC = /^.*\.(docx|DOCX|xlsx|xlsm|xls|xml|doc|DOC|pdf|PDF)$/;
+    if (file === null || file === '') {
+        toastDanger(title + ' không được để trống', title);
+        return false;
+    }
+    if (REGEX_DOC.test(file)) {
+        return true;
+    }
+    toastWarning(title + ' không đúng định dạng .doc, .docx, .xlsx, .xlsm, .xml, .pdf', title)
+    return false;
+}
+
 function checkUserName(username) {
     let REGEX_USERNAME = /[a-zA-Z0-9\-]{5,}$/
     if (username === null || username === '') {
@@ -274,7 +287,7 @@ function appendFormdata(idForm, data, objFile, name) {
         $('#' + idForm + ' :input').each(function () {
             if (this.name === name) {
                 if (this.type === 'file') {
-                    $(this)[0].dataset.oldimg = data
+                    $(this)[0].dataset.oldfile = data
                     objFile.nameFile = data
                     return;
                 } else if (this.type === 'select-one') {
