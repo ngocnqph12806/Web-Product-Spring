@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IReviewProductReponsitory;
 import com.example.webproductspringboot.service.intf.IReviewProductService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class ReviewProductService extends AbstractService implements IReviewProd
     @Override
     public ReviewDto save(ReviewDto dto) {
         ReviewProductEntity entity = (ReviewProductEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -40,10 +41,10 @@ public class ReviewProductService extends AbstractService implements IReviewProd
     @Override
     public ReviewDto update(ReviewDto dto) {
         ReviewProductEntity entity = (ReviewProductEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<ReviewProductEntity> optional = _iReviewProductReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Đánh giá không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "review", "review.not.found"));
         ReviewProductEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setCreated(fake.getCreated());

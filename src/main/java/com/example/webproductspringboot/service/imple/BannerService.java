@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBannerReponsitory;
 import com.example.webproductspringboot.service.intf.IBannerService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,6 @@ public class BannerService extends AbstractService implements IBannerService {
         _iBannerReponsitory = iBannerReponsitory;
     }
 
-
     @Override
     public List<BannerDto> findAll() {
         List<BannerEntity> entities = _iBannerReponsitory.findAll();
@@ -35,7 +35,7 @@ public class BannerService extends AbstractService implements IBannerService {
     public BannerDto findById(String id) {
         Optional<BannerEntity> optional = _iBannerReponsitory.findById(id);
         if (optional.isEmpty()) {
-            throw new NotFoundException("Banner không tồn tại");
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "banner", "banner.not.found"));
         }
         return (BannerDto) map(optional.get());
     }
@@ -43,7 +43,7 @@ public class BannerService extends AbstractService implements IBannerService {
     @Override
     public BannerDto save(BannerDto dto) {
         BannerEntity entity = (BannerEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu rỗng");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
@@ -55,10 +55,10 @@ public class BannerService extends AbstractService implements IBannerService {
     @Override
     public BannerDto update(BannerDto dto) {
         BannerEntity entity = (BannerEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu rỗng");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<BannerEntity> optional = _iBannerReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Banner không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "banner", "banner.not.found"));
         BannerEntity fake = optional.get();
         entity.setCreated(fake.getCreated());
         _iBannerReponsitory.save(entity);

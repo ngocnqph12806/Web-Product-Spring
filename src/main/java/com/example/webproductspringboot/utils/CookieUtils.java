@@ -15,14 +15,21 @@ public class CookieUtils {
     public String errorsProperties(HttpServletRequest request, String path, String key) {
         ResourceBundle resourceBundle = null;
         Cookie[] cookies = request.getCookies();
-        String lang = "en_US";
+        System.out.println("mảng cookie là: "+cookies);
+        System.out.println("tới đây sau mảng cookie");
+        String lang = "";
         for (Cookie x : cookies) {
-            if (x.getName().equals(CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME+"1")) {
+            if (x.getName().equals(CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME)) {
                 lang = x.getValue().replaceAll("-", "_");
                 break;
             }
         }
-        resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + lang);
+        System.out.println("lang: "+lang);
+        if (lang.isBlank()) {
+            resourceBundle = ResourceBundle.getBundle("i18n/" + path);
+        } else {
+            resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + lang);
+        }
         assert resourceBundle != null;
         return resourceBundle.getString(key);
     }

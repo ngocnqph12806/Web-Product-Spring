@@ -50,7 +50,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerException(Exception ex, WebRequest req) {
         // Log err
-        System.out.println(ex.getCause());
         System.out.println("ecxeption: " + ex);
         ErrorResponse err = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);

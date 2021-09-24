@@ -3,6 +3,7 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IProductService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.utils.MapperModelUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
 import lombok.Data;
@@ -53,7 +54,7 @@ public class ProductApi extends AbstractApi {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         List<String> lstImages = new ArrayList<>();
         for (String x : form.getImages()) if (x != null && !x.isEmpty()) lstImages.add(x);
-        if (lstImages.isEmpty()) throw new BadRequestException("Vui lòng chọn hình ản sản phẩm");
+        if (lstImages.isEmpty()) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", "image.please.choose.product.image"));
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
         if (dtoSave != null) for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());

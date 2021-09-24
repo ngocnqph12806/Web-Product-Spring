@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBrandReponsitory;
 import com.example.webproductspringboot.service.intf.IBrandService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class BrandService extends AbstractService implements IBrandService {
     public BrandDto findById(String id) {
         Optional<BrandEntity> brandEntity = _iBrandReponsitory.findById(id);
         if (brandEntity.isEmpty()) {
-            throw new NotFoundException("Thương hiệu không tồn tại");
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "brand", "brand.not.found"));
         }
         return (BrandDto) map(brandEntity.get());
     }
@@ -42,7 +43,7 @@ public class BrandService extends AbstractService implements IBrandService {
     @Override
     public BrandDto save(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -55,10 +56,10 @@ public class BrandService extends AbstractService implements IBrandService {
     @Override
     public BrandDto update(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<BrandEntity> optional = _iBrandReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Thương hiệu không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "brand", "brand.not.found"));
         BrandEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());

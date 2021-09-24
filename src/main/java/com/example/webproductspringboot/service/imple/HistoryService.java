@@ -4,6 +4,7 @@ import com.example.webproductspringboot.entity.HistoryEntity;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IHistoryReponsitory;
 import com.example.webproductspringboot.service.intf.IHistoryService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.HistoryVo;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class HistoryService extends AbstractService implements IHistoryService {
     @Override
     public HistoryVo findById(String id) {
         Optional<HistoryEntity> optional = _iHistoryReponsitory.findById(id);
-        if(optional.isEmpty()) throw new NotFoundException("Lịch sử thao tác không tồn tại");
+        if(optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "history", "history.not.found"));
         return (HistoryVo) map(optional.get());
     }
 

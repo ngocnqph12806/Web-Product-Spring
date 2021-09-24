@@ -9,6 +9,7 @@ import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,10 +46,10 @@ public class UserService extends AbstractService implements IUserService, UserDe
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> optional = _iUserReponsitory.findByUserNameOrEmail(username);
         if (optional.isEmpty()) {
-            log.error("User not fount in the database");
-            throw new NotFoundException("Người dùng không tồn tại");
+            log.error("Người dùng không tồn tại trong database");
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
         } else {
-            log.error("User fount in the database: {}", username);
+            log.error("Người dùng tồn tại trong database: {}", username);
         }
         UserEntity user = optional.get();
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -88,7 +89,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public UserDto findById(String id) {
         Optional<UserEntity> optional = _iUserReponsitory.findById(id);
-        if (optional.isEmpty()) throw new InternalServerException("Người dùng không tồn tại");
+        if (optional.isEmpty()) throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
         return (UserDto) map(optional.get());
     }
 
@@ -97,7 +98,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
         Optional<UserEntity> optional = _iUserReponsitory.findByUserName(username);
         if (optional.isEmpty()) {
             log.error("User not fount in the database");
-            throw new NotFoundException("Người dùng không tồn tại");
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
         } else {
             log.error("User fount in the database: {}", username);
         }
@@ -107,7 +108,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public UserDto save(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -122,22 +123,20 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public UserDto update(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
-        if (entity.getId() == null || entity.getId().isEmpty() || entity.getId().isBlank())
-            throw new BadRequestException("Người dùng không đúng");
-        Optional<UserEntity> fake = _iUserReponsitory.findById(entity.getId());
-        if (fake.isEmpty()) throw new InternalServerException("Người dùng không tồn tại");
-        UserEntity entityFake = fake.get();
-        entity.setCreated(entityFake.getCreated());
+        Optional<UserEntity> optional = _iUserReponsitory.findById(entity.getId());
+        if (optional.isEmpty()) throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
+        UserEntity fake = optional.get();
+        entity.setCreated(fake.getCreated());
         if (entity.getBlock() == null) {
-            entity.setBlock(entityFake.getBlock());
+            entity.setBlock(fake.getBlock());
         }
         if (entity.getStatus() == null) {
-            entity.setStatus(entityFake.getStatus());
+            entity.setStatus(fake.getStatus());
         }
         if (entity.getPassword() == null || entity.getPassword().isEmpty() || entity.getPassword().isBlank()) {
-            entity.setPassword(entityFake.getPassword());
+            entity.setPassword(fake.getPassword());
         } else {
             entity.setPassword(_passwordEncoder.encode(dto.getPassword()));
         }

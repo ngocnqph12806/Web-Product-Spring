@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
 import com.example.webproductspringboot.service.intf.ICategoryService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,7 @@ public class CategoryService extends AbstractService implements ICategoryService
     public CategoryDto findById(String id) {
         Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(id);
         if (optional.isEmpty()) {
-            throw new NotFoundException("Loại sản phẩm không tồn tại");
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "category", "category.not.found"));
         }
         return (CategoryDto) map(optional.get());
     }
@@ -43,7 +44,7 @@ public class CategoryService extends AbstractService implements ICategoryService
     @Override
     public CategoryDto save(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
@@ -55,10 +56,10 @@ public class CategoryService extends AbstractService implements ICategoryService
     @Override
     public CategoryDto update(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Loại sản phẩm không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "category", "category.not.found"));
         CategoryEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());

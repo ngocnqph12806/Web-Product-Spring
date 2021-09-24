@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICustomersReturnReponsitory;
 import com.example.webproductspringboot.service.intf.ICustomersReturnService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,16 @@ public class CustomersReturnService extends AbstractService implements ICustomer
     @Override
     public ReturnDto findById(String id) {
         Optional<CustomersReturnEntity> optional = _iCustomersReturnReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn khách trả không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "return", "return.not.found"));
         return (ReturnDto) map(optional.get());
     }
 
     @Override
     public ReturnDto save(ReturnDto dto) {
         CustomersReturnEntity entity = (CustomersReturnEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -54,10 +57,12 @@ public class CustomersReturnService extends AbstractService implements ICustomer
     @Override
     public ReturnDto update(ReturnDto dto) {
         CustomersReturnEntity entity = (CustomersReturnEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<CustomersReturnEntity> optional = _iCustomersReturnReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Hoá đươn khách trả không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "return", "return.not.found"));
         CustomersReturnEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setCreated(fake.getCreated());

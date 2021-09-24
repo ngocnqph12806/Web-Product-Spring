@@ -9,6 +9,7 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IProductImageReponsitory;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,8 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public ProductDto findProductById(String id) {
         Optional<ProductEntity> optional = _iProductReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException("Sản phẩm không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "product", "product.not.found"));
         return (ProductDto) map(optional.get());
     }
 
@@ -61,7 +63,8 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public ProductDto saveProduct(ProductDto dto) {
         ProductEntity entity = (ProductEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -75,10 +78,12 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public ProductDto updateProduct(ProductDto dto) {
         ProductEntity entity = (ProductEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<ProductEntity> optional = _iProductReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Sản phẩm không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "product", "product.not.found"));
         ProductEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setIdUrl(fake.getIdUrl());
@@ -91,7 +96,8 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public ProductImageVo saveImageProduct(ProductImageVo vo) {
         ProductImageEntity entity = (ProductImageEntity) map(vo);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         _iProductImageReponsitory.save(entity);

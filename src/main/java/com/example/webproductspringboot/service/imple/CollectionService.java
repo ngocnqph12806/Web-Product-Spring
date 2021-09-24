@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICollectionReponsitory;
 import com.example.webproductspringboot.service.intf.ICollectionService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,6 @@ public class CollectionService extends AbstractService implements ICollectionSer
         _iCollectionReponsitory = iCollectionReponsitory;
     }
 
-
     @Override
     public List<CollectionDto> findAll() {
         List<CollectionEntity> lst = _iCollectionReponsitory.findAll();
@@ -34,14 +34,14 @@ public class CollectionService extends AbstractService implements ICollectionSer
     @Override
     public CollectionDto findById(String idCollection) {
         Optional<CollectionEntity> collectionEntity = _iCollectionReponsitory.findById(idCollection);
-        if (collectionEntity.isEmpty()) throw new NotFoundException("Danh mục không tồnt ại");
+        if (collectionEntity.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
         return (CollectionDto) map(collectionEntity.get());
     }
 
     @Override
     public CollectionDto save(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -54,10 +54,10 @@ public class CollectionService extends AbstractService implements ICollectionSer
     @Override
     public CollectionDto updare(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Dữ liệu lỗi");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<CollectionEntity> optional = _iCollectionReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Danh mục không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
         CollectionEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());

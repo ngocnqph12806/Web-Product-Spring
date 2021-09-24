@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IVoucherReponsitory;
 import com.example.webproductspringboot.service.intf.IVoucherService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,14 @@ public class VoucherService extends AbstractService implements IVoucherService {
     @Override
     public VoucherDto findById(String id) {
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException("Mã giảm giá không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
         return (VoucherDto) map(optional.get());
     }
 
     @Override
     public VoucherDto save(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setIdStaff(userEntity);
@@ -54,10 +55,10 @@ public class VoucherService extends AbstractService implements IVoucherService {
     @Override
     public VoucherDto update(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Mã giảm giá không tồn tại");
+        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
         VoucherEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());

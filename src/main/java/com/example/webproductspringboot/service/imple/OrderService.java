@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IOrderReponsitory;
 import com.example.webproductspringboot.service.intf.IOrderService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,16 @@ public class OrderService extends AbstractService implements IOrderService {
     @Override
     public OrderDto findById(String id) {
         Optional<OrderEntity> optional = _iOrderReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn đặt hàng không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "order", "order.not.found"));
         return (OrderDto) map(optional.get());
     }
 
     @Override
     public OrderDto save(OrderDto dto) {
         OrderEntity entity = (OrderEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -54,10 +57,12 @@ public class OrderService extends AbstractService implements IOrderService {
     @Override
     public OrderDto update(OrderDto dto) {
         OrderEntity entity = (OrderEntity) map(dto);
-        if (entity == null) throw new BadRequestException("Lỗi dữ liệu");
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<OrderEntity> optional = _iOrderReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException("Hoá đơn đặt hàng không tồn tại");
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "order", "order.not.found"));
         OrderEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setCreated(fake.getCreated());
