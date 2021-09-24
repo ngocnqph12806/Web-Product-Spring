@@ -80,7 +80,7 @@ public class UserApi {
     @PostMapping("")
     public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<UserDto> result = new ResultDto<>(true, "Lưu thành công", _iUserService.save(dto));
+        ResultDto<UserDto> result = new ResultDto<>(true, "Đã thêm mới người dùng", _iUserService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -90,16 +90,14 @@ public class UserApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<UserDto> result = new ResultDto<UserDto>(true, "Lưu thành công", _iUserService.update(dto));
+        ResultDto<UserDto> result = new ResultDto<UserDto>(true, "Đã chỉnh sửa thông tin người dùng", _iUserService.update(dto));
         return ResponseEntity.ok(result);
     }
 
     private List<UserDto> searchByFullName(String[] fullName, List<UserDto> lst) {
         if (fullName == null) return lst;
         for (String x : fullName) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getFullName().contains(x))
                     .collect(Collectors.toList());
         }
@@ -109,9 +107,7 @@ public class UserApi {
     private List<UserDto> searchByDateOfBirth(String[] dateOfBirth, List<UserDto> lst) {
         if (dateOfBirth == null) return lst;
         for (String x : dateOfBirth) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateOfBirth()).contains(x))
                     .collect(Collectors.toList());
         }
@@ -121,9 +117,7 @@ public class UserApi {
     private List<UserDto> searchByPhoneNumber(String[] phoneNumber, List<UserDto> lst) {
         if (phoneNumber == null) return lst;
         for (String x : phoneNumber) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getPhoneNumber().contains(x))
                     .collect(Collectors.toList());
         }
@@ -133,9 +127,7 @@ public class UserApi {
     private List<UserDto> searchByEmail(String[] email, List<UserDto> lst) {
         if (email == null) return lst;
         for (String x : email) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getEmail().contains(x))
                     .collect(Collectors.toList());
         }
@@ -145,9 +137,7 @@ public class UserApi {
     private List<UserDto> searchByUsername(String[] username, List<UserDto> lst) {
         if (username == null) return lst;
         for (String x : username) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getUsername().contains(x))
                     .collect(Collectors.toList());
         }
@@ -157,9 +147,7 @@ public class UserApi {
     private List<UserDto> searchByAddress(String[] address, List<UserDto> lst) {
         if (address == null) return lst;
         for (String x : address) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getAddress().contains(x))
                     .collect(Collectors.toList());
         }
@@ -169,9 +157,7 @@ public class UserApi {
     private List<UserDto> searchByAvatar(String[] avatar, List<UserDto> lst) {
         if (avatar == null) return lst;
         for (String x : avatar) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getAvatar().contains(x))
                     .collect(Collectors.toList());
         }
@@ -181,9 +167,7 @@ public class UserApi {
     private List<UserDto> searchByRole(String[] role, List<UserDto> lst) {
         if (role == null) return lst;
         for (String x : role) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> e.getRole().contains(x))
                     .collect(Collectors.toList());
         }
@@ -193,10 +177,8 @@ public class UserApi {
     private List<UserDto> searchByStatus(String[] status, List<UserDto> lst) {
         if (status == null) return lst;
         for (String x : status) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
-            lst = lst.stream().filter(e -> e.getStatus().equals(x))
+            if (lst.isEmpty()) return lst;
+            lst = lst.stream().filter(e -> Boolean.parseBoolean(x) == e.getStatus())
                     .collect(Collectors.toList());
         }
         return lst;
@@ -205,10 +187,8 @@ public class UserApi {
     private List<UserDto> searchByBlock(String[] block, List<UserDto> lst) {
         if (block == null) return lst;
         for (String x : block) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
-            lst = lst.stream().filter(e -> e.getBlock().equals(x))
+            if (lst.isEmpty()) return lst;
+            lst = lst.stream().filter(e -> Boolean.parseBoolean(x) == e.getBlock())
                     .collect(Collectors.toList());
         }
         return lst;
@@ -217,9 +197,7 @@ public class UserApi {
     private List<UserDto> searchByDaetCreate(String[] dateCreated, List<UserDto> lst) {
         if (dateCreated == null) return lst;
         for (String x : dateCreated) {
-            if (lst.isEmpty()) {
-                return lst;
-            }
+            if (lst.isEmpty()) return lst;
             lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x))
                     .collect(Collectors.toList());
         }

@@ -1,9 +1,6 @@
 package com.example.webproductspringboot.api;
 
-import com.example.webproductspringboot.dto.ChangeUserDto;
-import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.UserDto;
-import com.example.webproductspringboot.dto.VoucherDto;
+import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/vouchers")
@@ -22,7 +21,9 @@ public class VoucherApi {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return null;
+        List<VoucherDto> lst = _iVoucherService.findAll();
+        ResultDto<List<VoucherDto>> result = new ResultDto<>(true, "", lst);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +47,7 @@ public class VoucherApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<VoucherDto> result = new ResultDto<>(true, "Lưu thành công", _iVoucherService.save(dto));
+        ResultDto<VoucherDto> result = new ResultDto<>(true, "Đã thêm mới mã giảm giá", _iVoucherService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -55,7 +56,7 @@ public class VoucherApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<VoucherDto> result = new ResultDto<>(true, "Lưu thành công", _iVoucherService.update(dto));
+        ResultDto<VoucherDto> result = new ResultDto<>(true, "Đã chỉnh sửa mã giảm giá", _iVoucherService.update(dto));
         return ResponseEntity.ok(result);
     }
 

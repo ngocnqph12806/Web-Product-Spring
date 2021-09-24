@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class ResultDto<T> {
 
-    private boolean result;
+    private Integer result;
     private String message;
     private T data;
 

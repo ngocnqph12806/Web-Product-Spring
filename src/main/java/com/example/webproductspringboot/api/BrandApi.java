@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/brand")
@@ -21,7 +22,9 @@ public class BrandApi {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(null);
+        List<BrandDto> lst = _iBrandService.findAll();
+        ResultDto<List<BrandDto>> result = new ResultDto<>(true, "", lst);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +48,7 @@ public class BrandApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<BrandDto> result = new ResultDto<>(true, "Lưu thành công", _iBrandService.save(dto));
+        ResultDto<BrandDto> result = new ResultDto<>(true, "Đã thêm mới thương hiệu", _iBrandService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -55,7 +58,7 @@ public class BrandApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<BrandDto> result = new ResultDto<>(true, "Lưu thành công", _iBrandService.update(dto));
+        ResultDto<BrandDto> result = new ResultDto<>(true, "Đã chỉnh sửa thương hiệu", _iBrandService.update(dto));
         return ResponseEntity.ok(result);
     }
 

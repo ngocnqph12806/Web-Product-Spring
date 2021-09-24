@@ -36,14 +36,14 @@ public class BrannerApi {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid BannerDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<BannerDto> result = new ResultDto<>(true, "Lưu thành công", _iBannerService.save(dto));
+        ResultDto<BannerDto> result = new ResultDto<>(true, "Đã thêm mới banner", _iBannerService.save(dto));
         return ResponseEntity.ok(result);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody @Valid BannerDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<BannerDto> result = new ResultDto<>(true, "Lưu thành công", _iBannerService.update(dto));
+        ResultDto<BannerDto> result = new ResultDto<>(true, "Đã chỉnh sửa banner", _iBannerService.update(dto));
         return ResponseEntity.ok(result);
     }
 

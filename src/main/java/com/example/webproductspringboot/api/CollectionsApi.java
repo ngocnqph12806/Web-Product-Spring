@@ -28,7 +28,7 @@ public class CollectionsApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CollectionDto> result = new ResultDto<>(true, "Lưu thành công", _iCollectionService.save(dto));
+        ResultDto<CollectionDto> result = new ResultDto<>(true, "Đã thêm mới danh mục", _iCollectionService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -38,7 +38,7 @@ public class CollectionsApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CollectionDto> result = new ResultDto<>(true, "Đã lưu danh mục", _iCollectionService.updare(dto));
+        ResultDto<CollectionDto> result = new ResultDto<>(true, "Đã chỉnh sửa danh mục", _iCollectionService.updare(dto));
         return ResponseEntity.ok(result);
     }
 

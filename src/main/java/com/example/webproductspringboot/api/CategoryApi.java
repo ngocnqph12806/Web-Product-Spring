@@ -41,10 +41,8 @@ public class CategoryApi {
 
     @PostMapping
     public ResponseEntity<?> save(@Validated @RequestBody CategoryDto dto, Errors errors) {
-        if (errors.hasErrors()) {
-            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        }
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.save(dto));
+        if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "Đã thêm mới loại sản phẩm", _iCategoryService.save(dto));
         return ResponseEntity.ok(result);
     }
 
@@ -53,7 +51,7 @@ public class CategoryApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "Lưu thành công", _iCategoryService.update(dto));
+        ResultDto<CategoryDto> result = new ResultDto<>(true, "Đã chỉnh sửa loại sản phẩm", _iCategoryService.update(dto));
         return ResponseEntity.ok(result);
     }
 

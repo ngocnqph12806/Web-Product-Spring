@@ -54,7 +54,7 @@ public class ProductApi {
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
         if (dtoSave != null) for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
-        ResultDto<ProductDto> result = new ResultDto<>(true, "Lưu thành công", _iProductService.findProductById(dtoSave.getId()));
+        ResultDto<ProductDto> result = new ResultDto<>(true, "Đã thêm mới sản phẩm", _iProductService.findProductById(dtoSave.getId()));
         return ResponseEntity.ok(result);
     }
 
@@ -71,7 +71,7 @@ public class ProductApi {
                         _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
             }
         }
-        ResultDto<ProductDto> result = new ResultDto<>(true, "Lưu thành công", _iProductService.findProductById(dtoSave.getId()));
+        ResultDto<ProductDto> result = new ResultDto<>(true, "Đã chỉnh sửa sản phảm", _iProductService.findProductById(dtoSave.getId()));
         return ResponseEntity.ok(result);
     }
 
