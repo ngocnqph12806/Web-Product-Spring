@@ -7,17 +7,21 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICustomersReturnReponsitory;
 import com.example.webproductspringboot.service.intf.ICustomersReturnService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomersReturnService extends AbstractService implements ICustomersReturnService {
 
-    @Autowired
-    private ICustomersReturnReponsitory _iCustomersReturnReponsitory;
+    private final ICustomersReturnReponsitory _iCustomersReturnReponsitory;
+
+    protected CustomersReturnService(HttpServletRequest request, ICustomersReturnReponsitory iCustomersReturnReponsitory) {
+        super(request);
+        _iCustomersReturnReponsitory = iCustomersReturnReponsitory;
+    }
 
     @Override
     public List<ReturnDto> findAll() {

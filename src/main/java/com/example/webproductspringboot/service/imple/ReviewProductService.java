@@ -1,17 +1,15 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.OrderDto;
 import com.example.webproductspringboot.dto.ReviewDto;
-import com.example.webproductspringboot.entity.OrderEntity;
 import com.example.webproductspringboot.entity.ReviewProductEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IReviewProductReponsitory;
 import com.example.webproductspringboot.service.intf.IReviewProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,8 +17,12 @@ import java.util.UUID;
 @Service
 public class ReviewProductService extends AbstractService implements IReviewProductService {
 
-    @Autowired
-    private IReviewProductReponsitory _iReviewProductReponsitory;
+    private final IReviewProductReponsitory _iReviewProductReponsitory;
+
+    protected ReviewProductService(HttpServletRequest request, IReviewProductReponsitory iReviewProductReponsitory) {
+        super(request);
+        _iReviewProductReponsitory = iReviewProductReponsitory;
+    }
 
     @Override
     public ReviewDto save(ReviewDto dto) {

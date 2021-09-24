@@ -7,17 +7,21 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IVoucherReponsitory;
 import com.example.webproductspringboot.service.intf.IVoucherService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class VoucherService extends AbstractService implements IVoucherService {
 
-    @Autowired
-    private IVoucherReponsitory _iVoucherReponsitory;
+    private final IVoucherReponsitory _iVoucherReponsitory;
+
+    protected VoucherService(HttpServletRequest request, IVoucherReponsitory iVoucherReponsitory) {
+        super(request);
+        _iVoucherReponsitory = iVoucherReponsitory;
+    }
 
     @Override
     public List<VoucherDto> findAll() {

@@ -1,9 +1,5 @@
 package com.example.webproductspringboot.api;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.webproductspringboot.dto.ChangeUserDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.dto.UserDto;
@@ -11,36 +7,30 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.vo.SearchUserVo;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/api/users")
 @Slf4j
-public class UserApi {
+public class UserApi extends AbstractApi {
 
-    @Autowired
-    private IUserService _iUserService;
+    private final IUserService _iUserService;
+
+    protected UserApi(HttpServletRequest request, IUserService iUserService) {
+        super(request);
+        _iUserService = iUserService;
+    }
 
     @GetMapping(path = "")
     public ResponseEntity<?> getAll(SearchUserVo searchUserVo) {
@@ -56,19 +46,19 @@ public class UserApi {
         lst = searchByStatus(searchUserVo.getStatus(), lst);
         lst = searchByBlock(searchUserVo.getBlock(), lst);
         lst = searchByDaetCreate(searchUserVo.getDateCreated(), lst);
-        ResultDto<List<UserDto>> result = new ResultDto<>(true, "", lst);
+        ResultDto<List<UserDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        ResultDto<UserDto> result = new ResultDto<>(true, "", _iUserService.findById(id));
+        ResultDto<UserDto> result = new ResultDto<>(OK, _iUserService.findById(id));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<UserDto> result = new ResultDto<>(true, "", null);
+        ResultDto<UserDto> result = new ResultDto<>(OK, null);
         try {
             result.setData(_iUserService.findById(id));
         } catch (Exception e) {
@@ -80,17 +70,18 @@ public class UserApi {
     @PostMapping("")
     public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<UserDto> result = new ResultDto<>(true, "Đã thêm mới người dùng", _iUserService.save(dto));
+        ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> update(@RequestBody @Valid ChangeUserDto dto, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @RequestBody @Valid ChangeUserDto dto, Errors errors) {
         System.out.println(dto);
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<UserDto> result = new ResultDto<UserDto>(true, "Đã chỉnh sửa thông tin người dùng", _iUserService.update(dto));
+        ResultDto<UserDto> result = new ResultDto<UserDto>(UPDATED, _iUserService.update(dto));
         return ResponseEntity.ok(result);
     }
 

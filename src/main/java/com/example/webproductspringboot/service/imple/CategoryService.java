@@ -7,17 +7,22 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
 import com.example.webproductspringboot.service.intf.ICategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CategoryService extends AbstractService implements ICategoryService {
 
-    @Autowired
-    private ICategoryReponsitory _iCategoryReponsitory;
+    private final ICategoryReponsitory _iCategoryReponsitory;
+
+    protected CategoryService(HttpServletRequest request, ICategoryReponsitory iCategoryReponsitory) {
+        super(request);
+        _iCategoryReponsitory = iCategoryReponsitory;
+    }
+
 
     @Override
     public List<CategoryDto> findAll() {

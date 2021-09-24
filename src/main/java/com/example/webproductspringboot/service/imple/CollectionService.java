@@ -7,17 +7,22 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICollectionReponsitory;
 import com.example.webproductspringboot.service.intf.ICollectionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CollectionService extends AbstractService implements ICollectionService {
 
-    @Autowired
-    private ICollectionReponsitory _iCollectionReponsitory;
+    private final ICollectionReponsitory _iCollectionReponsitory;
+
+    protected CollectionService(HttpServletRequest request, ICollectionReponsitory iCollectionReponsitory) {
+        super(request);
+        _iCollectionReponsitory = iCollectionReponsitory;
+    }
+
 
     @Override
     public List<CollectionDto> findAll() {

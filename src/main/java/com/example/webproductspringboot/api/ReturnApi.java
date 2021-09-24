@@ -3,44 +3,49 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICustomersReturnService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/returns")
-public class ReturnApi {
+public class ReturnApi extends AbstractApi {
 
-    @Autowired
-    private ICustomersReturnService _iCustomersReturnService;
+    private final ICustomersReturnService _iCustomersReturnService;
+
+    protected ReturnApi(HttpServletRequest request, ICustomersReturnService iCustomersReturnService) {
+        super(request);
+        _iCustomersReturnService = iCustomersReturnService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         List<ReturnDto> lst = _iCustomersReturnService.findAll();
-        ResultDto<List<ReturnDto>> result = new ResultDto<>(true, "", lst);
+        ResultDto<List<ReturnDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(true, "", _iCustomersReturnService.findById(id)));
+        return ResponseEntity.ok(new ResultDto<>(OK, _iCustomersReturnService.findById(id)));
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid ReturnDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<ReturnDto> result = new ResultDto<>(true, "Đã thêm mới hoá đơn trả hàng của khách", _iCustomersReturnService.save(dto));
+        ResultDto<ReturnDto> result = new ResultDto<>(CREATED, _iCustomersReturnService.save(dto));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@RequestBody @Valid ReturnDto dto, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @RequestBody @Valid ReturnDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<ReturnDto> result = new ResultDto<>(true, "Đã chỉnh sửa hoá đơn trả hàng của khách", _iCustomersReturnService.update(dto));
+        ResultDto<ReturnDto> result = new ResultDto<>(UPDATED, _iCustomersReturnService.update(dto));
         return ResponseEntity.ok(result);
     }
 

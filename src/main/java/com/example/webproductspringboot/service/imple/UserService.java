@@ -9,9 +9,7 @@ import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,10 +31,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService extends AbstractService implements IUserService, UserDetailsService {
 
-    @Autowired
-    private IUserReponsitory _iUserReponsitory;
-    @Autowired
-    private PasswordEncoder _passwordEncoder;
+    private final IUserReponsitory _iUserReponsitory;
+    private final PasswordEncoder _passwordEncoder;
+
+    protected UserService(HttpServletRequest request, IUserReponsitory iUserReponsitory, PasswordEncoder passwordEncoder) {
+        super(request);
+        _iUserReponsitory = iUserReponsitory;
+        _passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,25 +1,27 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.InvoiceDto;
 import com.example.webproductspringboot.dto.OrderDto;
-import com.example.webproductspringboot.entity.InvoiceEntity;
 import com.example.webproductspringboot.entity.OrderEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IOrderReponsitory;
 import com.example.webproductspringboot.service.intf.IOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderService extends AbstractService implements IOrderService {
 
-    @Autowired
-    private IOrderReponsitory _iOrderReponsitory;
+    private final IOrderReponsitory _iOrderReponsitory;
+
+    protected OrderService(HttpServletRequest request, IOrderReponsitory iOrderReponsitory) {
+        super(request);
+        _iOrderReponsitory = iOrderReponsitory;
+    }
 
     @Override
     public List<OrderDto> findAll() {

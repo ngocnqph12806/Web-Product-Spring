@@ -4,21 +4,24 @@ import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.entity.BrandEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBrandReponsitory;
 import com.example.webproductspringboot.service.intf.IBrandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BrandService extends AbstractService implements IBrandService {
 
-    @Autowired
-    private IBrandReponsitory _iBrandReponsitory;
+    private final IBrandReponsitory _iBrandReponsitory;
+
+    protected BrandService(HttpServletRequest request, IBrandReponsitory iBrandReponsitory) {
+        super(request);
+        _iBrandReponsitory = iBrandReponsitory;
+    }
 
     @Override
     public List<BrandDto> findAll() {

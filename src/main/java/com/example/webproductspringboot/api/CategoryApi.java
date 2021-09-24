@@ -4,18 +4,23 @@ import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/categories")
-public class CategoryApi {
+public class CategoryApi extends AbstractApi {
 
-    @Autowired
-    private ICategoryService _iCategoryService;
+    private final ICategoryService _iCategoryService;
+
+    protected CategoryApi(HttpServletRequest request, ICategoryService iCategoryService) {
+        super(request);
+        _iCategoryService = iCategoryService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -25,12 +30,12 @@ public class CategoryApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(_iCategoryService.findById(id));
+        return ResponseEntity.ok(new ResultDto<>(OK, _iCategoryService.findById(id)));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<ResultDto<CategoryDto>> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "", null);
+        ResultDto<CategoryDto> result = new ResultDto<>(OK, null);
         try {
             result.setData(_iCategoryService.findById(id));
         } catch (Exception e) {
@@ -42,16 +47,17 @@ public class CategoryApi {
     @PostMapping
     public ResponseEntity<?> save(@Validated @RequestBody CategoryDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "Đã thêm mới loại sản phẩm", _iCategoryService.save(dto));
+        ResultDto<CategoryDto> result = new ResultDto<>(CREATED, _iCategoryService.save(dto));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody CategoryDto dto, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @Validated @RequestBody CategoryDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<CategoryDto> result = new ResultDto<>(true, "Đã chỉnh sửa loại sản phẩm", _iCategoryService.update(dto));
+        ResultDto<CategoryDto> result = new ResultDto<>(UPDATED, _iCategoryService.update(dto));
         return ResponseEntity.ok(result);
     }
 

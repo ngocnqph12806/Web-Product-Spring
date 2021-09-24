@@ -4,37 +4,40 @@ import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IBrandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/brand")
-public class BrandApi {
+public class BrandApi extends AbstractApi {
 
-    @Autowired
-    private IBrandService _iBrandService;
+    private final IBrandService _iBrandService;
+    
+    protected BrandApi(HttpServletRequest request, IBrandService iBrandService) {
+        super(request);
+        _iBrandService = iBrandService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         List<BrandDto> lst = _iBrandService.findAll();
-        ResultDto<List<BrandDto>> result = new ResultDto<>(true, "", lst);
+        ResultDto<List<BrandDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(true, "", _iBrandService.findById(id)));
+        return ResponseEntity.ok(new ResultDto<>(OK, _iBrandService.findById(id)));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<BrandDto> result = new ResultDto<>(true, "", null);
+        ResultDto<BrandDto> result = new ResultDto<>(OK, null);
         try {
             result.setData(_iBrandService.findById(id));
         } catch (Exception e) {
@@ -48,17 +51,18 @@ public class BrandApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<BrandDto> result = new ResultDto<>(true, "Đã thêm mới thương hiệu", _iBrandService.save(dto));
+        ResultDto<BrandDto> result = new ResultDto<>(CREATED, _iBrandService.save(dto));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody BrandDto dto, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @Validated @RequestBody BrandDto dto, Errors errors) {
         System.out.println(dto);
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<BrandDto> result = new ResultDto<>(true, "Đã chỉnh sửa thương hiệu", _iBrandService.update(dto));
+        ResultDto<BrandDto> result = new ResultDto<>(UPDATED, _iBrandService.update(dto));
         return ResponseEntity.ok(result);
     }
 

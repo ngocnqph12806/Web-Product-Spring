@@ -3,37 +3,40 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IVoucherService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/vouchers")
-public class VoucherApi {
+public class VoucherApi extends AbstractApi {
 
-    @Autowired
-    private IVoucherService _iVoucherService;
+    private final IVoucherService _iVoucherService;
+
+    protected VoucherApi(HttpServletRequest request, IVoucherService iVoucherService) {
+        super(request);
+        _iVoucherService = iVoucherService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         List<VoucherDto> lst = _iVoucherService.findAll();
-        ResultDto<List<VoucherDto>> result = new ResultDto<>(true, "", lst);
+        ResultDto<List<VoucherDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(true, "", _iVoucherService.findById(id)));
+        return ResponseEntity.ok(new ResultDto<>(OK, _iVoucherService.findById(id)));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<VoucherDto> result = new ResultDto<>(true, "", null);
+        ResultDto<VoucherDto> result = new ResultDto<>(OK, null);
         try {
             result.setData(_iVoucherService.findById(id));
         } catch (Exception e) {
@@ -47,16 +50,17 @@ public class VoucherApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<VoucherDto> result = new ResultDto<>(true, "Đã thêm mới mã giảm giá", _iVoucherService.save(dto));
+        ResultDto<VoucherDto> result = new ResultDto<>(CREATED, _iVoucherService.save(dto));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@Validated @RequestBody VoucherDto dto, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @Validated @RequestBody VoucherDto dto, Errors errors) {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
-        ResultDto<VoucherDto> result = new ResultDto<>(true, "Đã chỉnh sửa mã giảm giá", _iVoucherService.update(dto));
+        ResultDto<VoucherDto> result = new ResultDto<>(UPDATED, _iVoucherService.update(dto));
         return ResponseEntity.ok(result);
     }
 

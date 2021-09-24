@@ -1,25 +1,26 @@
 package com.example.webproductspringboot.service.imple;
 
-import com.example.webproductspringboot.dto.InvoiceDto;
-import com.example.webproductspringboot.dto.OrderDto;
-import com.example.webproductspringboot.dto.ReviewDto;
 import com.example.webproductspringboot.dto.TransportDto;
 import com.example.webproductspringboot.entity.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ITransportReponsitory;
 import com.example.webproductspringboot.service.intf.ITransportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class TransportService extends AbstractService implements ITransportService {
 
-    @Autowired
-    private ITransportReponsitory _iTransportReponsitory;
+    private final ITransportReponsitory _iTransportReponsitory;
+
+    protected TransportService(HttpServletRequest request, ITransportReponsitory iTransportReponsitory) {
+        super(request);
+        _iTransportReponsitory = iTransportReponsitory;
+    }
 
     @Override
     public List<TransportDto> findAll() {

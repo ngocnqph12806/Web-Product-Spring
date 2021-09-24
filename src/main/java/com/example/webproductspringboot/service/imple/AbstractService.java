@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +23,11 @@ public abstract class AbstractService {
     private IUserReponsitory _iUserReponsitory;
     @Autowired
     private IHistoryReponsitory _iHistoryReponsitory;
+    protected final HttpServletRequest request;
+
+    protected AbstractService(HttpServletRequest request) {
+        this.request = request;
+    }
 
     protected void saveHistory(UserEntity user, String details) {
         HistoryEntity entity = HistoryEntity.builder()

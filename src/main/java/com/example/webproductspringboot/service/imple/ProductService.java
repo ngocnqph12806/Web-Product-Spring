@@ -5,25 +5,28 @@ import com.example.webproductspringboot.entity.ProductEntity;
 import com.example.webproductspringboot.entity.ProductImageEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IProductImageReponsitory;
 import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.vo.ProductImageVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductService extends AbstractService implements IProductService {
 
-    @Autowired
-    private IProductReponsitory _iProductReponsitory;
-    @Autowired
-    private IProductImageReponsitory _iProductImageReponsitory;
+    private final IProductReponsitory _iProductReponsitory;
+    private final IProductImageReponsitory _iProductImageReponsitory;
+
+    protected ProductService(HttpServletRequest request, IProductReponsitory iProductReponsitory, IProductImageReponsitory iProductImageReponsitory) {
+        super(request);
+        _iProductReponsitory = iProductReponsitory;
+        _iProductImageReponsitory = iProductImageReponsitory;
+    }
 
     @Override
     public List<ProductDto> findAllProduct() {

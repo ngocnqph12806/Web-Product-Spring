@@ -6,23 +6,26 @@ import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.MapperModelUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
 import lombok.Data;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
-public class ProductApi {
+public class ProductApi extends AbstractApi {
 
-    @Autowired
-    private IProductService _iProductService;
+    private final IProductService _iProductService;
+
+    protected ProductApi(HttpServletRequest request, IProductService iProductService) {
+        super(request);
+        _iProductService = iProductService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -31,12 +34,12 @@ public class ProductApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(true, "", _iProductService.findProductById(id)));
+        return ResponseEntity.ok(new ResultDto<>(OK, _iProductService.findProductById(id)));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<ProductDto> result = new ResultDto<>(true, "", null);
+        ResultDto<ProductDto> result = new ResultDto<>(OK, null);
         try {
             result.setData(_iProductService.findProductById(id));
         } catch (Exception e) {
@@ -54,12 +57,13 @@ public class ProductApi {
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
         if (dtoSave != null) for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
-        ResultDto<ProductDto> result = new ResultDto<>(true, "Đã thêm mới sản phẩm", _iProductService.findProductById(dtoSave.getId()));
+        ResultDto<ProductDto> result = new ResultDto<>(CREATED, _iProductService.findProductById(dtoSave.getId()));
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> update(@RequestBody @Valid ProductForm form, Errors errors) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") String id,
+                                    @RequestBody @Valid ProductForm form, Errors errors) {
         System.out.println(form);
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         ProductDto dtoSave = _iProductService.updateProduct(form.toDto());
@@ -71,11 +75,12 @@ public class ProductApi {
                         _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
             }
         }
-        ResultDto<ProductDto> result = new ResultDto<>(true, "Đã chỉnh sửa sản phảm", _iProductService.findProductById(dtoSave.getId()));
+        ResultDto<ProductDto> result = new ResultDto<>(UPDATED, _iProductService.findProductById(dtoSave.getId()));
         return ResponseEntity.ok(result);
     }
 
     @Data
+    static
     class ProductForm {
 
         private String id;

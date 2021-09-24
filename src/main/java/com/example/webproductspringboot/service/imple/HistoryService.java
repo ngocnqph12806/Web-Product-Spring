@@ -5,9 +5,9 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IHistoryReponsitory;
 import com.example.webproductspringboot.service.intf.IHistoryService;
 import com.example.webproductspringboot.vo.HistoryVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class HistoryService extends AbstractService implements IHistoryService {
 
-    @Autowired
-    private IHistoryReponsitory _iHistoryReponsitory;
+    private final IHistoryReponsitory _iHistoryReponsitory;
+
+    protected HistoryService(HttpServletRequest request, IHistoryReponsitory iHistoryReponsitory) {
+        super(request);
+        _iHistoryReponsitory = iHistoryReponsitory;
+    }
 
     @Override
     public List<HistoryVo> findAll() {

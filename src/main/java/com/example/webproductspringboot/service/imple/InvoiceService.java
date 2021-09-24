@@ -7,17 +7,21 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.InvoiceReponsitory;
 import com.example.webproductspringboot.service.intf.IInvoiceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class InvoiceService extends AbstractService implements IInvoiceService {
 
-    @Autowired
-    private InvoiceReponsitory _invoiceReponsitory;
+    private final InvoiceReponsitory _invoiceReponsitory;
+
+    protected InvoiceService(HttpServletRequest request, InvoiceReponsitory invoiceReponsitory) {
+        super(request);
+        _invoiceReponsitory = invoiceReponsitory;
+    }
 
     @Override
     public List<InvoiceDto> findAll() {

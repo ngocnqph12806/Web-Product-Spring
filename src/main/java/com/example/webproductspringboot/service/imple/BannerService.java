@@ -4,21 +4,25 @@ import com.example.webproductspringboot.dto.BannerDto;
 import com.example.webproductspringboot.entity.BannerEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
-import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBannerReponsitory;
 import com.example.webproductspringboot.service.intf.IBannerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class BannerService extends AbstractService implements IBannerService {
 
-    @Autowired
-    private IBannerReponsitory _iBannerReponsitory;
+    private final IBannerReponsitory _iBannerReponsitory;
+
+    protected BannerService(HttpServletRequest request, IBannerReponsitory iBannerReponsitory) {
+        super(request);
+        _iBannerReponsitory = iBannerReponsitory;
+    }
+
 
     @Override
     public List<BannerDto> findAll() {
