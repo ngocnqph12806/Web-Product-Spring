@@ -30,7 +30,9 @@ public class ProductApi extends AbstractApi {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return null;
+        List<ProductDto> lst = _iProductService.findAllProduct();
+        ResultDto<List<ProductDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -54,7 +56,8 @@ public class ProductApi extends AbstractApi {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         List<String> lstImages = new ArrayList<>();
         for (String x : form.getImages()) if (x != null && !x.isEmpty()) lstImages.add(x);
-        if (lstImages.isEmpty()) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", "image.please.choose.product.image"));
+        if (lstImages.isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", "image.please.choose.product.image"));
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
         if (dtoSave != null) for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
@@ -67,6 +70,8 @@ public class ProductApi extends AbstractApi {
                                     @RequestBody @Valid ProductForm form, Errors errors) {
         System.out.println(form);
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        if (!form.getId().equals(id))
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ProductDto dtoSave = _iProductService.updateProduct(form.toDto());
         if (dtoSave != null) {
             if (form.getImages() != null && form.getImages().length > 0) {

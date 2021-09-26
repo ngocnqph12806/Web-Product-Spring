@@ -3,6 +3,7 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IReviewProductService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class ReviewApi  extends AbstractApi{
     public ResponseEntity<?> update(@PathVariable("id") String id,
                                     @RequestBody @Valid ReviewDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        if (!dto.getId().equals(id)) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<ReviewDto> result = new ResultDto<>(UPDATED, _iReviewProductService.update(dto));
         return ResponseEntity.ok(result);
     }

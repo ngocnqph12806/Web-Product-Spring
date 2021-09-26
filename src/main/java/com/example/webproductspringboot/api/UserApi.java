@@ -6,6 +6,7 @@ import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.utils.ConvertUtils;
+import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.SearchUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -67,9 +68,12 @@ public class UserApi extends AbstractApi {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
+    @PostMapping("/{id}")
+    public ResponseEntity<?> save(@PathVariable("id") String id,
+                                  @Validated @RequestBody ChangeUserDto dto, Errors errors) {
         if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        if (!dto.getId().equals(id))
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
         return ResponseEntity.ok(result);
     }

@@ -15,12 +15,9 @@ public class UserAdmin {
 
     @Autowired
     private IUserService _iUserService;
-    @Autowired
-    private HttpServletRequest request;
 
     @GetMapping("staff")
     public String homeStaff(Model model) {
-        System.out.println(CookieUtils.get().errorsProperties(request, "lang", "home"));
         model.addAttribute("lstUser", _iUserService.findAllStaff());
         model.addAttribute("isStaff", true);
         return "page/admin/user/index";

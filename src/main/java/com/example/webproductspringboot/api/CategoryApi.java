@@ -4,12 +4,14 @@ import com.example.webproductspringboot.dto.CategoryDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICategoryService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -24,8 +26,9 @@ public class CategoryApi extends AbstractApi {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-
-        return ResponseEntity.ok(null);
+        List<CategoryDto> lst = _iCategoryService.findAll();
+        ResultDto<List<CategoryDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
@@ -57,6 +60,8 @@ public class CategoryApi extends AbstractApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
+        if (!dto.getId().equals(id))
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<CategoryDto> result = new ResultDto<>(UPDATED, _iCategoryService.update(dto));
         return ResponseEntity.ok(result);
     }

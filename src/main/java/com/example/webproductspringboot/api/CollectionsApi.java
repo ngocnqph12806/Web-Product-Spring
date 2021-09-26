@@ -4,11 +4,13 @@ import com.example.webproductspringboot.dto.CollectionDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICollectionService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/collections")
@@ -21,12 +23,18 @@ public class CollectionsApi extends AbstractApi {
         _iCollectionService = iCollectionService;
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        List<CollectionDto> lst = _iCollectionService.findAll();
+        ResultDto<List<CollectionDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/{id-collection}")
     public ResponseEntity<?> getColletionById(@PathVariable("id-collection") String idCollection) {
         ResultDto<CollectionDto> result = new ResultDto<>(OK, _iCollectionService.findById(idCollection));
         return ResponseEntity.ok(result);
     }
-
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody CollectionDto dto, Errors errors) {
@@ -44,6 +52,8 @@ public class CollectionsApi extends AbstractApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
+        if (!dto.getId().equals(id))
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<CollectionDto> result = new ResultDto<>(UPDATED, _iCollectionService.updare(dto));
         return ResponseEntity.ok(result);
     }

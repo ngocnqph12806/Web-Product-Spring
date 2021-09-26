@@ -1,6 +1,12 @@
 package com.example.webproductspringboot.api;
 
+import com.example.webproductspringboot.dto.BrandDto;
+import com.example.webproductspringboot.utils.ConvertUtils;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractApi {
 
@@ -14,4 +20,5 @@ public abstract class AbstractApi {
     protected AbstractApi(HttpServletRequest request) {
         this.request = request;
     }
+
 }

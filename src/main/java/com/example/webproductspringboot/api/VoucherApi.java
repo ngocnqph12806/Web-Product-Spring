@@ -3,6 +3,7 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IVoucherService;
+import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -60,6 +61,7 @@ public class VoucherApi extends AbstractApi {
         if (errors.hasErrors()) {
             throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
         }
+        if (!dto.getId().equals(id)) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<VoucherDto> result = new ResultDto<>(UPDATED, _iVoucherService.update(dto));
         return ResponseEntity.ok(result);
     }
