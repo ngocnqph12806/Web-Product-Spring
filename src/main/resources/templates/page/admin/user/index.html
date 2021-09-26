@@ -274,7 +274,7 @@
             setTimeout(function () {
                 console.log(obj.id)
                 if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
                 } else {
                     saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'POST')
                 }
@@ -304,11 +304,11 @@
                     if (method === 'status') {
                         let obj = response.data;
                         obj.status = data
-                        saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
                     } else if (method === 'block') {
                         let obj = response.data;
                         obj.block = data
-                        saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
                     } else {
                         swal('Hmmm!', 'Đừng sửa code...', 'warning')
                     }

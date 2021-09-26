@@ -34,7 +34,7 @@ public class BrandApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchBrandVo searchBrandVo) {
         List<BrandDto> lst = _iBrandService.findAll();
         System.out.println(searchBrandVo);
-        lst = search(lst, searchBrandVo, searchBrandVo.getName());
+        lst = search(lst, searchBrandVo, searchBrandVo.getName(), 0);
         ResultDto<List<BrandDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(result);
     }
@@ -58,7 +58,7 @@ public class BrandApi extends AbstractApi {
     @PostMapping
     public ResponseEntity<?> save(@Validated @RequestBody BrandDto dto, Errors errors) {
         if (errors.hasErrors())
-            throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "brand", errors.getFieldErrors().get(0).getDefaultMessage()));
         ResultDto<BrandDto> result = new ResultDto<>(CREATED, _iBrandService.save(dto));
         return ResponseEntity.ok(result);
     }
@@ -66,61 +66,64 @@ public class BrandApi extends AbstractApi {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") String id,
                                     @Validated @RequestBody BrandDto dto, Errors errors) {
-        if (errors.hasErrors()) throw new BadRequestException(errors.getFieldErrors().get(0).getDefaultMessage());
+        if (errors.hasErrors())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "brand", errors.getFieldErrors().get(0).getDefaultMessage()));
         if (!dto.getId().equals(id))
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<BrandDto> result = new ResultDto<>(UPDATED, _iBrandService.update(dto));
         return ResponseEntity.ok(result);
     }
 
-    private List<BrandDto> search(List<BrandDto> lst, SearchBrandVo searchBrandVo, String[] type) {
+    private List<BrandDto> search(List<BrandDto> lst, SearchBrandVo searchBrandVo, String[] type, Integer index) {
         String[] arrFake = new String[0];
         if (type != null) arrFake = type;
-        System.out.println(type);
-        System.out.println(arrFake);
         for (String x : arrFake) {
             if (lst.isEmpty()) return lst;
-            if (Arrays.equals(type, searchBrandVo.getName()))
-                lst = lst.stream().filter(e -> e.getName().contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getPhoneNumber()))
-                lst = lst.stream().filter(e -> e.getPhoneNumber().contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getEmail()))
-                lst = lst.stream().filter(e -> e.getEmail().contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getAddress()))
-                lst = lst.stream().filter(e -> e.getAddress().contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getDescription()))
-                lst = lst.stream().filter(e -> e.getDescription().contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getStatus()))
-                lst = lst.stream().filter(e -> e.getStatus() == Boolean.parseBoolean(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getDateCreated()))
-                lst = lst.stream().filter(e -> ConvertUtils.get()
-                        .dateToString(e.getDateCreated()).contains(x))
-                        .collect(Collectors.toList());
-            else if (Arrays.equals(type, searchBrandVo.getCountProducts()))
-                lst = lst.stream().filter(e -> e.getCountProducts() == Integer.parseInt(x))
-                        .collect(Collectors.toList());
+            switch (index) {
+                case 0:
+                    lst = lst.stream().filter(e -> e.getName().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+                case 1:
+                    lst = lst.stream().filter(e -> e.getPhoneNumber().contains(x)).collect(Collectors.toList());
+                    break;
+                case 2:
+                    lst = lst.stream().filter(e -> e.getEmail().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+                case 3:
+                    lst = lst.stream().filter(e -> e.getAddress().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+                case 4:
+                    lst = lst.stream().filter(e -> e.getDescription().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+                case 5:
+                    lst = lst.stream().filter(e -> e.getStatus().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+                case 6:
+                    lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x)).collect(Collectors.toList());
+                    break;
+                case 7:
+                    lst = lst.stream().filter(e -> e.getCountProducts().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    break;
+            }
         }
-        if (Arrays.equals(type, searchBrandVo.getName()))
-            return search(lst, searchBrandVo, searchBrandVo.getPhoneNumber());
-        else if (Arrays.equals(type, searchBrandVo.getPhoneNumber()))
-            return search(lst, searchBrandVo, searchBrandVo.getEmail());
-        else if (Arrays.equals(type, searchBrandVo.getEmail()))
-            return search(lst, searchBrandVo, searchBrandVo.getAddress());
-        else if (Arrays.equals(type, searchBrandVo.getAddress()))
-            return search(lst, searchBrandVo, searchBrandVo.getDescription());
-        else if (Arrays.equals(type, searchBrandVo.getDescription()))
-            return search(lst, searchBrandVo, searchBrandVo.getStatus());
-        else if (Arrays.equals(type, searchBrandVo.getStatus()))
-            return search(lst, searchBrandVo, searchBrandVo.getDateCreated());
-        else if (Arrays.equals(type, searchBrandVo.getDateCreated()))
-            return search(lst, searchBrandVo, searchBrandVo.getCountProducts());
-        else return lst;
+        switch (index) {
+            case 0:
+                return search(lst, searchBrandVo, searchBrandVo.getPhoneNumber(), 1);
+            case 1:
+                return search(lst, searchBrandVo, searchBrandVo.getEmail(), 2);
+            case 2:
+                return search(lst, searchBrandVo, searchBrandVo.getAddress(), 3);
+            case 3:
+                return search(lst, searchBrandVo, searchBrandVo.getDescription(), 4);
+            case 4:
+                return search(lst, searchBrandVo, searchBrandVo.getStatus(), 5);
+            case 5:
+                return search(lst, searchBrandVo, searchBrandVo.getDateCreated(), 6);
+            case 6:
+                return search(lst, searchBrandVo, searchBrandVo.getCountProducts(), 7);
+            default:
+                return lst;
+        }
     }
 
 }

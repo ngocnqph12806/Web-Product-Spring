@@ -34,7 +34,8 @@ public class HistoryService extends AbstractService implements IHistoryService {
     @Override
     public HistoryVo findById(String id) {
         Optional<HistoryEntity> optional = _iHistoryReponsitory.findById(id);
-        if(optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "history", "history.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "history", "history.not.found"));
         return (HistoryVo) map(optional.get());
     }
 

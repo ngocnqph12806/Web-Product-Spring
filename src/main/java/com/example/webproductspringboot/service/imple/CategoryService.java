@@ -44,22 +44,25 @@ public class CategoryService extends AbstractService implements ICategoryService
     @Override
     public CategoryDto save(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iCategoryReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm loại sản phẩm: \n" + entity);
+        saveHistory(userEntity, "Thêm loại sản phẩm", entity.toString());
         return (CategoryDto) map(entity);
     }
 
     @Override
     public CategoryDto update(CategoryDto dto) {
         CategoryEntity entity = (CategoryEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<CategoryEntity> optional = _iCategoryReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "category", "category.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "category", "category.not.found"));
         CategoryEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
@@ -67,7 +70,7 @@ public class CategoryService extends AbstractService implements ICategoryService
         entity.setIdUrl(fake.getIdUrl());
         entity.setCreated(fake.getCreated());
         _iCategoryReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa loại sản phẩm: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa loại sản phẩm", fake + "\n" + entity);
         return (CategoryDto) map(entity);
     }
 

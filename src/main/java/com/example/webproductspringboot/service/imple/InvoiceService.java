@@ -34,37 +34,41 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
     @Override
     public InvoiceDto findById(String id) {
         Optional<InvoiceEntity> optional = _invoiceReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "invoice", "invoice.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "invoice", "invoice.not.found"));
         return (InvoiceDto) map(optional.get());
     }
 
     @Override
     public InvoiceDto save(InvoiceDto dto) {
         InvoiceEntity entity = (InvoiceEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
         entity.setStatus(true);
         entity.setIdStaffCreate(userEntity);
         _invoiceReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm hoá đơn nhập hàng: \n" + entity);
+        saveHistory(userEntity, "Thêm hoá đơn nhập hàng", entity.toString());
         return (InvoiceDto) map(entity);
     }
 
     @Override
     public InvoiceDto update(InvoiceDto dto) {
         InvoiceEntity entity = (InvoiceEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<InvoiceEntity> optional = _invoiceReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "invoice", "invoice.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "invoice", "invoice.not.found"));
         InvoiceEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setCreated(fake.getCreated());
         entity.setIdStaffCreate(fake.getIdStaffCreate());
         _invoiceReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa hoá đơn nhập hàng: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa hoá đơn nhập hàng", fake + "\n" + entity);
         return (InvoiceDto) map(entity);
     }
 }

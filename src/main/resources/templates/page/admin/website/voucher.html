@@ -30,6 +30,8 @@
                         <th>Số lượng</th>
                         <th>Đã dùng</th>
                         <th>Giá trị</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
                         <th>Ngày tạo</th>
                         <th></th>
                     </tr>
@@ -43,6 +45,8 @@
                             <td th:text="*{quantity}">Số lượng</td>
                             <td th:text="*{quantityUsed}">Đã dùng</td>
                             <td th:text="*{#numbers.formatDecimal(priceSale, 0, 'COMMA', 0, 'POINT')}">Giá trị</td>
+                            <td th:text="*{#dates.format(dateStart, 'dd-MM-yyyy')}">Ngày bắt đầu</td>
+                            <td th:text="*{#dates.format(dateEnd, 'dd-MM-yyyy')}">Ngày kết thúc</td>
                             <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}">Ngày tạo</td>
                             <td>
                                 <div class="dropdown d-inline-block float-right">
@@ -135,24 +139,17 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="dateStart" class="col-sm-2 col-form-label text-right">Ngày bắt đầu</label>
+                            <label for="date-time-voucher" class="col-sm-2 col-form-label text-right">Thời hạn</label>
                             <div class="col-sm-10">
-                                <input type="text" id="dateStart" class="form-control" name="dateStart"
-                                       data-type="date" value="01/01/2021">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="dateEnd" class="col-sm-2 col-form-label text-right">Ngày kết thúc</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="dateEnd" class="form-control" name="dateEnd"
-                                       data-type="date" value="01/01/2021">
+                                <input type="text" id="date-time-voucher"
+                                       class="form-control" value="10/24/1984">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label text-right">Mô tả</label>
                             <div class="col-sm-10">
-                               <textarea id="textarea" class="form-control" name="description" maxlength="100" rows="3"
-                                         placeholder="Nhập mô tả sự kiện"></textarea>
+                           <textarea id="textarea" class="form-control" name="description" minlength="100" rows="3"
+                                     placeholder="Nhập mô tả sự kiện"></textarea>
                             </div>
                         </div>
                     </form>
@@ -195,23 +192,21 @@
                 if (name === 'quantity' && !checkQuantity(value, 'Số lượng mã áp dụng')) return;
                 if (name === 'priceSale' && !checkQuantity(value, 'Giá trị mã giảm giá')) return;
                 if (name === 'description' && !checkDescription(value, 'Mô tả mã giảm giá')) return;
-                if (name === 'dateStart') {
-                    if (checkDateAdmin('Ngày bắt đầu', value)) {
-                        value = value.substring(value.lastIndexOf('/') + 1) + '-' + value.substring(0, value.lastIndexOf('/')).replaceAll('/', '-');
-                    } else return;
-                }
-                if (name === 'dateEnd') {
-                    if (checkDateAdmin('Ngày két thúc', value)) {
-                        value = value.substring(value.lastIndexOf('/') + 1) + '-' + value.substring(0, value.lastIndexOf('/')).replaceAll('/', '-');
-                    } else return;
-                }
                 obj[name] = value;
             }
+            let dateTime = $('#date-time-voucher').val() + ''
+            console.log(dateTime);
+            let dateStart = dateTime.substring(0, dateTime.lastIndexOf('-')).trim()
+            dateStart = dateStart.substring(dateStart.lastIndexOf('/') + 1) + '-' + dateStart.substring(0, dateStart.lastIndexOf('/')).replaceAll('/', '-');
+            let dateEnd = dateTime.substring(dateTime.lastIndexOf('-') + 1).trim()
+            dateEnd = dateEnd.substring(dateEnd.lastIndexOf('/') + 1) + '-' + dateEnd.substring(0, dateEnd.lastIndexOf('/')).replaceAll('/', '-');
+            obj.dateStart = dateStart
+            obj.dateEnd = dateEnd
             console.log(obj)
             setTimeout(function () {
                 console.log(obj.id)
                 if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/vouchers', window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, window.location.href, 'PUT')
                 } else {
                     saveWithAPI(JSON.stringify(obj), '/api/vouchers', window.location.href, 'POST')
                 }
@@ -244,9 +239,7 @@
     <link href="/web-admin/css/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css">
     <link href="/web-admin/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
     <link href="/web-admin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet"><!-- App css -->
-    <link href="/web-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="/web-admin/css/icons.css" rel="stylesheet" type="text/css">
-    <link href="/web-admin/css/style.css" rel="stylesheet" type="text/css">
+
 </th:block>
 </body>
 </html>

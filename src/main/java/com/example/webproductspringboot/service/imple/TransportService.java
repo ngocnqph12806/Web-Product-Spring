@@ -48,7 +48,7 @@ public class TransportService extends AbstractService implements ITransportServi
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iTransportReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm hoá đơn vận chuyển : \n" + entity);
+        saveHistory(userEntity, "Thêm hoá đơn vận chuyển", entity.toString());
         return (TransportDto) map(entity);
     }
 
@@ -65,7 +65,7 @@ public class TransportService extends AbstractService implements ITransportServi
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
         entity.setCreated(fake.getCreated());
         _iTransportReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa hoá đơn vận chuyển: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa hoá đơn vận chuyển", fake + "\n" + entity);
         return (TransportDto) map(entity);
     }
 }

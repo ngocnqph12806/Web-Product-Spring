@@ -50,7 +50,7 @@ public class CustomersReturnService extends AbstractService implements ICustomer
         entity.setCreated(new Date(System.currentTimeMillis()));
         entity.setIdStaff(userEntity);
         _iCustomersReturnReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm hoá đơn khách trả: \n" + entity);
+        saveHistory(userEntity, "Thêm hoá đơn khách trả", entity.toString());
         return (ReturnDto) map(entity);
     }
 
@@ -68,7 +68,7 @@ public class CustomersReturnService extends AbstractService implements ICustomer
         entity.setCreated(fake.getCreated());
         entity.setIdStaff(fake.getIdStaff());
         _iCustomersReturnReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa hoá đơn khach trả: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa hoá đơn khach trả", fake + "\n" + entity);
         return (ReturnDto) map(entity);
     }
 }

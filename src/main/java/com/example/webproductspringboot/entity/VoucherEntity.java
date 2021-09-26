@@ -35,7 +35,7 @@ public class VoucherEntity {
     private Date dateStart;
     @Column
     private Date dateEnd;
-    @Column
+    @Column(nullable = false, columnDefinition = "text")
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;

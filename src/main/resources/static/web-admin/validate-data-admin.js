@@ -26,7 +26,7 @@ function checkPath(value) {
 }
 
 function checkCode(value, title) {
-    const REGEX_CODE = /^[a-zA-Z0-9]+$/
+    const REGEX_CODE = /^[a-zA-Z0-9\-]+$/
     if (value === null || value === '') {
         toastDanger(title + ' không được để trống', 'Lỗi');
         return false;

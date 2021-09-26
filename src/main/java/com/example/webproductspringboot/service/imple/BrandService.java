@@ -43,30 +43,33 @@ public class BrandService extends AbstractService implements IBrandService {
     @Override
     public BrandDto save(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iBrandReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm thương hiệu: \n" + entity);
+        saveHistory(userEntity, "Thêm thương hiệu", entity.toString());
         return (BrandDto) map(entity);
     }
 
     @Override
     public BrandDto update(BrandDto dto) {
         BrandEntity entity = (BrandEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<BrandEntity> optional = _iBrandReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "brand", "brand.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "brand", "brand.not.found"));
         BrandEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
         }
         entity.setCreated(fake.getCreated());
         _iBrandReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa thương hiệu: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa thương hiệu", fake + "\n" + entity);
         return (BrandDto) map(entity);
     }
 

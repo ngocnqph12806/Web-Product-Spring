@@ -34,37 +34,41 @@ public class CollectionService extends AbstractService implements ICollectionSer
     @Override
     public CollectionDto findById(String idCollection) {
         Optional<CollectionEntity> collectionEntity = _iCollectionReponsitory.findById(idCollection);
-        if (collectionEntity.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
+        if (collectionEntity.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
         return (CollectionDto) map(collectionEntity.get());
     }
 
     @Override
     public CollectionDto save(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iCollectionReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm danh mục: \n" + entity);
+        saveHistory(userEntity, "Thêm danh mục", entity.toString());
         return (CollectionDto) map(entity);
     }
 
     @Override
     public CollectionDto updare(CollectionDto dto) {
         CollectionEntity entity = (CollectionEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<CollectionEntity> optional = _iCollectionReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "collection", "collection.not.found"));
         CollectionEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
         }
         entity.setCreated(fake.getCreated());
         _iCollectionReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa danh mục: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa danh mục", fake + "\n" + entity);
         return (CollectionDto) map(entity);
     }
 }

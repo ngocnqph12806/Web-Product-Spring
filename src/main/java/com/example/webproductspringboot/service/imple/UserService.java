@@ -89,7 +89,8 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public UserDto findById(String id) {
         Optional<UserEntity> optional = _iUserReponsitory.findById(id);
-        if (optional.isEmpty()) throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
+        if (optional.isEmpty())
+            throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
         return (UserDto) map(optional.get());
     }
 
@@ -108,7 +109,8 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public UserDto save(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
@@ -116,17 +118,19 @@ public class UserService extends AbstractService implements IUserService, UserDe
         entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
         entity.setCreated(new Date());
         _iUserReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm người dùng: \n" + entity);
+        saveHistory(userEntity, "Thêm người dùng", entity.toString());
         return (UserDto) map(entity);
     }
 
     @Override
     public UserDto update(ChangeUserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<UserEntity> optional = _iUserReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
+        if (optional.isEmpty())
+            throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
         UserEntity fake = optional.get();
         entity.setCreated(fake.getCreated());
         if (entity.getBlock() == null) {
@@ -141,7 +145,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
             entity.setPassword(_passwordEncoder.encode(dto.getPassword()));
         }
         _iUserReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa thông tin người dùng: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa thông tin người dùng", fake + "\n" + entity);
         return (UserDto) map(entity);
     }
 

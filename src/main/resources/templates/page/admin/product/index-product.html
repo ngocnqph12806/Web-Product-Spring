@@ -328,7 +328,7 @@
             swal('Đang lưu...', 'Vui lòng đợi', 'success')
             setTimeout(function () {
                 if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/product', window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/product'+obj.id, window.location.href, 'PUT')
                 } else {
                     saveWithAPI(JSON.stringify(obj), '/api/product', window.location.href, 'POST')
                 }

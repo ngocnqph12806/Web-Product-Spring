@@ -29,11 +29,11 @@ function saveWithAPI(formData, url, urlSuccess, method) {
             success: function (data) {
                 console.log(data)
                 urlSuccess = urlSuccess.substring(0, urlSuccess.lastIndexOf('#'))
-                if (data.code === 200) {
+                if (data.code === 201) {
                     swal("Thành công", 'Đã thêm mới', "success").then((function (t) {
                         if (t) window.location = urlSuccess
                     }))
-                } else if (data.code === 201) {
+                } else if (data.code === 200) {
                     swal("Thành công", 'Đã chỉnh sửa', "success").then((function (t) {
                         if (t) window.location = urlSuccess
                     }))
