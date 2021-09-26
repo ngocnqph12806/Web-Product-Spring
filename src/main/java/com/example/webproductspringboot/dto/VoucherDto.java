@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
@@ -16,30 +15,32 @@ import java.util.Date;
 public class VoucherDto {
 
     private String id;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.code")
+    @NotBlank(message = "NotBlank.voucher.code")
+    @Pattern(regexp = "^[a-zA-Z0-9\\-]+$", message = "Pattern.voucher.code")
+    @Size(min = 5, max = 30, message = "Size.voucher.code")
     private String code;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.title")
+    @NotBlank(message = "NotBlank.voucher.title")
+    @Pattern(regexp = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ \\-.]+$",
+            message = "Pattern.voucher.title")
+    @Size(min = 5, max = 100, message = "Size.voucher.title")
     private String title;
-    @NotNull
-    @NotEmpty
     private String idStaff;
     private String nameStaff;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.quantity")
+    @Min(value = 1, message = "Min.voucher.quantity")
     private Integer quantity;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.priceSale")
+    @Min(value = 1, message = "Min.voucher.priceSale")
     private Long priceSale;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.dateStart")
     private Date dateStart;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.dateEnd")
     private Date dateEnd;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "NotNull.voucher.description")
+    @NotBlank(message = "NotBlank.voucher.description")
+    @Size(min = 100, message = "Size.voucher.description")
     private String description;
     private Boolean status;
     private Date dateCreated;

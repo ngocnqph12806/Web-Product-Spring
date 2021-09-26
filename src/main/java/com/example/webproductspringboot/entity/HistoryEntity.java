@@ -22,8 +22,10 @@ public class HistoryEntity {
     @ManyToOne
     @JoinColumn
     private UserEntity idStaff;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String details;
+    @Column(nullable = false)
+    private String description;
     @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 

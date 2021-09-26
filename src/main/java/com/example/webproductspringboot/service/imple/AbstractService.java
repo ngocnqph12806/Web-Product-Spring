@@ -29,11 +29,12 @@ public abstract class AbstractService {
         this.request = request;
     }
 
-    protected void saveHistory(UserEntity user, String details) {
+    protected void saveHistory(UserEntity user, String description, String details) {
         HistoryEntity entity = HistoryEntity.builder()
                 .id(UUID.randomUUID().toString())
                 .idStaff(user)
                 .details(details)
+                .description(description)
                 .created(new Date(System.currentTimeMillis()))
                 .build();
         _iHistoryReponsitory.save(entity);

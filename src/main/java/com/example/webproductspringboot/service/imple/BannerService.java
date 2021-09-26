@@ -43,26 +43,29 @@ public class BannerService extends AbstractService implements IBannerService {
     @Override
     public BannerDto save(BannerDto dto) {
         BannerEntity entity = (BannerEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iBannerReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm banner: \n" + entity);
+        saveHistory(userEntity, "Thêm mới banner", entity.toString());
         return (BannerDto) map(entity);
     }
 
     @Override
     public BannerDto update(BannerDto dto) {
         BannerEntity entity = (BannerEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<BannerEntity> optional = _iBannerReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "banner", "banner.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "banner", "banner.not.found"));
         BannerEntity fake = optional.get();
         entity.setCreated(fake.getCreated());
         _iBannerReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa banner: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa banner", fake + "\n" + entity);
         return (BannerDto) map(entity);
     }
 }

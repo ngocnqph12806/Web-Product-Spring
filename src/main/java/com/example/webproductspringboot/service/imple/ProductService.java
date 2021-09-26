@@ -71,7 +71,7 @@ public class ProductService extends AbstractService implements IProductService {
         entity.setIdUrl(new Random().nextLong());
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iProductReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm sản phẩm: \n" + entity);
+        saveHistory(userEntity, "Thêm sản phẩm", entity.toString());
         return (ProductDto) map(entity);
     }
 
@@ -89,7 +89,7 @@ public class ProductService extends AbstractService implements IProductService {
         entity.setIdUrl(fake.getIdUrl());
         entity.setCreated(fake.getCreated());
         _iProductReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa sản phẩm: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa sản phẩm", fake + "\n" + entity);
         return (ProductDto) map(entity);
     }
 
@@ -101,7 +101,7 @@ public class ProductService extends AbstractService implements IProductService {
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         _iProductImageReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm sảnh sản phẩm: \n" + entity);
+        saveHistory(userEntity, "Thêm sảnh sản phẩm", entity.toString());
         return (ProductImageVo) map(entity);
     }
 
@@ -114,7 +114,7 @@ public class ProductService extends AbstractService implements IProductService {
     public void deleteAllImagesByProductId(String id) {
         UserEntity userEntity = getUserLogin();
         _iProductImageReponsitory.deleteAllImagesByProductId(id);
-        saveHistory(userEntity, "Xoá toàn bộ ảnh sản phẩm: " + id);
+        saveHistory(userEntity, "Xoá toàn bộ ảnh sản phẩm", "Xoá toàn bộ ảnh sản phẩm: " + id);
     }
 
 

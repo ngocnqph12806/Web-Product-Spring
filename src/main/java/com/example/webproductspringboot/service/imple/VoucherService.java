@@ -34,31 +34,35 @@ public class VoucherService extends AbstractService implements IVoucherService {
     @Override
     public VoucherDto findById(String id) {
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findById(id);
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
         return (VoucherDto) map(optional.get());
     }
 
     @Override
     public VoucherDto save(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setIdStaff(userEntity);
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iVoucherReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm mã giảm giá: \n" + entity);
+        saveHistory(userEntity, "Thêm mã giảm giá", entity.toString());
         return (VoucherDto) map(entity);
     }
 
     @Override
     public VoucherDto update(VoucherDto dto) {
         VoucherEntity entity = (VoucherEntity) map(dto);
-        if (entity == null) throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findById(entity.getId());
-        if (optional.isEmpty()) throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
         VoucherEntity fake = optional.get();
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
@@ -66,7 +70,7 @@ public class VoucherService extends AbstractService implements IVoucherService {
         entity.setIdStaff(fake.getIdStaff());
         entity.setCreated(fake.getCreated());
         _iVoucherReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa mã giảm giá: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa mã giảm giá", fake + "\n" + entity);
         return (VoucherDto) map(entity);
     }
 

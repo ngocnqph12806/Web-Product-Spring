@@ -119,23 +119,34 @@
             //     swal("Lỗi", "Bạn chưa đủ 18 tuổi", "warning")
             // }
             // alert("You are " + n + " years old!")
+        }), n('input[data-type="date-event"]').daterangepicker({
+            singleDatePicker: !0,
+            showDropdowns: !0,
+            minYear: 2010,
+            maxYear: parseInt(moment().format("YYYY"), 0)
+        }, function (t, e, a) {
+            // var n = moment().diff(t, "years") + '';
+            // if (Number(n) < 18) {
+            //     swal("Lỗi", "Bạn chưa đủ 18 tuổi", "warning")
+            // }
+            // alert("You are " + n + " years old!")
         });
-        var t = moment().subtract(29, "days"), e = moment();
+        var t = moment(), e = moment().subtract(-29, "days");
 
         function a(t, e) {
-            n("#reportrange span").html(t.format("MMMM D, YYYY") + " - " + e.format("MMMM D, YYYY"))
+            n("#date-time-voucher span").html(t.format("MMMM D, YYYY") + " - " + e.format("MMMM D, YYYY"))
         }
 
-        n("#reportrange").daterangepicker({
+        n("#date-time-voucher").daterangepicker({
             startDate: t,
             endDate: e,
             ranges: {
-                Today: [moment(), moment()],
-                Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
-                "Last 7 Days": [moment().subtract(6, "days"), moment()],
-                "Last 30 Days": [moment().subtract(29, "days"), moment()],
-                "This Month": [moment().startOf("month"), moment().endOf("month")],
-                "Last Month": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+                "Hôm nay": [moment(), moment()],
+                "Ngày mai": [moment().subtract(-1, "days"), moment().subtract(-1, "days")],
+                "7 ngày tới": [moment(), moment().subtract(-6, "days")],
+                "30 ngày tới": [ moment(),moment().subtract(-29, "days")],
+                "Tháng này": [moment().startOf("month"), moment().endOf("month")],
+                "Tháng sau": [moment().subtract(-1, "month").startOf("month"), moment().subtract(-1, "month").endOf("month")]
             }
         }, a), a(t, e)
     }, n.AdvancedForm = new t, n.AdvancedForm.Constructor = t

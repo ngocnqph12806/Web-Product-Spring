@@ -50,7 +50,7 @@ public class OrderService extends AbstractService implements IOrderService {
         entity.setCreated(new Date(System.currentTimeMillis()));
         entity.setStaffCreate(userEntity);
         _iOrderReponsitory.save(entity);
-        saveHistory(userEntity, "Thêm hoá đơn đặt hàng: \n" + entity);
+        saveHistory(userEntity, "Thêm hoá đơn đặt hàng", entity.toString());
         return (OrderDto) map(entity);
     }
 
@@ -68,7 +68,7 @@ public class OrderService extends AbstractService implements IOrderService {
         entity.setCreated(fake.getCreated());
         entity.setStaffCreate(fake.getStaffCreate());
         _iOrderReponsitory.save(entity);
-        saveHistory(userEntity, "Sửa hoá đơn đặt hàng: \n" + fake + "\n" + entity);
+        saveHistory(userEntity, "Sửa hoá đơn đặt hàng", fake + "\n" + entity);
         return (OrderDto) map(entity);
     }
 }
