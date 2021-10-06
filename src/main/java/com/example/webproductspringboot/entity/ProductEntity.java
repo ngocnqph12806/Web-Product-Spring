@@ -62,6 +62,8 @@ public class ProductEntity {
 //    private List<InvoiceDetailsEntity> lstInvoiceDetailsEntities;
     @OneToMany(mappedBy = "idProduct")
     private List<ReviewProductEntity> lstReviewProductEntities;
+    @OneToMany(mappedBy = "idProduct")
+    private List<WishlistEntity> lstWishlistEntities;
 
     @Override
     public String toString() {

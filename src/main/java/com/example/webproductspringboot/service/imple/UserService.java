@@ -59,7 +59,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
 
     @Override
     public List<UserDto> findAll() {
-        List<UserEntity> lst = _iUserReponsitory.findAll();
+        List<UserEntity> lst = _iUserReponsitory.findAll(sortAZByCreated());
         Collections.reverse(lst);
         return lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList());
     }

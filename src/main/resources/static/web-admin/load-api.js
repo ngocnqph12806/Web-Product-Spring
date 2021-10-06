@@ -96,16 +96,49 @@ function readFileGithub(fileName, tagImg) {
     });
 }
 
+async function writeMutilFileGitHub(objFile) {
+    for (let i = 0; i < objFile.targetFile.length; i++) {
+        if (objFileImage.targetFile[i] !== null && objFileImage.targetFile[i] !== undefined) {
+            let target = objFile.targetFile[i];
+            let fileName = objFile.nameFile[i];
+            await writeMutilFileGitHub(target, fileName);
+            objFile.targetFile[i] = null;
+        }
+    }
+
+}
+
+const toBase64 = objFile => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(objFile);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
 function writeFileGitHub(target, fileName) {
     if (target.files && target.files[0]) {
         let reader = new FileReader();
         // let fileName = today + target.files[0].name
         reader.onloadend = function () {
             let base64result = reader.result.substr(reader.result.indexOf(',') + 1);
-            saveFileGitHub(fileName, "uploading a file in date: " + getNameTime(), base64result)
+            // saveFileGitHub(fileName, "uploading a file in date: " + getNameTime(), base64result)
+            $.ajax({
+                url: 'https://api.github.com/repos/' + nameOwner + '/' + nameRepo + '/contents/' + fileName,
+                type: 'PUT',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/vnd.github.v3+json"
+                },
+                data: JSON.stringify({
+                    "message": "uploading a file in date: " + getNameTime(),
+                    "content": base64result
+                }),
+                success: function (e) {
+                    console.log('lưu thành công');
+                }
+            })
         }
         reader.readAsDataURL(target.files[0]);
-        // return fileName
     }
 }
 

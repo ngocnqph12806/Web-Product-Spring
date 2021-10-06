@@ -1,5 +1,7 @@
 package com.example.webproductspringboot.dto;
 
+import com.example.webproductspringboot.vo.CollectionBrandVo;
+import com.example.webproductspringboot.vo.CollectionCategoryVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,11 +22,17 @@ public class CollectionDto {
     @NotNull
     @NotEmpty
     private String name;
+    private Long idPath;
+    @NotNull
+    @NotEmpty
+    private String path;
     @NotNull
     @NotEmpty
     private String description;
     private Boolean status;
     private Date dateCreated;
     private Integer countProducts;
+//    private List<CollectionBrandVo> lstCollectionBrandVos;
+    private List<CollectionCategoryVo> lstCollectionCategoryVos;
 
 }

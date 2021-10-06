@@ -24,6 +24,10 @@ public class CollectionEntity {
     private String name;
     @Column
     private String description;
+    @Column(nullable = false, unique = true)
+    private Long idUrl;
+    @Column(nullable = false, unique = true)
+    private String pathUrl;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;
     @Column(columnDefinition = "timestamp default current_timestamp")

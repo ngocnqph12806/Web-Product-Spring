@@ -31,13 +31,18 @@ public class VoucherApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchVoucherVo searchVoucherVo) {
         List<VoucherDto> lst = _iVoucherService.findAll();
         lst = search(lst, searchVoucherVo, searchVoucherVo.getCode(), 0);
-        ResultDto<List<VoucherDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+//        ResultDto<List<VoucherDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(lst);
+    }
+
+    @GetMapping(params = "code")
+    public ResponseEntity<?> getByCode(@RequestParam("code") String code) {
+        return ResponseEntity.ok(_iVoucherService.findByCode(code));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iVoucherService.findById(id)));
+        return ResponseEntity.ok(_iVoucherService.findById(id));
     }
 
     @GetMapping(value = "/{id}", params = "modal")

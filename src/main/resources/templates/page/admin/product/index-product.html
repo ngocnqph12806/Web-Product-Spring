@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/layout/admin/index"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+>
 <head>
     <title layout:fragment="title">Dasboard - Quản lý hàng hoá</title>
 </head>
@@ -245,19 +245,19 @@
 <th:block layout:fragment="script-admin">
     <script>
 
-        var objFileImage = {
-            targetFile: [],
+        let objFileImage = {
+            data: [],
             nameFile: [],
         }
 
-        function onChangeImage(e) {
-            console.log(e.dataset.index);
+        async function onChangeImage(e) {
             if (!checkImage(e.files[0].name, 'File ')) return;
             let index = e.dataset.index
             // objFile.targetFile = e
-            objFileImage.targetFile[index] = e
+            // objFileImage.targetFile[index] = e
             objFileImage.nameFile[index] = getNameTime() + e.files[0].name
-            console.log(objFileImage.nameFile[index])
+            let data = await toBase64(e.files[0])
+            objFileImage.data[index] = data
         }
 
         for (let i = 0; i < 12; i++) {
@@ -275,35 +275,49 @@
             $('#path').val(pathUrl)
         })
 
-        var objFile = {
-            targetFile: null,
+        let objFile = {
+            data: null,
             nameFile: null,
         }
 
-        function onChangeFile(e) {
-            objFile.targetFile = e
+        async function onChangeFile(e) {
             objFile.nameFile = getNameTime() + e.files[0].name
-
+            let data = await toBase64(e.files[0])
+            objFile.data = data
         }
 
-        function saveProduct() {
-            let data = JSON.parse(JSON.stringify($("#form-input-product").serializeArray()))
-            console.log(data)
+        async function saveProduct() {
+            let form = $("#form-input-product").serializeArray()
             let obj = {};
-            for (let i = 0; i < data.length; i++) {
-                let name = data[i].name;
-                let value = data[i].value;
-
-                obj[name] = value;
+            for (let i = 0; i < form.length; i++) {
+                let name = form[i].name;
+                obj[name] = form[i].value;
             }
-            if (objFile.targetFile !== null && objFile.targetFile !== undefined) {
-                writeFileGitHub(objFile.targetFile, objFile.nameFile)
-                objFile.targetFile = null
-            }
-            if (!checkFileDoc(objFile.nameFile, 'File hướng dẫn sử dụng')) {
-                return
-            } else {
-                obj['pathUserManual'] = objFile.nameFile
+            console.log(obj)
+            swal('Đang lưu...', 'Vui lòng đợi', 'success')
+            if (objFile.data !== null && objFile.data !== undefined) {
+                let data = objFile.data + '';
+                console.log(data)
+                let base = data.substring(data.indexOf(",") + 1, data.length)
+                await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFile.nameFile, {
+                    method: 'PUT',
+                    headers: {
+                        "Authorization": "Bearer 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",
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "message": "uploading a file in date: " + getNameTime(),
+                        "content": base
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(out => {
+                        console.log("up thành công");
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                objFile.data = null
             }
             for (let i = 0; i < objFileImage.nameFile.length; i++) {
                 if (objFileImage.nameFile[i] !== null
@@ -312,27 +326,67 @@
                     if (!checkImage(objFileImage.nameFile[i], 'Hình ảnh số ' + (i + 1))) {
                         objFileImage.nameFile[i] = null;
                         return;
+                    } else if (objFileImage.data[i] !== null && objFileImage.data[i] !== undefined
+                        && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
+                        let data = objFileImage.data[i] + '';
+                        console.log(data)
+                        let base = data.substring(data.indexOf(",") + 1, data.length)
+                        await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileImage.nameFile[i], {
+                            method: 'PUT',
+                            headers: {
+                                "Authorization": "Bearer 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",
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "message": "uploading a file in date: " + getNameTime(),
+                                "content": base
+                            }),
+                        })
+                            .then(response => response.json())
+                            .then(out => {
+                                console.log("up thành công");
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                        objFileImage.data[i] = null;
                     }
-                } else {
-                    setTimeout(function () {
-                        if (objFileImage.targetFile[i] !== null && objFileImage.targetFile[i] !== undefined
-                            && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
-                            writeFileGitHub(objFileImage.targetFile[i], objFileImage.nameFile[i])
-                            objFileImage.targetFile[i] = null
-                        }
-                    }, 10)
                 }
+            }
+            if (!checkFileDoc(objFile.nameFile, 'File hướng dẫn sử dụng')) {
+                return
+            } else {
+                obj['pathUserManual'] = objFile.nameFile
             }
             obj.images = objFileImage.nameFile
             console.log(obj)
-            swal('Đang lưu...', 'Vui lòng đợi', 'success')
-            setTimeout(function () {
-                if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/product'+obj.id, window.location.href, 'PUT')
-                } else {
-                    saveWithAPI(JSON.stringify(obj), '/api/product', window.location.href, 'POST')
+            if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
+                saveWithAPI(JSON.stringify(obj), '/api/product' + obj.id, window.location.href, 'PUT')
+            } else {
+                saveWithAPI(JSON.stringify(obj), '/api/product', window.location.href, 'POST')
+            }
+        }
+
+        async function saveFile() {
+            if (objFile.targetFile !== null && objFile.targetFile !== undefined) {
+                await writeFileGitHub(objFile.targetFile, objFile.nameFile)
+                objFile.targetFile = null
+            }
+            for (let i = 0; i < objFileImage.nameFile.length; i++) {
+                if (objFileImage.nameFile[i] !== null
+                    && objFileImage.nameFile[i] !== undefined
+                    && objFileImage.nameFile[i] !== '') {
+                    if (!checkImage(objFileImage.nameFile[i], 'Hình ảnh số ' + (i + 1))) {
+                        objFileImage.nameFile[i] = null;
+                        return false;
+                    } else if (objFileImage.targetFile[i] !== null && objFileImage.targetFile[i] !== undefined
+                        && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
+                        await writeFileGitHub(objFileImage.targetFile[i], objFileImage.nameFile[i])
+                        objFileImage.nameFile[i] = null;
+                    }
                 }
-            }, 3000);
+            }
+            return true;
         }
 
         function getProduct(e) {

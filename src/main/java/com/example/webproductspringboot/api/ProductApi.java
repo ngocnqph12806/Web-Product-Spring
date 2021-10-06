@@ -7,7 +7,6 @@ import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.utils.MapperModelUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchProductVo;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class ProductApi extends AbstractApi {
 
     private final IProductService _iProductService;
@@ -36,8 +36,8 @@ public class ProductApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchProductVo searchProductVo) {
         List<ProductDto> lst = _iProductService.findAllProduct();
         lst = search(lst, searchProductVo, searchProductVo.getName(), 0);
-        ResultDto<List<ProductDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+//        ResultDto<List<ProductDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(lst);
     }
 
     @GetMapping("/{id}")
@@ -57,7 +57,7 @@ public class ProductApi extends AbstractApi {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@Validated @RequestBody ProductForm form, Errors errors) {
+    public ResponseEntity<?> save(@Validated @RequestBody ProductFormDto form, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", errors.getFieldErrors().get(0).getDefaultMessage()));
         List<String> lstImages = new ArrayList<>();
@@ -65,7 +65,7 @@ public class ProductApi extends AbstractApi {
         if (lstImages.isEmpty())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", "image.please.choose.product.image"));
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
-        if (dtoSave != null) for (String x : lstImages)
+        if (dtoSave != null) System.out.println("Lưu ảnh"); for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
         ResultDto<ProductDto> result = new ResultDto<>(CREATED, _iProductService.findProductById(dtoSave.getId()));
         return ResponseEntity.ok(result);
@@ -73,7 +73,7 @@ public class ProductApi extends AbstractApi {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") String id,
-                                    @RequestBody @Valid ProductForm form, Errors errors) {
+                                    @RequestBody @Valid ProductFormDto form, Errors errors) {
         System.out.println(form);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", errors.getFieldErrors().get(0).getDefaultMessage()));
@@ -184,31 +184,6 @@ public class ProductApi extends AbstractApi {
                 return search(lst, obj, obj.getDateCreated(), 16);
             default:
                 return lst;
-        }
-    }
-
-    @Data
-    static
-    class ProductForm {
-
-        private String id;
-        private String name;
-        private String idBrand;
-        private String idCategory;
-        private Long price;
-        private Long priceSale;
-        private Integer quantity;
-        private String color;
-        private String categoryDetails;
-        private String location;
-        private String path;
-        private String pathUserManual;
-        private String description;
-        private Boolean status;
-        private String[] images;
-
-        public ProductDto toDto() {
-            return (ProductDto) MapperModelUtils.get().toDto(this, ProductDto.class);
         }
     }
 }

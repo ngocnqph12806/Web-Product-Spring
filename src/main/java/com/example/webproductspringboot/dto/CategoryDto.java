@@ -27,6 +27,7 @@ public class CategoryDto {
     @NotNull
     @NotEmpty
     private String path;
+    private Long idPath;
     @NotNull
     @NotEmpty
     private String description;

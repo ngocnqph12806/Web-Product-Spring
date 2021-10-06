@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -17,26 +19,45 @@ import java.util.List;
 public class OrderDto {
 
     private String id;
-    @NotNull
-    @NotEmpty
+    //    @NotNull
+//    @NotBlank
     private String idUser;
     private String nameUser;
-    @NotNull
-    @NotEmpty
+    private String idVoucher;
+    private String codeVoucher;
+    private Long priceVoucher;
     private String idCreator;
     private String nameCreator;
-    @NotNull
-    @NotEmpty
+    //    @NotNull
+//    @NotBlank
     private String idSaller;
     private String nameSaller;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String paymentMethod;
-    @NotNull
-    @NotEmpty
     private Boolean paymentStatus;
     @NotNull
-    @NotEmpty
+    @NotBlank
+    private String fullName;
+    @NotNull
+    @NotBlank
+    private String phoneNumber;
+    @NotNull
+    @NotBlank
+    private String email;
+    @NotNull
+    @NotBlank
+    private String village; // số nhà, thôn xóm
+    @NotNull
+    @NotBlank
+    private String ward; // phường xã
+    @NotNull
+    @NotBlank
+    private String district; // quận huyện
+    @NotNull
+    @NotBlank
+    private String city; // thành phố
+    private String note; // thành phố
     private String description;
     private Boolean status;
     private Date dateCreated;

@@ -8,6 +8,8 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IVoucherReponsitory;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import com.example.webproductspringboot.utils.MapperModelUtils;
+import com.example.webproductspringboot.vo.VoucherApplyVo;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +74,22 @@ public class VoucherService extends AbstractService implements IVoucherService {
         _iVoucherReponsitory.save(entity);
         saveHistory(userEntity, "Sửa mã giảm giá", fake + "\n" + entity);
         return (VoucherDto) map(entity);
+    }
+
+    @Override
+    public VoucherApplyVo findByCode(String code) {
+        Optional<VoucherEntity> optional = _iVoucherReponsitory.findByCode(code);
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
+        return entityToVoucherApplyVo(optional.get());
+    }
+
+    private VoucherApplyVo entityToVoucherApplyVo(VoucherEntity entity) {
+        return VoucherApplyVo.builder()
+                .id(entity.getId())
+                .code(entity.getCode())
+                .priceSale(entity.getPriceSale())
+                .build();
     }
 
 }

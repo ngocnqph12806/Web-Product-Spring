@@ -1,6 +1,7 @@
 package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.CategoryDto;
+import com.example.webproductspringboot.dto.OrderDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICategoryService;
@@ -14,7 +15,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,8 +36,16 @@ public class CategoryApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchCategoryVo searchCategoryVo) {
         List<CategoryDto> lst = _iCategoryService.findAll();
         lst = search(lst, searchCategoryVo, searchCategoryVo.getName(), 0);
-        ResultDto<List<CategoryDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+//        ResultDto<List<CategoryDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(lst);
+    }
+
+    @GetMapping(params = "nav")
+    public ResponseEntity<?> getForNav() {
+        List<CategoryDto> lst = _iCategoryService.findAll();
+        Set<String> lstStr = lst.stream().map(CategoryDto::getName).collect(Collectors.toSet());
+
+        return ResponseEntity.ok(lstStr);
     }
 
     @GetMapping("/{id}")

@@ -25,6 +25,9 @@ public class OrderEntity {
     private UserEntity idVisit;
     @ManyToOne
     @JoinColumn
+    private VoucherEntity idVoucher;
+    @ManyToOne
+    @JoinColumn
     private UserEntity staffCreate;
     @ManyToOne
     @JoinColumn
@@ -33,7 +36,21 @@ public class OrderEntity {
     private String paymentMethod;
     @Column(columnDefinition = "bit default 0")
     private Boolean paymentStatus;
-    @Column
+    @Column(nullable = false, length = 50)
+    private String fullName;
+    @Column(nullable = false, length = 15)
+    private String phoneNumber;
+    @Column(nullable = false, length = 50)
+    private String email;
+    @Column(nullable = false, length = 50)
+    private String village; // số nhà, thôn xóm
+    @Column(nullable = false, length = 50)
+    private String ward; // phường xã
+    @Column(nullable = false, length = 50)
+    private String district; // quận huyện
+    @Column(nullable = false, length = 50)
+    private String city; // thành phố
+    private String note; // thành phố
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;

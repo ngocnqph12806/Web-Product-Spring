@@ -16,7 +16,7 @@ public interface IProductService {
 
     ProductDto updateProduct(ProductDto dto);
 
-    ProductImageVo saveImageProduct(ProductImageVo vo);
+    void saveImageProduct(ProductImageVo vo);
 
     Set<String> getSetCategoryDetailsByIdCategory(String idCategory);
 

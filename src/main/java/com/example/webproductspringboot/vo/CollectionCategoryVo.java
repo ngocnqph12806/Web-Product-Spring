@@ -14,6 +14,8 @@ public class CollectionCategoryVo {
     private String id;
     private String idCategory;
     private String nameCategory;
+    private Long idPathCategory;
+    private String pathCategory;
     private String idCollection;
     private String nameCollection;
 

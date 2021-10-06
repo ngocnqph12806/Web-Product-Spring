@@ -2,6 +2,7 @@ package com.example.webproductspringboot.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -10,30 +11,31 @@ import java.util.Date;
 public class ChangeUserDto {
 
     private String id;
+    @NotNull
+    @NotBlank
     private String fullName;
     @NotNull
-    @NotEmpty
     private Date dateOfBirth;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String email;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String phoneNumber;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String username;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String password;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String address;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String avatar;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String role;
     private Boolean status;
     private Boolean block;

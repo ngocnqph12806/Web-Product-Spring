@@ -31,6 +31,8 @@ public class ProductDto {
     @NotEmpty
     private String idCategory;
     private String nameCategory;
+    private Long idPathCategory;
+    private String pathCategory;
     @NotNull
     @NotEmpty
     private Long price;
@@ -62,6 +64,7 @@ public class ProductDto {
     private Boolean status;
     private Date dateCreated;
     private Double pointReview;
+    private Integer countWishlist;
     private List<ProductDetailsVo> details;
     private List<ProductImageVo> images;
     private List<ReviewDto> reviews;

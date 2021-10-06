@@ -7,6 +7,7 @@ import com.example.webproductspringboot.reponsitory.IHistoryReponsitory;
 import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +25,22 @@ public abstract class AbstractService {
     @Autowired
     private IHistoryReponsitory _iHistoryReponsitory;
     protected final HttpServletRequest request;
+    private final String urlGit = "https://raw.githubusercontent.com/ngocnqph12806/Repo_File/main/";
 
     protected AbstractService(HttpServletRequest request) {
         this.request = request;
+    }
+
+    protected Sort sortAZByCreated() {
+        return Sort.by(Sort.Direction.DESC, "created");
+    }
+
+    protected Sort sortAZ(String type) {
+        return Sort.by(Sort.Direction.DESC, type);
+    }
+
+    protected Sort sortZA(String type) {
+        return Sort.by(Sort.Direction.DESC, type);
     }
 
     protected void saveHistory(UserEntity user, String description, String details) {
@@ -49,8 +63,26 @@ public abstract class AbstractService {
 
     protected Object map(Object data) {
         if (data == null) return null;
+//        WISHLIST
+        if (data instanceof WishlistVo) {
+            WishlistVo dto = (WishlistVo) data;
+            return WishlistEntity.builder()
+                    .id(dto.getId())
+                    .idProduct(ProductEntity.builder().id(dto.getIdProduct()).build())
+                    .idVisit(UserEntity.builder().id(dto.getIdVisit()).build())
+                    .build();
+        } else if (data instanceof WishlistEntity) {
+            WishlistEntity entity = (WishlistEntity) data;
+            return WishlistVo.builder()
+                    .id(entity.getId())
+                    .idProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getId() : null)
+                    .idVisit(entity.getIdVisit() != null
+                            ? entity.getIdVisit().getId() : null)
+                    .build();
+        }
         //BANNER
-        if (data instanceof BannerDto) {
+        else if (data instanceof BannerDto) {
             BannerDto dto = (BannerDto) data;
             return BannerEntity.builder()
                     .id(dto.getId())
@@ -65,7 +97,7 @@ public abstract class AbstractService {
             return BannerDto.builder()
                     .id(entity.getId())
                     .title(entity.getTitle())
-                    .pathImage(entity.getPathImage())
+                    .pathImage(urlGit + entity.getPathImage())
                     .link(entity.getPathLink())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
@@ -141,8 +173,9 @@ public abstract class AbstractService {
             return CategoryDto.builder()
                     .id(entity.getId())
                     .name(entity.getName())
-                    .banner(entity.getBanner())
+                    .banner(urlGit + entity.getBanner())
                     .path(entity.getPathUrl())
+                    .idPath(entity.getIdUrl())
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
@@ -174,6 +207,10 @@ public abstract class AbstractService {
                             ? entity.getIdCategory().getId() : null)
                     .nameCategory(entity.getIdCategory() != null
                             ? entity.getIdCategory().getName() : null)
+                    .idPathCategory(entity.getIdCategory() != null
+                            ? entity.getIdCategory().getIdUrl() : null)
+                    .pathCategory(entity.getIdCategory() != null
+                            ? entity.getIdCategory().getPathUrl() : null)
                     .idCollection(entity.getIdCollection() != null
                             ? entity.getIdCollection().getId() : null)
                     .nameCollection(entity.getIdCollection() != null
@@ -204,6 +241,9 @@ public abstract class AbstractService {
                                     ? e.getIdCategory().getLstProductEntities().size() : 0)
                             .sum()
                             : 0)
+                    .lstCollectionCategoryVos(entity.getLstCollectionCategoryEntities() != null
+                            ? entity.getLstCollectionCategoryEntities().stream()
+                            .map(e -> (CollectionCategoryVo) map(e)).collect(Collectors.toList()) : null)
                     .build();
         }
 //        RETURN
@@ -345,10 +385,19 @@ public abstract class AbstractService {
             return OrderEntity.builder()
                     .id(dto.getId())
                     .idVisit(UserEntity.builder().id(dto.getIdUser()).build())
+                    .idVoucher(VoucherEntity.builder().id(dto.getIdVoucher()).code(dto.getCodeVoucher()).build())
                     .staffCreate(UserEntity.builder().id(dto.getIdCreator()).build())
                     .staffSales(UserEntity.builder().id(dto.getIdSaller()).build())
                     .paymentMethod(dto.getPaymentMethod())
                     .paymentStatus(dto.getPaymentStatus())
+                    .fullName(dto.getFullName())
+                    .phoneNumber(dto.getPhoneNumber())
+                    .email(dto.getEmail())
+                    .village(dto.getVillage())
+                    .ward(dto.getWard())
+                    .district(dto.getDistrict())
+                    .city(dto.getCity())
+                    .note(dto.getNote())
                     .description(dto.getDescription())
                     .status(dto.getStatus())
                     .created(dto.getDateCreated())
@@ -361,6 +410,12 @@ public abstract class AbstractService {
                             ? entity.getIdVisit().getId() : null)
                     .nameUser(entity.getIdVisit() != null
                             ? entity.getIdVisit().getFullName() : null)
+                    .idVoucher(entity.getIdVoucher() != null
+                            ? entity.getIdVoucher().getId() : null)
+                    .codeVoucher(entity.getIdVoucher() != null
+                            ? entity.getIdVoucher().getCode() : null)
+                    .priceVoucher(entity.getIdVoucher() != null
+                            ? entity.getIdVoucher().getPriceSale() : null)
                     .idCreator(entity.getStaffCreate() != null
                             ? entity.getStaffCreate().getId() : null)
                     .nameCreator(entity.getStaffCreate() != null
@@ -371,6 +426,14 @@ public abstract class AbstractService {
                             ? entity.getStaffSales().getFullName() : null)
                     .paymentMethod(entity.getPaymentMethod())
                     .paymentStatus(entity.getPaymentStatus())
+                    .fullName(entity.getFullName())
+                    .phoneNumber(entity.getPhoneNumber())
+                    .email(entity.getEmail())
+                    .village(entity.getVillage())
+                    .ward(entity.getWard())
+                    .district(entity.getDistrict())
+                    .city(entity.getCity())
+                    .note(entity.getNote())
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
@@ -418,6 +481,10 @@ public abstract class AbstractService {
                             ? entity.getIdCategory().getId() : null)
                     .nameCategory(entity.getIdCategory() != null
                             ? entity.getIdCategory().getName() : null)
+                    .pathCategory(entity.getIdCategory() != null
+                            ? entity.getIdCategory().getPathUrl() : null)
+                    .idPathCategory(entity.getIdCategory() != null
+                            ? entity.getIdCategory().getIdUrl() : null)
                     .price(entity.getPrice())
                     .priceSale(entity.getPriceSale())
                     .quantity(entity.getQuantity())
@@ -426,7 +493,7 @@ public abstract class AbstractService {
                     .location(entity.getLocation())
                     .path(entity.getPathUrl())
                     .idPath(entity.getIdUrl())
-                    .pathUserManual(entity.getPathUserManual())
+                    .pathUserManual(urlGit + entity.getPathUserManual())
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
@@ -447,6 +514,8 @@ public abstract class AbstractService {
                             ? entity.getLstReviewProductEntities().stream()
                             .map(e -> (ReviewDto) map(e)).collect(Collectors.toList())
                             : null)
+                    .countWishlist(entity.getLstWishlistEntities() != null
+                            ? entity.getLstWishlistEntities().size() : 0)
                     .build();
         }
 //        PRODUCT IMAGE
@@ -461,7 +530,7 @@ public abstract class AbstractService {
             ProductImageEntity entity = (ProductImageEntity) data;
             return ProductImageVo.builder()
                     .id(entity.getId())
-                    .path(entity.getPath())
+                    .path(urlGit + entity.getPath())
                     .idProduct(entity.getIdProduct() != null
                             ? entity.getIdProduct().getId() : null)
                     .build();
@@ -519,7 +588,7 @@ public abstract class AbstractService {
                     .email(entity.getEmail())
                     .username(entity.getUsername())
                     .address(entity.getAddress())
-                    .avatar(entity.getAvatar())
+                    .avatar(urlGit + entity.getAvatar())
                     .role(entity.getRole())
                     .status(entity.getStatus())
                     .block(entity.getBlock())
@@ -536,6 +605,8 @@ public abstract class AbstractService {
                             ? entity.getLstReviewProductEntities().stream()
                             .map(e -> (ReviewDto) map(e)).collect(Collectors.toList())
                             : null)
+                    .countWishlist(entity.getLstWishlistEntities() != null
+                            ? entity.getLstWishlistEntities().size() : 0)
                     .build();
         } else if (data instanceof ChangeUserDto) {
             ChangeUserDto dto = (ChangeUserDto) data;
@@ -623,7 +694,7 @@ public abstract class AbstractService {
                     .dateCreated(entity.getCreated())
                     .images(entity.getLstReviewImageEntities() != null
                             ? entity.getLstReviewImageEntities().stream()
-                            .map(e -> e.getPathImage()).collect(Collectors.toList())
+                            .map(e -> urlGit + e.getPathImage()).collect(Collectors.toList())
                             : null)
                     .build();
         }

@@ -11,6 +11,7 @@ import com.example.webproductspringboot.reponsitory.IProductReponsitory;
 import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,18 +21,18 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService extends AbstractService implements IProductService {
 
-    private final IProductReponsitory _iProductReponsitory;
-    private final IProductImageReponsitory _iProductImageReponsitory;
+    @Autowired
+    private IProductReponsitory _iProductReponsitory;
+    @Autowired
+    private IProductImageReponsitory _iProductImageReponsitory;
 
-    protected ProductService(HttpServletRequest request, IProductReponsitory iProductReponsitory, IProductImageReponsitory iProductImageReponsitory) {
+    protected ProductService(HttpServletRequest request) {
         super(request);
-        _iProductReponsitory = iProductReponsitory;
-        _iProductImageReponsitory = iProductImageReponsitory;
     }
 
     @Override
     public List<ProductDto> findAllProduct() {
-        List<ProductEntity> lst = _iProductReponsitory.findAll();
+        List<ProductEntity> lst = _iProductReponsitory.findAll(sortAZByCreated());
         Collections.reverse(lst);
         return lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList());
     }
@@ -68,7 +69,8 @@ public class ProductService extends AbstractService implements IProductService {
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
-        entity.setIdUrl(new Random().nextLong());
+        String idUrl = String.valueOf(new Random().nextInt(20) * 1000000000);
+        entity.setIdUrl(Long.parseLong(idUrl.replaceAll("-", "")));
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iProductReponsitory.save(entity);
         saveHistory(userEntity, "Thêm sản phẩm", entity.toString());
@@ -94,7 +96,7 @@ public class ProductService extends AbstractService implements IProductService {
     }
 
     @Override
-    public ProductImageVo saveImageProduct(ProductImageVo vo) {
+    public void saveImageProduct(ProductImageVo vo) {
         ProductImageEntity entity = (ProductImageEntity) map(vo);
         if (entity == null)
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
@@ -102,7 +104,6 @@ public class ProductService extends AbstractService implements IProductService {
         entity.setId(UUID.randomUUID().toString());
         _iProductImageReponsitory.save(entity);
         saveHistory(userEntity, "Thêm sảnh sản phẩm", entity.toString());
-        return (ProductImageVo) map(entity);
     }
 
     @Override

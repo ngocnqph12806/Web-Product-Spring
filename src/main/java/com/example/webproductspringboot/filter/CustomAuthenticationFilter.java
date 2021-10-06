@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -41,14 +42,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String rememberMe = request.getParameter("rememberMe");
-        if (rememberMe != null && rememberMe.equals("on")) {
-            response.addCookie(new Cookie("username", username));
-            response.addCookie(new Cookie("password", password));
-        }
-        log.info("Usernaem is: " + username);
+//        String rememberMe = request.getParameter("rememberMe");
+//        if (rememberMe != null && rememberMe.equals("on")) {
+//            response.addCookie(new Cookie("username", username));
+//            response.addCookie(new Cookie("password", password));
+//        }
+        log.info("Username is: " + username);
         log.info("Password is: " + password);
-        log.info("Password is: " + rememberMe);
+//        log.info("Password is: " + rememberMe);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(authenticationToken);
     }

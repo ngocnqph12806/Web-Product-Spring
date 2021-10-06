@@ -72,13 +72,10 @@ public class UserApi extends AbstractApi {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> save(@PathVariable("id") String id,
-                                  @Validated @RequestBody ChangeUserDto dto, Errors errors) {
+    @PostMapping
+    public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
-        if (!dto.getId().equals(id))
-            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
         return ResponseEntity.ok(result);
     }

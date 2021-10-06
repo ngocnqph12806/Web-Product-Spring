@@ -48,6 +48,8 @@ public class CategoryService extends AbstractService implements ICategoryService
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
+        String idUrl = String.valueOf(new Random().nextInt(20) * 1000000000);
+        entity.setIdUrl(Long.parseLong(idUrl.replaceAll("-", "")));
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iCategoryReponsitory.save(entity);
         saveHistory(userEntity, "Thêm loại sản phẩm", entity.toString());

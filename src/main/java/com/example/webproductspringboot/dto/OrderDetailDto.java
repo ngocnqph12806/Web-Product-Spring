@@ -17,6 +17,7 @@ import java.util.List;
 public class OrderDetailDto {
 
     private String id;
+    private String idOrder;
     @NotNull
     @NotEmpty
     private String idProduct;

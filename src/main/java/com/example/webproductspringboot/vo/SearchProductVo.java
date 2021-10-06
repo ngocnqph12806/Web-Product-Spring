@@ -2,8 +2,6 @@ package com.example.webproductspringboot.vo;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class SearchProductVo {
 

@@ -44,6 +44,7 @@ public class UserDto {
     private Boolean status;
     private Boolean block;
     private Date dateCreated;
+    private Integer countWishlist;
     private List<OrderDto> orders;
     private List<ReturnDto> returns;
     private List<ReviewDto> reviews;

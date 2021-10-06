@@ -63,6 +63,8 @@ public class UserEntity {
     //VISIT
     @OneToMany(mappedBy = "idVisit")
     private List<ReviewProductEntity> lstReviewProductEntities;
+    @OneToMany(mappedBy = "idVisit")
+    private List<WishlistEntity> lstWishlistEntities;
     //    @OneToMany(mappedBy = "idVisit")
 //    private List<VoucherUseEntity> lstVoucherUseEntityList;
     @OneToMany(mappedBy = "idVisit")

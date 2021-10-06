@@ -31,8 +31,11 @@ public class OrderApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchOrderVo searchOrderVo) {
         List<OrderDto> lst = _iOrderService.findAll();
         lst = search(lst, searchOrderVo, searchOrderVo.getIdUser(), 0);
-        ResultDto<List<OrderDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+//        ResultDto<List<OrderDto>> result = new ResultDto<>(OK, lst);
+//        lst.add(new OrderDto());
+//        lst.add(new OrderDto());
+//        lst.add(new OrderDto());
+        return ResponseEntity.ok(lst);
     }
 
     @GetMapping("/{id}")
@@ -42,6 +45,7 @@ public class OrderApi extends AbstractApi {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid OrderDto dto, Errors errors) {
+        System.out.println(dto);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", errors.getFieldErrors().get(0).getDefaultMessage()));
         ResultDto<OrderDto> result = new ResultDto<>(CREATED, _iOrderService.save(dto));

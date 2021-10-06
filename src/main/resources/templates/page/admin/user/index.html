@@ -47,8 +47,8 @@
                     <th:block th:each="user: ${lstUser}" th:object="${user}">
                         <tr>
                             <td>
-                                <img src="#" th:data-file-github="*{avatar}"
-                                     alt="" class="file-github rounded-circle thumb-sm mr-1">
+                                <img th:src="*{avatar}"
+                                     alt="" class="rounded-circle thumb-sm mr-1">
                             </td>
                             <td th:text="*{fullName}"></td>
                             <td th:text="*{#dates.format(dateOfBirth, 'dd-MM-yyyy')}"></td>
@@ -201,7 +201,8 @@
                         </div>
                     </form>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                            Huỷ bỏ
                         </button>
                         <button type="button" onclick="saveStaff()" class="btn btn-primary waves-effect waves-light">
                             Lưu lại
@@ -213,11 +214,23 @@
     </div>
     <!-- /.modal -->
 </div>
+
 <th:block layout:fragment="script-admin">
+
+    <th:block th:if="${isStaff}">
+        <script>
+
+        </script>
+    </th:block>
+
+    <th:block th:unless="${isStaff}">
+        <script>
+
+        </script>
+    </th:block>
+
     <script>
 
-        // var targetFileAvatar = null;
-        // var nameFileAvatar = $('.file-avatar')[0].dataset.oldfile
         var objFileAvatar = {
             targetFileAvatar: null,
             nameFile: null,
@@ -274,7 +287,7 @@
             setTimeout(function () {
                 console.log(obj.id)
                 if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/users' + obj.id, window.location.href, 'PUT')
                 } else {
                     saveWithAPI(JSON.stringify(obj), '/api/users', window.location.href, 'POST')
                 }
@@ -304,11 +317,11 @@
                     if (method === 'status') {
                         let obj = response.data;
                         obj.status = data
-                        saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/users' + obj.id, window.location.href, 'PUT')
                     } else if (method === 'block') {
                         let obj = response.data;
                         obj.block = data
-                        saveWithAPI(JSON.stringify(obj), '/api/users'+obj.id, window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/users' + obj.id, window.location.href, 'PUT')
                     } else {
                         swal('Hmmm!', 'Đừng sửa code...', 'warning')
                     }
