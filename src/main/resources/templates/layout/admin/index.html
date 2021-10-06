@@ -3,26 +3,19 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
-    <!-- default header name is X-CSRF-TOKEN -->
-    <!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-    <!-- default header name is X-CSRF-TOKEN -->
-    <!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta content="A premium admin dashboard template by mannatthemes" name="description">
     <meta content="Mannatthemes" name="author">
-    <!-- App favicon -->
-    <!--    <link rel="/web-admin/plugin/shortcut icon" href="favicon.ico">-->
-    <!--    <link href="/web-admin/plugin/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">-->
-    <!--    <link href="/web-admin/plugin/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">&lt;!&ndash; App css &ndash;&gt;-->
 
-    <link href="/web-admin/css/jquery-jvectormap-2.0.2.css" rel="stylesheet" type="text/css"><!-- DataTables -->
-    <link href="/web-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="/web-admin/css/icons.css" rel="stylesheet" type="text/css">
+    <link th:href="@{/web-admin/css/jquery-jvectormap-2.0.2.css}" rel="stylesheet" type="text/css"><!-- DataTables -->
+    <link th:href="@{/web-admin/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/web-admin/css/icons.css}" rel="stylesheet" type="text/css">
     <title layout:fragment="title">START</title>
     <div layout:fragment="css-admin">START</div>
-    <link href="/web-admin/css/style.css" rel="stylesheet" type="text/css">
+    <link th:href="@{/web-admin/css/style.css}" rel="stylesheet" type="text/css">
     <!--    SEETALERT-->
-    <link href="/web-admin/css/sweetalert2.min.css" type="text/css" rel="stylesheet">
+    <link th:href="@{/web-admin/css/sweetalert2.min.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>
@@ -31,29 +24,20 @@
 <div class="page-wrapper">
     <div th:replace="/layout/admin/nav.html :: nav-admin"></div>
     <div class="page-content">
-        <div class="container-fluid" layout:fragment="content-admin"></div>
+        <!--        <div class="container-fluid" layout:fragment="content-admin"></div>-->
+        <div id="data-user"></div>
         <div th:replace="/layout/admin/footer.html :: footer-admin"></div>
     </div>
 </div>
 <!-- Sweet-Alert  -->
-<script src="/web-admin/js/sweetalert2.min.js"></script>
-<script src="/web-admin/js/jquery.sweet-alert.init.js"></script>
-<script src="/web-admin/validate-data-admin.js"></script>
-<script src="/web-admin/js/moment.js"></script>
+<script th:src="@{/web-admin/js/sweetalert2.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery.sweet-alert.init.js}"></script>
+<script th:src="@{/web-admin/validate-data-admin.js}"></script>
+<script th:src="@{/web-admin/js/moment.js}"></script>
 
 <script th:src="@{'/web-admin/js/jquery.min.js'}"></script>
 <script th:src="@{'/web-admin/js/bootstrap.bundle.min.js'}"></script>
-<!--&lt;!&ndash;&ndash;&gt;-->
-<!--<script src="/web-admin/plugin/waves.min.js" ></script>-->
-<!--<script src="/web-admin/plugin/jquery.slimscroll.min.js"></script>-->
-<!--<script src="/web-admin/plugin/jquery-jvectormap-2.0.2.min.js"></script>-->
-<!--<script src="/web-admin/plugin/jquery-jvectormap-world-mill-en.js"></script>-->
-<!--<script src="/web-admin/plugin/moment.js"></script>-->
-<!--<script src="/web-admin/plugin/apexcharts.min.js"></script>-->
-<!--<script src="/web-admin/plugin/irregular-data-series.js"></script>-->
-<!--<script src="/web-admin/plugin/series1000.js"></script>-->
-<!--<script src="/web-admin/plugin/ohlc.js"></script>-->
-<!--&lt;!&ndash;&ndash;&gt;-->
+
 <script th:src="@{'/web-admin/js/jquery.dashboard.init.js'}"></script>
 <!-- App js -->
 <script th:src="@{'/web-admin/js/app.js'}"></script>
@@ -61,26 +45,60 @@
 <script th:src="@{'/web-admin/load-api.js'}"></script>
 
 <script>
-    // $(document).ready(function () {
-    //     let token = getSession('access_token')
-    //     console.log('token: ' + token)
-    //     if (token !== null && token !== undefined && token !== '') {
-    //         console.log(token)
-    //         $.ajax({
-    //             url: '/token/check',
-    //             type: 'GET',
-    //             // contentType: 'application/json',
-    //             beforeSend: function (xhr) {
-    //                 xhr.setRequestHeader("Authorization", "Bearer " + token);
-    //             },
-    //             error: function (response) {
-    //                 window.location = '/login'
-    //             }
-    //         });
-    //     } else {
-    //         window.location = '/login'
-    //     }
-    // })
+    $(document).ready(function () {
+        let token = getSession('access_token')
+        console.log('token: ' + token)
+        if (token !== null && token !== undefined && token !== '') {
+            console.log(token)
+            $.ajax({
+                url: '/token/check',
+                type: 'GET',
+                // contentType: 'application/json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                },
+                error: function (response) {
+                    window.location = '/login'
+                }
+            });
+        } else {
+            window.location = '/login'
+        }
+    })
+
+    let url = '';
+
+    function openStaff() {
+        url = '/admin/user/load'
+        loadData(url, 'admin', 0, 5)
+    }
+
+    function openVisit() {
+        url = '/admin/user/load'
+        loadData(url, 'user', 0, 5)
+    }
+
+    function loadData(url, type_user, page, size) {
+        $.ajax({
+            url: url + '?_p=' + page + '&_s=' + size + '&_type=' + type_user,
+            type: 'GET',
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+            },
+            success: function (response) {
+                $('#data-user').html(response)
+            },
+            error: function (e) {
+                console.log('Lỗi lấy dữ liệu data')
+            }
+        });
+    }
+
+    function clickPage(e) {
+        let page = e.dataset.index
+        loadData(url, 'admin', page, 5)
+    }
 </script>
 </body>
 </html>

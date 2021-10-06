@@ -9,6 +9,7 @@ import com.example.webproductspringboot.exception.InternalServerException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
+import com.example.webproductspringboot.utils.ContainsUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -80,7 +81,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
 
     @Override
     public PageDto<List<UserDto>> findAll(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page + 1, size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<UserEntity> entities = _iUserReponsitory.findAll(pageable);
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
                 entities.getContent().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
@@ -88,10 +89,22 @@ public class UserService extends AbstractService implements IUserService, UserDe
 
     @Override
     public PageDto<List<UserDto>> findStaffByPage(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page + 1, size, sortAZ("created"));
-        Page<UserEntity> entities = _iUserReponsitory.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<UserEntity> entities = _iUserReponsitory.findStaffByPage(pageable);
+        List<UserEntity> lst = entities.getContent();
+        lst = lst.stream().filter(e -> !e.getRole().equals(ContainsUtils.ROLE_USER)).collect(Collectors.toList());
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
-                entities.getContent().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
+                lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public PageDto<List<UserDto>> findVisitByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<UserEntity> entities = _iUserReponsitory.findVisitByPage(pageable);
+        List<UserEntity> lst = entities.getContent();
+        lst = lst.stream().filter(e -> e.getRole().equals(ContainsUtils.ROLE_USER)).collect(Collectors.toList());
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +34,24 @@ public class UserAdmin {
         return "/user/index";
     }
 
-    @PostMapping("staff/load")
-    public String loadPageStaff(@RequestParam("_p") Integer page,
+    @GetMapping(value = "user/load", params = "_type")
+    public String loadPageStaff(@RequestParam("_type") String typeUser,
+                                @RequestParam("_p") Integer page,
                                 @RequestParam(value = "_s", defaultValue = "10") Integer size,
                                 Model model) {
-        PageDto<List<UserDto>> pageDto = _iUserService.findStaffByPage(page, size);
-        model.addAttribute("lstUser", pageDto.getContent());
-        model.addAttribute("totalPage", pageDto.getTotalPages());
-        model.addAttribute("page", page);
-        model.addAttribute("isStaff", true);
+        if (typeUser.equals("admin")) {
+            PageDto<List<UserDto>> pageDto = _iUserService.findStaffByPage(page, size);
+            model.addAttribute("lstUser", pageDto.getContent());
+            model.addAttribute("totalPage", pageDto.getTotalPages());
+            model.addAttribute("page", page);
+            model.addAttribute("isStaff", true);
+        }else{
+            PageDto<List<UserDto>> pageDto = _iUserService.findVisitByPage(page, size);
+            model.addAttribute("lstUser", pageDto.getContent());
+            model.addAttribute("totalPage", pageDto.getTotalPages());
+            model.addAttribute("page", page);
+            model.addAttribute("isStaff", false);
+        }
         return "/user/table-user";
     }
 

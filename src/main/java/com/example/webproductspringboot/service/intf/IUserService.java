@@ -18,6 +18,8 @@ public interface IUserService {
 
     PageDto<List<UserDto>> findStaffByPage(Integer page, Integer size);
 
+    PageDto<List<UserDto>> findVisitByPage(Integer page, Integer size);
+
     UserDto findById(String id);
 
     UserDto findByUserName(String username);
@@ -25,6 +27,5 @@ public interface IUserService {
     UserDto save(ChangeUserDto dto);
 
     UserDto update(ChangeUserDto dto);
-
 
 }
