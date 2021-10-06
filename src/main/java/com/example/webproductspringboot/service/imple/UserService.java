@@ -82,7 +82,15 @@ public class UserService extends AbstractService implements IUserService, UserDe
     public PageDto<List<UserDto>> findAll(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page + 1, size);
         Page<UserEntity> entities = _iUserReponsitory.findAll(pageable);
-        return new PageDto<List<UserDto>>(entities.getTotalPages(), entities.getTotalPages(),
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                entities.getContent().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public PageDto<List<UserDto>> findStaffByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page + 1, size, sortAZ("created"));
+        Page<UserEntity> entities = _iUserReponsitory.findAll(pageable);
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
                 entities.getContent().stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
     }
 
@@ -148,5 +156,6 @@ public class UserService extends AbstractService implements IUserService, UserDe
         saveHistory(userEntity, "Sửa thông tin người dùng", fake + "\n" + entity);
         return (UserDto) map(entity);
     }
+
 
 }

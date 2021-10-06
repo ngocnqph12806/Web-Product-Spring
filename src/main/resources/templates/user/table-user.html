@@ -1,0 +1,107 @@
+<div class="table-responsive">
+    <table class="table mb-0 table-centered">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Họ tên</th>
+            <th>Ngày sinh</th>
+            <th>Tên đăng nhập</th>
+            <th>Điện thoại</th>
+            <th>Email</th>
+            <th th:if="${isStaff}">Chức vụ</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="user: ${lstUser}" th:object="${user}">
+            <tr>
+                <td>
+                    <img src="#" th:data-file-github="*{avatar}"
+                         alt="" class="file-github rounded-circle thumb-sm mr-1">
+                </td>
+                <td th:text="*{fullName}"></td>
+                <td th:text="*{#dates.format(dateOfBirth, 'dd-MM-yyyy')}"></td>
+                <td th:text="*{phoneNumber}"></td>
+                <td th:text="*{username}"></td>
+                <td th:text="*{email}"></td>
+                <td th:if="${isStaff}">
+                                <span th:unless="*{role == 'SUPPER_ADMIN'}" class="badge badge-success"
+                                      th:text="*{role}"></span>
+                    <span th:if="*{role == 'SUPPER_ADMIN'}" class="badge badge-primary"
+                          th:text="*{role}"></span>
+                </td>
+                <td th:unless="*{block}">
+                    <span th:if="*{status}" class="badge badge-success" th:text="*{'Đã kích hoạt'}"></span>
+                    <span th:unless="*{status}" class="badge badge-warning" th:text="*{'Chưa kích hoạt'}">>Khoá</span>
+                </td>
+                <td th:if="*{block}">
+                    <span class="badge badge-danger" th:text="*{'Đang khoá'}"></span>
+                </td>
+                <td>
+                    <div class="dropdown d-inline-block float-right">
+                        <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
+                           data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="false" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v font-20 text-muted"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
+                            <a class="dropdown-item" href="#modal-input-staff"
+                               data-toggle="modal" data-animation="bounce"
+                               onclick="getStaff(this)" th:data-id="*{id}">
+                                Chỉnh sửa
+                            </a>
+                            <a th:unless="*{block}" class="dropdown-item" href="#"
+                               data-method="block" data-method-data="true"
+                               th:data-id="*{id}" onclick="changeStaff(this)">
+                                Khoá
+                            </a>
+                            <a th:if="*{block}" class="dropdown-item" href="#"
+                               data-method="block" data-method-data="false"
+                               th:data-id="*{id}" onclick="changeStaff(this)">
+                                Mở khoá
+                            </a>
+                            <a th:unless="*{status}" class="dropdown-item" href="#"
+                               data-method="status" data-method-data="true"
+                               th:data-id="*{id}" onclick="changeStaff(this)">
+                                Kích hoạt
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <!--end /table-->
+</div>
+<!--end /tableresponsive-->
+<nav aria-label="..." class="pagination custom-pagination float-right">
+    <ul class="list-unstyled">
+        <li class="list-inline-item">
+            <a class="page-link bg-primary text-light" href="#"
+               aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span class="sr-only">Previous</span>
+                <div class="ripple-container"></div>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a class="page-link bg-dark text-white" href="#" tabindex="-1">1 </a>
+        </li>
+        <li class="list-inline-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="list-inline-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="list-inline-item">
+            <a class="page-link bg-primary text-light" href="#"
+               aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+    <!--end pagination-->
+</nav>

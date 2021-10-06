@@ -37,22 +37,20 @@ public class UserApi extends AbstractApi {
 
     @GetMapping(path = "")
     public ResponseEntity<?> getAll(SearchUserVo searchUserVo) {
+        System.out.println(searchUserVo);
         List<UserDto> lst = _iUserService.findAll();
         System.out.println(searchUserVo);
         lst = search(lst, searchUserVo, searchUserVo.getFullName(), 0);
-//        lst = searchByFullName(searchUserVo.getFullName(), lst);
-//        lst = searchByDateOfBirth(searchUserVo.getDateOfBirth(), lst);
-//        lst = searchByEmail(searchUserVo.getEmail(), lst);
-//        lst = searchByPhoneNumber(searchUserVo.getPhoneNumber(), lst);
-//        lst = searchByUsername(searchUserVo.getUsername(), lst);
-//        lst = searchByAddress(searchUserVo.getAddress(), lst);
-//        lst = searchByAvatar(searchUserVo.getAvatar(), lst);
-//        lst = searchByRole(searchUserVo.getRole(), lst);
-//        lst = searchByStatus(searchUserVo.getStatus(), lst);
-//        lst = searchByBlock(searchUserVo.getBlock(), lst);
-//        lst = searchByDaetCreate(searchUserVo.getDateCreated(), lst);
-        ResultDto<List<UserDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+//        ResultDto<List<UserDto>> result = new ResultDto<>(OK, lst);
+        return ResponseEntity.ok(lst);
+    }
+
+    @GetMapping(params = "_type")
+    public ResponseEntity<?> getAll(@RequestParam("_type") String typeUser) {
+        if (typeUser.equals("admin")) {
+            return ResponseEntity.ok(_iUserService.findAllStaff());
+        }
+        return ResponseEntity.ok(_iUserService.findAllVisit());
     }
 
     @GetMapping("/{id}")
@@ -131,114 +129,4 @@ public class UserApi extends AbstractApi {
         else if (index == 9) return search(lst, obj, obj.getDateCreated(), 10);
         else return lst;
     }
-
-//    private List<UserDto> searchByFullName(String[] fullName, List<UserDto> lst) {
-//        if (fullName == null) return lst;
-//        for (String x : fullName) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getFullName().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByDateOfBirth(String[] dateOfBirth, List<UserDto> lst) {
-//        if (dateOfBirth == null) return lst;
-//        for (String x : dateOfBirth) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateOfBirth()).contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByPhoneNumber(String[] phoneNumber, List<UserDto> lst) {
-//        if (phoneNumber == null) return lst;
-//        for (String x : phoneNumber) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getPhoneNumber().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByEmail(String[] email, List<UserDto> lst) {
-//        if (email == null) return lst;
-//        for (String x : email) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getEmail().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByUsername(String[] username, List<UserDto> lst) {
-//        if (username == null) return lst;
-//        for (String x : username) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getUsername().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByAddress(String[] address, List<UserDto> lst) {
-//        if (address == null) return lst;
-//        for (String x : address) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getAddress().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByAvatar(String[] avatar, List<UserDto> lst) {
-//        if (avatar == null) return lst;
-//        for (String x : avatar) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getAvatar().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByRole(String[] role, List<UserDto> lst) {
-//        if (role == null) return lst;
-//        for (String x : role) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> e.getRole().contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByStatus(String[] status, List<UserDto> lst) {
-//        if (status == null) return lst;
-//        for (String x : status) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> Boolean.parseBoolean(x) == e.getStatus())
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByBlock(String[] block, List<UserDto> lst) {
-//        if (block == null) return lst;
-//        for (String x : block) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> Boolean.parseBoolean(x) == e.getBlock())
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
-//
-//    private List<UserDto> searchByDaetCreate(String[] dateCreated, List<UserDto> lst) {
-//        if (dateCreated == null) return lst;
-//        for (String x : dateCreated) {
-//            if (lst.isEmpty()) return lst;
-//            lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x))
-//                    .collect(Collectors.toList());
-//        }
-//        return lst;
-//    }
 }

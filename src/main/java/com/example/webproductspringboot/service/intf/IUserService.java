@@ -16,6 +16,8 @@ public interface IUserService {
 
     PageDto<List<UserDto>> findAll(Integer page, Integer size);
 
+    PageDto<List<UserDto>> findStaffByPage(Integer page, Integer size);
+
     UserDto findById(String id);
 
     UserDto findByUserName(String username);

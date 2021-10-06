@@ -1,12 +1,24 @@
 //LOAD LINK GITHUB
-function getLinkGithub() {
-    let fileGithub = $('.file-github')
-    for (let i = 0; i < fileGithub.length; i++) {
-        if (fileGithub[i].dataset.fileGithub !== undefined
-            && fileGithub[i].dataset.fileGithub !== null) {
-            fileGithub[i].src = 'https://raw.githubusercontent.com/ngocnqph12806/Repo_File/main/' + fileGithub[i].dataset.fileGithub
-        }
-    }
+// function getLinkGithub() {
+//     let fileGithub = $('.file-github')
+//     for (let i = 0; i < fileGithub.length; i++) {
+//         if (fileGithub[i].dataset.fileGithub !== undefined
+//             && fileGithub[i].dataset.fileGithub !== null) {
+//             fileGithub[i].src = 'https://raw.githubusercontent.com/ngocnqph12806/Repo_File/main/' + fileGithub[i].dataset.fileGithub
+//         }
+//     }
+// }
+
+function getSession(key) {
+    return JSON.parse(window.sessionStorage.getItem(key))
+}
+
+function saveSession(key, data) {
+    window.sessionStorage.setItem(key, JSON.stringify(data))
+}
+
+function removeSession(key) {
+    window.sessionStorage.removeItem(key)
 }
 
 function saveWithAPI(formData, url, urlSuccess, method) {
@@ -24,7 +36,7 @@ function saveWithAPI(formData, url, urlSuccess, method) {
             processData: false,
             enctype: 'multipart/form-data',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader($("meta[name='_csrf_header']").attr("content"), $("meta[name='_csrf']").attr("content"));
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
             },
             success: function (data) {
                 console.log(data)
@@ -52,6 +64,9 @@ function getWithAPI(obj, path) {
         type: 'GET',
         data: obj,
         contentType: 'application/json',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+        },
         success: function (response) {
             obj = response;
         },
