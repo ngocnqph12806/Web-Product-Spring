@@ -27,9 +27,6 @@ public class ChangeUserDto {
     private String username;
     @NotNull
     @NotBlank
-    private String password;
-    @NotNull
-    @NotBlank
     private String address;
     @NotNull
     @NotBlank

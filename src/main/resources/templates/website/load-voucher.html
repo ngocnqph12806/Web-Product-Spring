@@ -1,0 +1,172 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex mb-3">
+      <h3 class="flex-grow-1 mt-0 header-title">
+        Danh sách mã giảm giá
+      </h3>
+      <a class="btn btn-primary" href="#modal-input-voucher"
+         data-toggle="modal" data-animation="bounce"
+         onclick="getVoucher(this)" data-username="1">
+        Thêm mã giảm giá
+      </a>
+    </div>
+    <div class="table-responsive">
+      <table class="table mb-0 table-centered">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Mã áp dụng</th>
+          <th>Người thêm</th>
+          <th>Số lượng</th>
+          <th>Đã dùng</th>
+          <th>Giá trị</th>
+          <th>Ngày bắt đầu</th>
+          <th>Ngày kết thúc</th>
+          <th>Ngày tạo</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="voucher, theCount: ${lstVoucher}" th:object="${voucher}">
+          <tr>
+            <td th:text="${theCount.index +1}">#</td>
+            <td th:text="*{code}">Mã áp dụng</td>
+            <td th:text="*{nameStaff}">Người thêm</td>
+            <td th:text="*{quantity}">Số lượng</td>
+            <td th:text="*{quantityUsed}">Đã dùng</td>
+            <td th:text="*{#numbers.formatDecimal(priceSale, 0, 'COMMA', 0, 'POINT')}">Giá trị</td>
+            <td th:text="*{#dates.format(dateStart, 'dd-MM-yyyy')}">Ngày bắt đầu</td>
+            <td th:text="*{#dates.format(dateEnd, 'dd-MM-yyyy')}">Ngày kết thúc</td>
+            <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}">Ngày tạo</td>
+            <td>
+              <div class="dropdown d-inline-block float-right">
+                <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
+                   data-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="false" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v font-20 text-muted"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
+                  <a class="dropdown-item" href="#modal-input-voucher"
+                     data-toggle="modal" data-animation="bounce"
+                     onclick="getVoucher(this)" th:data-id="*{id}">
+                    Chỉnh sửa
+                  </a>
+                  <a th:unless="*{status}" class="dropdown-item" href="#"
+                     data-method="block" data-method-data="true"
+                     th:data-id="*{id}" onclick="changeStatus(this)">
+                    Kích hoạt
+                  </a>
+                  <a th:if="*{status}" class="dropdown-item" href="#"
+                     data-method="block" data-method-data="false"
+                     th:data-id="*{id}" onclick="changeStatus(this)">
+                    Huỷ kích hoạt
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
+      <!--end /table-->
+    </div>
+    <!--end /tableresponsive-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->
+<!--    MODAL-->
+<div class="modal fade" id="modal-input-voucher" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title mt-0">
+          Nhập mã giảm giá
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-input-voucher">
+          <input type="hidden" name="id"/>
+          <div class="form-group row">
+            <label for="code" class="col-sm-2 col-form-label text-right">
+              Mã áp dụng
+            </label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" placeholder="Nhập mã áp dụng" name="code"
+                     maxlength="32" id="code">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label text-right">
+              Tiêu đề
+            </label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text"
+                     placeholder="Nhập tiêu đề sự kiện giảm giá" name="title"
+                     maxlength="32" id="title">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="quantity" class="col-sm-2 col-form-label text-right">
+              Số lượng
+            </label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" placeholder="Nhập số lượng mã áp dụng"
+                     name="quantity"
+                     maxlength="50" id="quantity">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="priceSale" class="col-sm-2 col-form-label text-right">
+              Giá trị
+            </label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" placeholder="Nhập giá trị mã giảm giá"
+                     name="priceSale"
+                     maxlength="50" id="priceSale">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="date-time-voucher" class="col-sm-2 col-form-label text-right">Thời hạn</label>
+            <div class="col-sm-10">
+              <input type="text" id="date-time-voucher"
+                     class="form-control" value="10/24/1984">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-right">Mô tả</label>
+            <div class="col-sm-10">
+                           <textarea id="textarea" class="form-control" name="description" minlength="100" rows="3"
+                                     placeholder="Nhập mô tả sự kiện"></textarea>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
+          </button>
+          <button type="button" onclick="saveVoucher()" class="btn btn-primary waves-effect waves-light">
+            Lưu lại
+          </button>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script th:src="@{/web-admin/js/daterangepicker.js}"></script>
+<script th:src="@{/web-admin/js/tempusdominus-bootstrap-4.js}"></script>
+<script th:src="@{/web-admin/js/bootstrap-material-datetimepicker.js}"></script>
+<script th:src="@{/web-admin/js/jquery-clockpicker.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery-asColor.js}"></script>
+<script th:src="@{/web-admin/js/jquery-asGradient.js}"></script>
+<script th:src="@{/web-admin/js/jquery-asColorPicker.min.js}"></script>
+<script th:src="@{/web-admin/js/select2.min.js}"></script>
+<script th:src="@{/web-admin/js/bootstrap-colorpicker.min.js}"></script>
+<script th:src="@{/web-admin/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/web-admin/js/bootstrap-maxlength.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery.bootstrap-touchspin.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery.clock-img.init.js}"></script>
+<script th:src="@{/web-admin/js/jquery.forms-advanced.js}"></script>

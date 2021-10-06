@@ -55,7 +55,7 @@
                         <td>
                             <div class="dropdown d-inline-block float-right">
                                 <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
-                                   data-toggle="dropdown" href="#" role="button"
+                                   data-toggle="dropdown" style="cursor: pointer" role="button"
                                    aria-haspopup="false" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v font-20 text-muted"></i>
                                 </a>
@@ -65,17 +65,17 @@
                                        onclick="getStaff(this)" th:data-id="*{id}">
                                         Chỉnh sửa
                                     </a>
-                                    <a th:unless="*{block}" class="dropdown-item" href="#"
+                                    <a th:unless="*{block}" class="dropdown-item" style="cursor: pointer"
                                        data-method="block" data-method-data="true"
                                        th:data-id="*{id}" onclick="changeStaff(this)">
                                         Khoá
                                     </a>
-                                    <a th:if="*{block}" class="dropdown-item" href="#"
+                                    <a th:if="*{block}" class="dropdown-item" style="cursor: pointer"
                                        data-method="block" data-method-data="false"
                                        th:data-id="*{id}" onclick="changeStaff(this)">
                                         Mở khoá
                                     </a>
-                                    <a th:unless="*{status}" class="dropdown-item" href="#"
+                                    <a th:unless="*{status}" class="dropdown-item" style="cursor: pointer"
                                        data-method="status" data-method-data="true"
                                        th:data-id="*{id}" onclick="changeStaff(this)">
                                         Kích hoạt
@@ -93,7 +93,7 @@
         <nav th:if="${totalPage > 1}" aria-label="..." class="pagination custom-pagination float-right">
             <ul class="list-unstyled">
                 <li th:unless="${page == 0}" class="list-inline-item">
-                    <a class="page-link bg-primary text-light" href="#" onclick="clickPage(this)"
+                    <a class="page-link bg-primary text-light" style="cursor: pointer" onclick="clickPage(this)"
                        th:data-index="${page - 1}"
                        aria-label="Previous">
                         <span aria-hidden="true">«</span>
@@ -102,33 +102,35 @@
                     </a>
                 </li>
                 <li th:if="${page - 2 > 0}" class="list-inline-item">
-                    <a class="page-link" href="#" tabindex="-1" onclick="clickPage(this)" th:data-index="${0}">1</a>
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${0}">1</a>
                 </li>
                 <li th:if="${page - 2 > 1}" class="list-inline-item">
-                    <a class="page-link" href="#" tabindex="-1">...</a>
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
                 </li>
                 <th:block th:each="index, theCount: ${#numbers.sequence(0, totalPage - 1)}">
                     <th:block th:if="${index < page + 2 && index >= page - 2}">
                         <li th:if="${index == page}" class="list-inline-item">
-                            <a class="page-link bg-dark text-white" href="#" tabindex="-1"
+                            <a class="page-link bg-dark text-white" style="cursor: pointer" tabindex="-1"
                                th:text="${index + 1}"></a>
                         </li>
                         <li th:unless="${index == page}" class="list-inline-item">
-                            <a class="page-link" href="#" tabindex="-1" onclick="clickPage(this)"
+                            <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
                                th:data-index="${index}"
                                th:text="${index + 1}"></a>
                         </li>
                     </th:block>
                 </th:block>
                 <li th:if="${totalPage - 3 > page}" class="list-inline-item">
-                    <a class="page-link" href="#" tabindex="-1">...</a>
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
                 </li>
                 <li th:if="${totalPage - 2 > page}" class="list-inline-item">
-                    <a class="page-link" href="#" tabindex="-1" onclick="clickPage(this)" th:data-index="${totalPage-1}"
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${totalPage-1}"
                        th:text="${totalPage}"></a>
                 </li>
                 <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
-                    <a class="page-link bg-primary text-light" href="#" onclick="clickPage(this)"
+                    <a class="page-link bg-primary text-light" onclick="clickPage(this)" style="cursor: pointer"
                        th:data-index="${page + 1}"
                        aria-label="Next">
                         <span aria-hidden="true">»</span>
@@ -166,15 +168,15 @@
                                    maxlength="32" id="username">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="password" class="col-sm-2 col-form-label text-right">
-                            Mật khẩu
-                        </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="password" placeholder="Mật khẩu" name="password"
-                                   maxlength="32" id="password">
-                        </div>
-                    </div>
+                    <!--                    <div class="form-group row">-->
+                    <!--                        <label for="password" class="col-sm-2 col-form-label text-right">-->
+                    <!--                            Mật khẩu-->
+                    <!--                        </label>-->
+                    <!--                        <div class="col-sm-10">-->
+                    <!--                            <input class="form-control" type="password" placeholder="Mật khẩu" name="password"-->
+                    <!--                                   maxlength="32" id="password">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <div class="form-group row">
                         <label for="fullname" class="col-sm-2 col-form-label text-right">Họ và tên</label>
                         <div class="col-sm-10">
@@ -245,3 +247,22 @@
     </div><!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<script src="/web-admin/js/daterangepicker.js"></script>
+<script src="/web-admin/js/tempusdominus-bootstrap-4.js"></script>
+<script src="/web-admin/js/bootstrap-material-datetimepicker.js"></script>
+<script src="/web-admin/js/jquery-clockpicker.min.js"></script>
+<script src="/web-admin/js/jquery-asColor.js"></script>
+<script src="/web-admin/js/jquery-asGradient.js"></script>
+<script src="/web-admin/js/jquery-asColorPicker.min.js"></script>
+<script src="/web-admin/js/select2.min.js"></script>
+<script src="/web-admin/js/bootstrap-colorpicker.min.js"></script>
+<script src="/web-admin/js/bootstrap-datepicker.min.js"></script>
+<script th:src="@{/web-admin/js/bootstrap-maxlength.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery.bootstrap-touchspin.min.js}"></script>
+<script th:src="@{/web-admin/js/jquery.clock-img.init.js}"></script>
+<script th:src="@{/web-admin/js/jquery.forms-advanced.js}"></script>
+
+<!--    UPLOAD-->
+<script src="/web-admin/js/dropify.min.js"></script>
+<script src="/web-admin/js/jquery.form-upload.init.js"></script>

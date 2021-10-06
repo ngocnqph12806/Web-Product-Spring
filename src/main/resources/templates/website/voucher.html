@@ -209,9 +209,9 @@
             setTimeout(function () {
                 console.log(obj.id)
                 if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, 'PUT')
                 } else {
-                    saveWithAPI(JSON.stringify(obj), '/api/vouchers', window.location.href, 'POST')
+                    saveWithAPI(JSON.stringify(obj), '/api/vouchers', 'POST')
                 }
             }, 10)
         }
@@ -225,7 +225,7 @@
     <script th:src="@{/web-admin/js/jquery-asColorPicker.min.js}"></script>
     <script th:src="@{/web-admin/js/select2.min.js}"></script>
     <script th:src="@{/web-admin/js/bootstrap-colorpicker.min.js}"></script>
-    <script th:src="/web-admin/js/bootstrap-datepicker.min.js"></script>
+    <script th:src="@{/web-admin/js/bootstrap-datepicker.min.js}"></script>
     <script th:src="@{/web-admin/js/bootstrap-maxlength.min.js}"></script>
     <script th:src="@{/web-admin/js/jquery.bootstrap-touchspin.min.js}"></script>
     <script th:src="@{/web-admin/js/jquery.clock-img.init.js}"></script>

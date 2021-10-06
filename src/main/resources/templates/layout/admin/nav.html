@@ -11,7 +11,7 @@
                 <!-- Navigation Menu-->
                 <ul class="navigation-menu list-unstyled">
                     <li class="has-submenu">
-                        <a href="#">
+                        <a href="#" onclick="openHome()">
                             <i class="mdi mdi-monitor"></i> Dashboard
                         </a>
                     </li>
@@ -34,10 +34,10 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="/admin/product">Sản phẩm</a>
+                                <a href="#product" onclick="openProduct()">Sản phẩm</a>
                             </li>
                             <li>
-                                <a href="/admin/category">Loại sản phẩm</a>
+                                <a href="#category" onclick="openCategory()">Loại sản phẩm</a>
                             </li>
                         </ul>
                     </li>
@@ -47,13 +47,13 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="/admin/invoice">Nhập hàng</a>
+                                <a href="#invoice" onclick="openInvoice()">Nhập hàng</a>
                             </li>
                             <li>
-                                <a href="/admin/bill-order">Thanh toán</a>
+                                <a href="#bill-order" onclick="openOrder()">Thanh toán</a>
                             </li>
                             <li>
-                                <a href="/admin/returns">Khách trả hàng</a>
+                                <a href="#returns" onclick="openReturns()">Khách trả hàng</a>
                             </li>
                         </ul>
                     </li>
@@ -63,19 +63,19 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="/admin/brand">Thương hiệu</a>
+                                <a href="#brand" onclick="openBrand()">Thương hiệu</a>
                             </li>
                             <li>
-                                <a href="/admin/transport">Vận chuyển</a>
+                                <a href="#transport" onclick="openTransport()">Vận chuyển</a>
                             </li>
                             <li>
-                                <a href="/admin/voucher">Mã giảm giá</a>
+                                <a href="#voucher" onclick="openVoucher()">Mã giảm giá</a>
                             </li>
                         </ul>
                     </li>
                     <li class="has-submenu">
                         <a href="/admin/history">
-                            <i class="mdi mdi-chart-bar"></i>Lịch sử
+                            <i class="mdi mdi-chart-bar" onclick="openHistory()"></i>Lịch sử
                         </a>
                     </li>
                 </ul><!-- End navigation menu -->

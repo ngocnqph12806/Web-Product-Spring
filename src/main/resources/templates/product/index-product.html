@@ -361,9 +361,9 @@
             obj.images = objFileImage.nameFile
             console.log(obj)
             if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-                saveWithAPI(JSON.stringify(obj), '/api/product' + obj.id, window.location.href, 'PUT')
+                saveWithAPI(JSON.stringify(obj), '/api/product' + obj.id, 'PUT')
             } else {
-                saveWithAPI(JSON.stringify(obj), '/api/product', window.location.href, 'POST')
+                saveWithAPI(JSON.stringify(obj), '/api/product', 'POST')
             }
         }
 
@@ -404,7 +404,7 @@
             let data = e.dataset.methodData;
             let id = e.dataset.id
             if (e.dataset.method === 'status') {
-                saveWithAPI(JSON.stringify({'status': data}), '/api/products', window.location.href, 'PUT')
+                saveWithAPI(JSON.stringify({'status': data}), '/api/products', 'PUT')
             }
         }
     </script>

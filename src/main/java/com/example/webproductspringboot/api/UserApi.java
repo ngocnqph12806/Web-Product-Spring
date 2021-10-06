@@ -47,7 +47,7 @@ public class UserApi extends AbstractApi {
 
     @GetMapping(params = "_type")
     public ResponseEntity<?> getAll(@RequestParam("_type") String typeUser) {
-        if (typeUser.equals("admin")) {
+        if (typeUser.equals("staff")) {
             return ResponseEntity.ok(_iUserService.findAllStaff());
         }
         return ResponseEntity.ok(_iUserService.findAllVisit());
@@ -55,8 +55,8 @@ public class UserApi extends AbstractApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        ResultDto<UserDto> result = new ResultDto<>(OK, _iUserService.findById(id));
-        return ResponseEntity.ok(result);
+//        ResultDto<UserDto> result = new ResultDto<>(OK, _iUserService.findById(id));
+        return ResponseEntity.ok(_iUserService.findById(id));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
@@ -71,22 +71,22 @@ public class UserApi extends AbstractApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Validated @RequestBody ChangeUserDto dto, Errors errors) {
+    public ResponseEntity<?> save(@Validated @RequestBody UserDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
-        return ResponseEntity.ok(result);
+//        ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
+        return ResponseEntity.ok(_iUserService.save(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") String id,
-                                    @RequestBody @Valid ChangeUserDto dto, Errors errors) {
+                                    @RequestBody @Valid UserDto dto, Errors errors) {
         System.out.println(dto);
         if (errors.hasErrors()) {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
         }
-        ResultDto<UserDto> result = new ResultDto<UserDto>(UPDATED, _iUserService.update(dto));
-        return ResponseEntity.ok(result);
+//        ResultDto<UserDto> result = new ResultDto<UserDto>(UPDATED, _iUserService.update(dto));
+        return ResponseEntity.ok(_iUserService.update(dto));
     }
 
     private List<UserDto> search(List<UserDto> lst, SearchUserVo obj, String[] type, Integer index) {

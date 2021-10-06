@@ -24,8 +24,8 @@ public interface IUserService {
 
     UserDto findByUserName(String username);
 
-    UserDto save(ChangeUserDto dto);
+    UserDto save(UserDto dto);
 
-    UserDto update(ChangeUserDto dto);
+    UserDto update(UserDto dto);
 
 }

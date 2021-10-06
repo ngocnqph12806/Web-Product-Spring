@@ -50,6 +50,7 @@ public class CategoryService extends AbstractService implements ICategoryService
         entity.setId(UUID.randomUUID().toString());
         String idUrl = String.valueOf(new Random().nextInt(20) * 1000000000);
         entity.setIdUrl(Long.parseLong(idUrl.replaceAll("-", "")));
+        entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iCategoryReponsitory.save(entity);
         saveHistory(userEntity, "Thêm loại sản phẩm", entity.toString());

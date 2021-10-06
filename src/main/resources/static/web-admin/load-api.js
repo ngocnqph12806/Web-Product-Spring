@@ -9,6 +9,44 @@
 //     }
 // }
 
+$(document).ready(function () {
+    let token = getSession('access_token')
+    console.log('token: ' + token)
+    if (token !== null && token !== undefined && token !== '') {
+        console.log(token)
+        $.ajax({
+            url: '/token/refresh',
+            type: 'GET',
+            // contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: function (response) {
+                window.sessionStorage.setItem('access_token', JSON.stringify(response.access_token))
+            },
+            error: function (response) {
+                window.location = '/login'
+            }
+        });
+    } else {
+        window.location = '/login'
+    }
+    reloadPage()
+})
+
+function reloadPage() {
+    let url = window.location.href + ''
+    let type = url.substring(url.lastIndexOf("#") + 1)
+    switch (type) {
+        case 'staff':
+            openStaff()
+            break;
+        case 'visit':
+            openVisit()
+            break
+    }
+}
+
 function getSession(key) {
     return JSON.parse(window.sessionStorage.getItem(key))
 }
@@ -21,7 +59,37 @@ function removeSession(key) {
     window.sessionStorage.removeItem(key)
 }
 
-function saveWithAPI(formData, url, urlSuccess, method) {
+let urlApiLoadPage = '';
+
+function clickPage(e) {
+    let page = e.dataset.index
+    let url = window.location.href + ''
+    let typeUser = url.substring(url.lastIndexOf('#') + 1)
+    console.log(typeUser)
+    loadData(urlApiLoadPage, page, 5, typeUser)
+}
+
+function loadData(url, page, size, typeUser) {
+    urlApiLoadPage = url
+    typeUser == null || typeUser == undefined ? typeUser = '' : typeUser = typeUser
+    $.ajax({
+        url: url + '?_p=' + page + '&_s=' + size + '&_type=' + typeUser,
+        type: 'POST',
+        contentType: 'application/json',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+        },
+        success: function (response) {
+            $('#data-user').html(response)
+        },
+        error: function (e) {
+            console.log(e)
+            $('#data-user').html('<h3>' + e.status + '</h3>')
+        }
+    });
+}
+
+function saveWithAPI(formData, url, method, linkSuccess, pageSuccess, sizeSucess, typeUser) {
     if (method === 'POST' || method === 'PUT') {
         $.ajax({
             url: url,
@@ -39,15 +107,24 @@ function saveWithAPI(formData, url, urlSuccess, method) {
                 xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
             },
             success: function (data) {
-                console.log(data)
-                urlSuccess = urlSuccess.substring(0, urlSuccess.lastIndexOf('#'))
-                if (data.code === 201) {
+                console.log(linkSuccess)
+                console.log(typeUser)
+                $('.modal').modal('hide');
+                if (method === 'POST') {
                     swal("Thành công", 'Đã thêm mới', "success").then((function (t) {
-                        if (t) window.location = urlSuccess
+                        if (t && linkSuccess !== null && linkSuccess !== undefined
+                            && pageSuccess !== null && pageSuccess !== undefined
+                            && sizeSucess !== null && sizeSucess !== undefined) {
+                            loadData(linkSuccess, pageSuccess, sizeSucess, typeUser)
+                        }
                     }))
-                } else if (data.code === 200) {
+                } else if (method === 'PUT') {
                     swal("Thành công", 'Đã chỉnh sửa', "success").then((function (t) {
-                        if (t) window.location = urlSuccess
+                        if (t && linkSuccess !== null && linkSuccess !== undefined
+                            && pageSuccess !== null && pageSuccess !== undefined
+                            && sizeSucess !== null && sizeSucess !== undefined) {
+                            loadData(linkSuccess, pageSuccess, sizeSucess, typeUser)
+                        }
                     }))
                 }
             },

@@ -20,32 +20,18 @@ public class UserAdmin {
     @Autowired
     private IUserService _iUserService;
 
-    @GetMapping("staff")
-    public String homeStaff(Model model) {
-        model.addAttribute("lstUser", _iUserService.findAllStaff());
-        model.addAttribute("isStaff", true);
-        return "/user/index";
-    }
-
-    @GetMapping("visit")
-    public String homeVisit(Model model) {
-        model.addAttribute("lstUser", _iUserService.findAllVisit());
-        model.addAttribute("isStaff", false);
-        return "/user/index";
-    }
-
-    @GetMapping(value = "user/load", params = "_type")
+    @PostMapping(value = "user/load", params = "_type")
     public String loadPageStaff(@RequestParam("_type") String typeUser,
                                 @RequestParam("_p") Integer page,
                                 @RequestParam(value = "_s", defaultValue = "10") Integer size,
                                 Model model) {
-        if (typeUser.equals("admin")) {
+        if (typeUser.equals("staff")) {
             PageDto<List<UserDto>> pageDto = _iUserService.findStaffByPage(page, size);
             model.addAttribute("lstUser", pageDto.getContent());
             model.addAttribute("totalPage", pageDto.getTotalPages());
             model.addAttribute("page", page);
             model.addAttribute("isStaff", true);
-        }else{
+        } else {
             PageDto<List<UserDto>> pageDto = _iUserService.findVisitByPage(page, size);
             model.addAttribute("lstUser", pageDto.getContent());
             model.addAttribute("totalPage", pageDto.getTotalPages());

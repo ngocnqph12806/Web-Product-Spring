@@ -325,9 +325,9 @@
                 console.log(obj)
                 setTimeout(function () {
                     if (obj.id === null || obj.id === undefined || obj.id === '') {
-                        saveWithAPI(JSON.stringify(obj), '/api/categories', window.location.href, 'POST')
+                        saveWithAPI(JSON.stringify(obj), '/api/categories', 'POST')
                     } else {
-                        saveWithAPI(JSON.stringify(obj), '/api/categories'+obj.id, window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/categories'+obj.id, 'PUT')
                     }
                 }, 10)
             })
@@ -379,9 +379,9 @@
                 console.log(obj)
                 setTimeout(function () {
                     if (obj.id === null || obj.id === undefined || obj.id === '') {
-                        saveWithAPI(JSON.stringify(obj), '/api/brand', window.location.href, 'POST')
+                        saveWithAPI(JSON.stringify(obj), '/api/brand', 'POST')
                     } else {
-                        saveWithAPI(JSON.stringify(obj), '/api/brand'+obj.id, window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/brand'+obj.id, 'PUT')
                     }
                 }, 10)
             })
@@ -419,9 +419,9 @@
             console.log(obj)
             setTimeout(function () {
                 if (obj.id === null || obj.id === undefined || obj.id === '') {
-                    saveWithAPI(JSON.stringify(obj), '/api/collections', window.location.href, 'POST')
+                    saveWithAPI(JSON.stringify(obj), '/api/collections', 'POST')
                 } else {
-                    saveWithAPI(JSON.stringify(obj), '/api/collections'+obj.id, window.location.href, 'PUT')
+                    saveWithAPI(JSON.stringify(obj), '/api/collections'+obj.id, 'PUT')
                 }
             }, 10)
         })
@@ -442,7 +442,7 @@
                         let obj = response.data;
                         console.log(obj)
                         obj.status = data
-                        saveWithAPI(JSON.stringify(obj), '/api/collections'+obj.id, window.location.href, 'PUT')
+                        saveWithAPI(JSON.stringify(obj), '/api/collections'+obj.id, 'PUT')
                     } else {
                         swal('Hmmm!', 'Đừng sửa code...', 'warning')
                     }

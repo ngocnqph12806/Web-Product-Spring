@@ -128,7 +128,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
     }
 
     @Override
-    public UserDto save(ChangeUserDto dto) {
+    public UserDto save(UserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
         if (entity == null)
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
@@ -136,7 +136,8 @@ public class UserService extends AbstractService implements IUserService, UserDe
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setBlock(false);
-        entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
+//        entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
+        entity.setPassword(_passwordEncoder.encode("123445678"));
         entity.setCreated(new Date());
         _iUserReponsitory.save(entity);
         saveHistory(userEntity, "Thêm người dùng", entity.toString());
@@ -144,7 +145,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
     }
 
     @Override
-    public UserDto update(ChangeUserDto dto) {
+    public UserDto update(UserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
         if (entity == null)
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
@@ -160,11 +161,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
         if (entity.getStatus() == null) {
             entity.setStatus(fake.getStatus());
         }
-        if (entity.getPassword() == null || entity.getPassword().isEmpty() || entity.getPassword().isBlank()) {
-            entity.setPassword(fake.getPassword());
-        } else {
-            entity.setPassword(_passwordEncoder.encode(dto.getPassword()));
-        }
+        entity.setPassword(fake.getPassword());
         _iUserReponsitory.save(entity);
         saveHistory(userEntity, "Sửa thông tin người dùng", fake + "\n" + entity);
         return (UserDto) map(entity);
