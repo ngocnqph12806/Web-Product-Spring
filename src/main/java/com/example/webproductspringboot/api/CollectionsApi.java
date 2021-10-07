@@ -35,10 +35,19 @@ public class CollectionsApi extends AbstractApi {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id-collection}")
-    public ResponseEntity<?> getColletionById(@PathVariable("id-collection") String idCollection) {
-        ResultDto<CollectionDto> result = new ResultDto<>(OK, _iCollectionService.findById(idCollection));
-        return ResponseEntity.ok(result);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getColletionById(@PathVariable("id") String idCollection) {
+        return ResponseEntity.ok(_iCollectionService.findById(idCollection));
+    }
+
+    @GetMapping(value = "/{id}", params = "modal")
+    public ResponseEntity<?> getColletionByIdWithModal(@PathVariable("id") String idCollection) {
+        try {
+            return ResponseEntity.ok(_iCollectionService.findById(idCollection));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(new CollectionDto());
     }
 
     @PostMapping

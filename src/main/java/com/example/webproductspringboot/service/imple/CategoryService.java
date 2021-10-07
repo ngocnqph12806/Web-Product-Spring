@@ -1,6 +1,9 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.dto.CategoryDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.entity.BrandEntity;
 import com.example.webproductspringboot.entity.CategoryEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
@@ -8,6 +11,9 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICategoryReponsitory;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +36,15 @@ public class CategoryService extends AbstractService implements ICategoryService
         List<CategoryEntity> lst = _iCategoryReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (CategoryDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<CategoryDto>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<CategoryEntity> entities = _iCategoryReponsitory.findAll(pageable);
+        List<CategoryEntity> lst = entities.getContent();
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                lst.stream().map(e -> (CategoryDto) map(e)).collect(Collectors.toList()));
     }
 
     @Override

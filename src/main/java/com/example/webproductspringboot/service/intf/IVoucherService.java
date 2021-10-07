@@ -1,5 +1,6 @@
 package com.example.webproductspringboot.service.intf;
 
+import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.VoucherDto;
 import com.example.webproductspringboot.vo.VoucherApplyVo;
 
@@ -9,6 +10,8 @@ public interface IVoucherService {
 
     List<VoucherDto> findAll();
 
+    PageDto<List<VoucherDto>> findByPage(Integer page, Integer size);
+
     VoucherDto findById(String id);
 
     VoucherDto save(VoucherDto dto);
@@ -16,4 +19,5 @@ public interface IVoucherService {
     VoucherDto update(VoucherDto dto);
 
     VoucherApplyVo findByCode(String code);
+
 }

@@ -1,6 +1,9 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.InvoiceDto;
 import com.example.webproductspringboot.dto.OrderDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.entity.InvoiceEntity;
 import com.example.webproductspringboot.entity.OrderEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
@@ -8,6 +11,9 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IOrderReponsitory;
 import com.example.webproductspringboot.service.intf.IOrderService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +35,14 @@ public class OrderService extends AbstractService implements IOrderService {
         List<OrderEntity> lst = _iOrderReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (OrderDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<OrderDto>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<OrderEntity> entities = _iOrderReponsitory.findAll(pageable);
+        List<OrderDto> lst = entities.getContent().stream().map(e -> (OrderDto) map(e)).collect(Collectors.toList());
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(), lst);
     }
 
     @Override

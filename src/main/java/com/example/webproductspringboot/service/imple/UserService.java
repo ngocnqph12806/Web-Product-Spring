@@ -92,7 +92,6 @@ public class UserService extends AbstractService implements IUserService, UserDe
         Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
         Page<UserEntity> entities = _iUserReponsitory.findStaffByPage(pageable);
         List<UserEntity> lst = entities.getContent();
-        lst = lst.stream().filter(e -> !e.getRole().equals(ContainsUtils.ROLE_USER)).collect(Collectors.toList());
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
                 lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
     }
@@ -102,7 +101,6 @@ public class UserService extends AbstractService implements IUserService, UserDe
         Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
         Page<UserEntity> entities = _iUserReponsitory.findVisitByPage(pageable);
         List<UserEntity> lst = entities.getContent();
-        lst = lst.stream().filter(e -> e.getRole().equals(ContainsUtils.ROLE_USER)).collect(Collectors.toList());
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
                 lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList()));
     }

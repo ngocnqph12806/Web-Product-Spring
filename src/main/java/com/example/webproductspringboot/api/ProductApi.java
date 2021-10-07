@@ -2,6 +2,7 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
@@ -42,18 +43,17 @@ public class ProductApi extends AbstractApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iProductService.findProductById(id)));
+        return ResponseEntity.ok(_iProductService.findProductById(id));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<ProductDto> result = new ResultDto<>(OK, null);
         try {
-            result.setData(_iProductService.findProductById(id));
+            return ResponseEntity.ok(_iProductService.findProductById(id));
         } catch (Exception e) {
-            result.setData(new ProductDto());
+
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(new ProductDto());
     }
 
     @PostMapping("")
@@ -65,10 +65,11 @@ public class ProductApi extends AbstractApi {
         if (lstImages.isEmpty())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", "image.please.choose.product.image"));
         ProductDto dtoSave = _iProductService.saveProduct(form.toDto());
-        if (dtoSave != null) System.out.println("Lưu ảnh"); for (String x : lstImages)
+        if (dtoSave != null) System.out.println("Lưu ảnh");
+        for (String x : lstImages)
             _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
-        ResultDto<ProductDto> result = new ResultDto<>(CREATED, _iProductService.findProductById(dtoSave.getId()));
-        return ResponseEntity.ok(result);
+//        ResultDto<ProductDto> result = new ResultDto<>(CREATED, _iProductService.findProductById(dtoSave.getId()));
+        return ResponseEntity.ok(_iProductService.findProductById(dtoSave.getId()));
     }
 
     @PutMapping("/{id}")
@@ -88,8 +89,19 @@ public class ProductApi extends AbstractApi {
                         _iProductService.saveImageProduct(ProductImageVo.builder().path(x).idProduct(dtoSave.getId()).build());
             }
         }
-        ResultDto<ProductDto> result = new ResultDto<>(UPDATED, _iProductService.findProductById(dtoSave.getId()));
-        return ResponseEntity.ok(result);
+//        ResultDto<ProductDto> result = new ResultDto<>(UPDATED, _iProductService.findProductById(dtoSave.getId()));
+        return ResponseEntity.ok(_iProductService.findProductById(dtoSave.getId()));
+    }
+
+    @PutMapping(value = "/{id}/{status}")
+    public ResponseEntity<?> changeStatusProduct(@PathVariable("id") String id, Boolean status) {
+        System.out.println(status);
+        ProductDto dtoProduct = _iProductService.findProductById(id);
+        if (dtoProduct == null)
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "product", "product.not.found"));
+        dtoProduct.setStatus(status);
+//        ResultDto<ProductDto> result = new ResultDto<>(UPDATED, _iProductService.findProductById(dtoSave.getId()));
+        return ResponseEntity.ok(_iProductService.updateProduct(dtoProduct));
     }
 
     private List<ProductDto> search(List<ProductDto> lst, SearchProductVo obj, String[] type, Integer index) {

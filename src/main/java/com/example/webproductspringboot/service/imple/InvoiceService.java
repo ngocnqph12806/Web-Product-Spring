@@ -1,6 +1,8 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.InvoiceDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.entity.HistoryEntity;
 import com.example.webproductspringboot.entity.InvoiceEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
@@ -8,6 +10,10 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.InvoiceReponsitory;
 import com.example.webproductspringboot.service.intf.IInvoiceService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import com.example.webproductspringboot.vo.HistoryVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +35,14 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
         List<InvoiceEntity> lst = _invoiceReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (InvoiceDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<InvoiceDto>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<InvoiceEntity> entities = _invoiceReponsitory.findAll(pageable);
+        List<InvoiceDto> lst = entities.getContent().stream().map(e -> (InvoiceDto) map(e)).collect(Collectors.toList());
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(), lst);
     }
 
     @Override

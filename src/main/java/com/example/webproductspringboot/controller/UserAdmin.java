@@ -3,14 +3,11 @@ package com.example.webproductspringboot.controller;
 import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.service.intf.IUserService;
-import com.example.webproductspringboot.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -38,7 +35,7 @@ public class UserAdmin {
             model.addAttribute("page", page);
             model.addAttribute("isStaff", false);
         }
-        return "/user/table-user";
+        return "/load-user";
     }
 
 }

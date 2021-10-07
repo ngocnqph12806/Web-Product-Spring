@@ -1,6 +1,8 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.BrandDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.entity.BrandEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
@@ -8,6 +10,9 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IBrandReponsitory;
 import com.example.webproductspringboot.service.intf.IBrandService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +34,15 @@ public class BrandService extends AbstractService implements IBrandService {
         List<BrandEntity> lst = _iBrandReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (BrandDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<BrandDto>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<BrandEntity> entities = _iBrandReponsitory.findAll(pageable);
+        List<BrandEntity> lst = entities.getContent();
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                lst.stream().map(e -> (BrandDto) map(e)).collect(Collectors.toList()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.webproductspringboot.service.intf;
 
+import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.ProductDto;
 import com.example.webproductspringboot.vo.ProductImageVo;
 
@@ -9,6 +10,8 @@ import java.util.Set;
 public interface IProductService {
 
     List<ProductDto> findAllProduct();
+
+    PageDto<List<ProductDto>> findByPage(Integer page, Integer size);
 
     ProductDto findProductById(String id);
 
@@ -25,4 +28,5 @@ public interface IProductService {
     ProductDto getMinMaxPrice();
 
     void deleteAllImagesByProductId(String id);
+
 }

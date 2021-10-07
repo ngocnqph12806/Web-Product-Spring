@@ -1,14 +1,19 @@
 package com.example.webproductspringboot.controller;
 
+import com.example.webproductspringboot.dto.BrandDto;
+import com.example.webproductspringboot.dto.CategoryDto;
+import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.service.intf.IBrandService;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import com.example.webproductspringboot.service.intf.ICollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin/")
@@ -22,19 +27,29 @@ public class CategoryAdmin {
     private IBrandService _iBrandService;
 
     @PostMapping("category/load")
-    public String loadCategory(Model model) {
-        model.addAttribute("lstCategoriesAndBrand", _iCategoryService.findAll());
+    public String loadCategory(@RequestParam("_p") Integer page,
+                               @RequestParam(value = "_s", defaultValue = "10") Integer size,
+                               Model model) {
+        PageDto<List<CategoryDto>> pageDto = _iCategoryService.findByPage(page, size);
+        model.addAttribute("lstCategoriesAndBrand", pageDto.getContent());
+        model.addAttribute("totalPage", pageDto.getTotalPages());
+        model.addAttribute("page", page);
         model.addAttribute("lstCollections", _iCollectionService.findAll());
         model.addAttribute("isCategory", true);
-        return "/product/load-not-product";
+        return "/load-not-product";
     }
 
     @PostMapping("brand/load")
-    public String loadBrand(Model model) {
-        model.addAttribute("lstCategoriesAndBrand", _iBrandService.findAll());
+    public String loadBrand(@RequestParam("_p") Integer page,
+                            @RequestParam(value = "_s", defaultValue = "10") Integer size,
+                            Model model) {
+        PageDto<List<BrandDto>> pageDto = _iBrandService.findByPage(page, size);
+        model.addAttribute("lstCategoriesAndBrand", pageDto.getContent());
+        model.addAttribute("totalPage", pageDto.getTotalPages());
+        model.addAttribute("page", page);
         model.addAttribute("lstCollections", _iCollectionService.findAll());
         model.addAttribute("isCategory", false);
-        return "/product/load-not-product";
+        return "/load-not-product";
     }
 
 }

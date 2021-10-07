@@ -1,13 +1,19 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.OrderDto;
+import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.ReturnDto;
 import com.example.webproductspringboot.entity.CustomersReturnEntity;
+import com.example.webproductspringboot.entity.OrderEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.ICustomersReturnReponsitory;
 import com.example.webproductspringboot.service.intf.ICustomersReturnService;
 import com.example.webproductspringboot.utils.CookieUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +35,14 @@ public class CustomersReturnService extends AbstractService implements ICustomer
         List<CustomersReturnEntity> lst = _iCustomersReturnReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (ReturnDto) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<ReturnDto>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<CustomersReturnEntity> entities = _iCustomersReturnReponsitory.findAll(pageable);
+        List<ReturnDto> lst = entities.getContent().stream().map(e -> (ReturnDto) map(e)).collect(Collectors.toList());
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(), lst);
     }
 
     @Override

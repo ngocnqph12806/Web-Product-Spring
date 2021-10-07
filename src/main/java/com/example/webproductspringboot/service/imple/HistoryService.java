@@ -1,11 +1,17 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.CategoryDto;
+import com.example.webproductspringboot.dto.PageDto;
+import com.example.webproductspringboot.entity.CategoryEntity;
 import com.example.webproductspringboot.entity.HistoryEntity;
 import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.reponsitory.IHistoryReponsitory;
 import com.example.webproductspringboot.service.intf.IHistoryService;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.HistoryVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +35,15 @@ public class HistoryService extends AbstractService implements IHistoryService {
         List<HistoryEntity> lst = _iHistoryReponsitory.findAll();
         Collections.reverse(lst);
         return lst.stream().map(e -> (HistoryVo) map(e)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDto<List<HistoryVo>> findByPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<HistoryEntity> entities = _iHistoryReponsitory.findAll(pageable);
+        List<HistoryEntity> lst = entities.getContent();
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                lst.stream().map(e -> (HistoryVo) map(e)).collect(Collectors.toList()));
     }
 
     @Override

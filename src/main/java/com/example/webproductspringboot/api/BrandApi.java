@@ -33,26 +33,23 @@ public class BrandApi extends AbstractApi {
     @GetMapping
     public ResponseEntity<?> getAll(SearchBrandVo searchBrandVo) {
         List<BrandDto> lst = _iBrandService.findAll();
-        System.out.println(searchBrandVo);
         lst = search(lst, searchBrandVo, searchBrandVo.getName(), 0);
-        ResultDto<List<BrandDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(lst);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iBrandService.findById(id)));
+        return ResponseEntity.ok(_iBrandService.findById(id));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<BrandDto> result = new ResultDto<>(OK, null);
         try {
-            result.setData(_iBrandService.findById(id));
+            return ResponseEntity.ok(_iBrandService.findById(id));
         } catch (Exception e) {
-            result.setData(new BrandDto());
+            e.printStackTrace();
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(new BrandDto());
     }
 
     @PostMapping

@@ -1,0 +1,341 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex mb-3">
+                    <h3 class="flex-grow-1 mt-0 header-title">Danh mục</h3>
+                    <a class="btn btn-primary" href="#modal-input-collection"
+                       data-toggle="modal" data-animation="bounce"
+                       onclick="getCollection(this)" data-id="-1">
+                        Thêm danh mục
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0 table-centered">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên danh mục</th>
+                            <th>Tổng sản phẩm</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="collection, theCount : ${lstCollections}" th:object="${collection}">
+                            <tr>
+                                <th th:text="${theCount.index + 1}">#</th>
+                                <th th:text="*{name}">Tên danh mục</th>
+                                <th th:text="*{countProducts}">Tổng sản phẩm</th>
+                                <td>
+                                    <div class="dropdown d-inline-block float-right">
+                                        <a class="nav-link dropdown-toggle arrow-none" id="editCollection"
+                                           data-toggle="dropdown" href="#" role="button"
+                                           aria-haspopup="false" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v font-20 text-muted"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                             aria-labelledby="editCollection">
+                                            <a class="dropdown-item" href="#modal-input-collection"
+                                               data-toggle="modal" data-animation="bounce"
+                                               onclick="getCollection(this)" th:data-id="*{id}">
+                                                Chỉnh sửa
+                                            </a>
+                                            <a th:if="*{status}" class="dropdown-item" href="#"
+                                               onclick="changeStatusCollecton(this)"
+                                               th:data-id="*{id}" data-method="status" data-method-data="false">
+                                                Huỷ kích hoạt
+                                            </a>
+                                            <a th:unless="*{status}" class="dropdown-item" href="#"
+                                               onclick="changeStatusCollecton(this)"
+                                               th:data-id="*{id}" data-method="status" data-method-data="true">
+                                                Kích hoạt
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                    <!--end /table-->
+                </div>
+                <!--end /tableresponsive-->
+<!--                <hr class="mt-3 mb-3"/>-->
+<!--                <form id="form-input-collection" class="row">-->
+<!--                    <input type="hidden" name="id"/>-->
+<!--                    <div class="col-xl-9 mb-3">-->
+<!--                        <input class="form-control" name="name" type="text" placeholder="Nhập tên danh mục"/>-->
+<!--                    </div>-->
+<!--                    <button type="button" onclick="saveCollection()" class="btn btn-primary mb-3">-->
+<!--                        Thêm danh muc-->
+<!--                    </button>-->
+<!--                </form>-->
+            </div>
+            <!--end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex mb-3">
+                    <h3 class="flex-grow-1 mt-0 header-title">
+                        <th:block th:if="${isCategory}" th:text="'Danh sách loại sản phẩm'"></th:block>
+                        <th:block th:unless="${isCategory}" th:text="'Danh sách thương hiệu'"></th:block>
+                    </h3>
+                    <a th:if="${isCategory}" class="btn btn-primary" href="#modal-input-category"
+                       data-toggle="modal" data-animation="bounce"
+                       onclick="getCategory(this)" data-id="-1">
+                        Thêm loại sản phẩm
+                    </a>
+                    <a th:unless="${isCategory}" class="btn btn-primary" href="#modal-input-brand"
+                       data-toggle="modal" data-animation="bounce"
+                       onclick="getBrand(this)" data-id="-1">
+                        Thêm thương hiệu
+                    </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table mb-0 table-centered">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th th:if="${isCategory}">Tên loại</th>
+                            <th th:if="${isCategory}">Đường dẫn</th>
+                            <th th:unless="${isCategory}">Tên thương hiệu</th>
+                            <th th:unless="${isCategory}">Điện thoại</th>
+                            <th th:unless="${isCategory}">Email</th>
+                            <th>Tổng sản phẩm</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="details, theCount: ${lstCategoriesAndBrand}" th:object="${details}">
+                            <tr>
+                                <td th:text="${theCount.index +1}"></td>
+                                <td th:if="${isCategory}" th:text="*{name}">Tên loại</td>
+                                <td th:if="${isCategory}" th:text="*{path}">Đường dẫn</td>
+                                <td th:unless="${isCategory}" th:text="*{name}">Tên thương hiệu</td>
+                                <td th:unless="${isCategory}" th:text="*{phoneNumber}">Điện thoại</td>
+                                <td th:unless="${isCategory}" th:text="*{email}">Email</td>
+                                <td th:text="*{#numbers.formatDecimal(countProducts, 0, 'COMMA', 0, 'POINT')}"></td>
+                                <td class="text-center">
+                                    <th:block th:if="${isCategory}">
+                                        <a class="btn btn-info" href="#modal-input-category" data-animation="bounce"
+                                           data-toggle="modal" onclick="getCategory(this)" th:data-id="*{id}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </th:block>
+                                    <th:block th:unless="${isCategory}">
+                                        <a class="btn btn-info" href="#modal-input-brand" data-animation="bounce"
+                                           data-toggle="modal" onclick="getBrand(this)" th:data-id="*{id}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </th:block>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                    <!--end /table-->
+                </div>
+                <!--end /tableresponsive-->
+            </div>
+            <!--end card-body-->
+        </div>
+        <!--end card-->
+    </div>
+</div>
+
+<th:block th:if="${isCategory}">
+    <!--    MODAL CATEGORY-->
+    <div class="modal fade" id="modal-input-category" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0">Nhập loại sản phẩm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-input-category">
+                        <input type="hidden" name="id"/>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Tên loại
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nhập tên loại"
+                                       name="name" maxlength="50" id="name-category"
+                                       onchange="changeNameCategoryAndChangePathCategory()">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Đường dẫn
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nhập đường dẫn"
+                                       name="path" maxlength="32" id="path-url" onchange="changePathUrlCategory()">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">Ảnh banner</label>
+                            <div class="col-sm-10">
+                                <input type="file" id="input-file-now-custom-2" name="banner"
+                                       class="dropify" accept="image/png, image/gif, image/jpeg"
+                                       onchange="onChangeFile(this)" data-oldfile="" data-height="200">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Mô tả
+                            </label>
+                            <div class="col-sm-10">
+                               <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                         placeholder="Nhập mô tả"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
+                        </button>
+                        <button type="button" onclick="saveCategory()"
+                                class="btn btn-primary waves-effect waves-light">
+                            Lưu lại
+                        </button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</th:block>
+<th:block th:unless="${isCategory}">
+    <!--    MODAL BRAND-->
+    <div class="modal fade" id="modal-input-brand" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0">Nhập thương hiệu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-input-brand">
+                        <input type="hidden" name="id"/>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Tên thương hiệu
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nhập tên thương hiệu"
+                                       name="name" maxlength="100">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Số điện thoại
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nhập số điện thoại"
+                                       name="phoneNumber" maxlength="15">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Email
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Nhập tên địa chỉ email"
+                                       name="email" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Địa chỉ
+                            </label>
+                            <div class="col-sm-10">
+                               <textarea id="textarea" class="form-control" name="address" maxlength="100" rows="3"
+                                         placeholder="Nhập địa chỉ"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-right">
+                                Mô tả
+                            </label>
+                            <div class="col-sm-10">
+                               <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                         placeholder="Nhập mô tả"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                            Huỷ bỏ
+                        </button>
+                        <button type="button" onclick="saveBrand()" class="btn btn-primary waves-effect waves-light">
+                            Lưu lại
+                        </button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</th:block>
+
+<!--    MODAL COLLECTION-->
+<div class="modal fade" id="modal-input-collection" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Nhập loại sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-input-collection">
+                    <input type="hidden" name="id"/>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-right">
+                            Tên loại
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập tên loại"
+                                   name="name" maxlength="50" id="name-collection"
+                                   onchange="changeNameCategoryAndChangePathCollection()">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-right">
+                            Đường dẫn
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập đường dẫn"
+                                   name="path" maxlength="32" id="path-url-collection" onchange="changePathUrlCollection()">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-right">
+                            Mô tả
+                        </label>
+                        <div class="col-sm-10">
+                               <textarea class="form-control" name="description" maxlength="255" rows="3"
+                                         placeholder="Nhập mô tả"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
+                    </button>
+                    <button type="button" onclick="saveCollection()"
+                            class="btn btn-primary waves-effect waves-light">
+                        Lưu lại
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--    UPLOAD-->
+<script src="/js/dropify.min.js"></script>
+<script src="/js/jquery.form-upload.init.js"></script>

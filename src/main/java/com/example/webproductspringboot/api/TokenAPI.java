@@ -42,7 +42,7 @@ public class TokenAPI {
                 UserDto user = _iUserService.findByUserName(username);
                 String access_token = JWT.create()
                         .withSubject(user.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("role", Arrays.asList(user.getRole()))
                         .sign(algorithm);

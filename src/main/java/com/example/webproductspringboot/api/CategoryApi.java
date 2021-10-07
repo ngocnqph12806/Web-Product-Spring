@@ -36,7 +36,6 @@ public class CategoryApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchCategoryVo searchCategoryVo) {
         List<CategoryDto> lst = _iCategoryService.findAll();
         lst = search(lst, searchCategoryVo, searchCategoryVo.getName(), 0);
-//        ResultDto<List<CategoryDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(lst);
     }
 
@@ -44,24 +43,23 @@ public class CategoryApi extends AbstractApi {
     public ResponseEntity<?> getForNav() {
         List<CategoryDto> lst = _iCategoryService.findAll();
         Set<String> lstStr = lst.stream().map(CategoryDto::getName).collect(Collectors.toSet());
-
         return ResponseEntity.ok(lstStr);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iCategoryService.findById(id)));
+        return ResponseEntity.ok(_iCategoryService.findById(id));
     }
 
     @GetMapping(value = "/{id}", params = "modal")
-    public ResponseEntity<ResultDto<CategoryDto>> getByIdWithModal(@PathVariable("id") String id) {
+    public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
         ResultDto<CategoryDto> result = new ResultDto<>(OK, null);
         try {
-            result.setData(_iCategoryService.findById(id));
+            return ResponseEntity.ok(_iCategoryService.findById(id));
         } catch (Exception e) {
-            result.setData(new CategoryDto());
+            e.printStackTrace();
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(new CategoryDto());
     }
 
     @PostMapping
