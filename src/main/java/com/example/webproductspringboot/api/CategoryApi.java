@@ -66,8 +66,7 @@ public class CategoryApi extends AbstractApi {
     public ResponseEntity<?> save(@Validated @RequestBody CategoryDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "category", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<CategoryDto> result = new ResultDto<>(CREATED, _iCategoryService.save(dto));
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(_iCategoryService.save(dto));
     }
 
     @PutMapping("/{id}")
@@ -78,8 +77,7 @@ public class CategoryApi extends AbstractApi {
         }
         if (!dto.getId().equals(id))
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
-        ResultDto<CategoryDto> result = new ResultDto<>(UPDATED, _iCategoryService.update(dto));
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(_iCategoryService.update(dto));
     }
 
     private List<CategoryDto> search(List<CategoryDto> lst, SearchCategoryVo obj, String[] type, Integer index) {

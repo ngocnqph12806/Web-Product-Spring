@@ -1,0 +1,166 @@
+<div class="card" xmlns:th="http://www.thymeleaf.org">
+    <div class="card-body">
+        <div class="d-flex mb-3">
+            <h3 class="flex-grow-1 mt-0 header-title">
+                Danh sách mã giảm giá
+            </h3>
+            <a class="btn btn-primary" href="#modal-input-voucher"
+               data-toggle="modal" data-animation="bounce"
+               onclick="getVoucher(this)" data-username="1">
+                Thêm mã giảm giá
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0 table-centered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Người nhập</th>
+                    <th>Người kiểm tra</th>
+                    <th>Tổng tiền</th>
+                    <th>Ngày nhập</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="invoice, theCount: ${lstInvoice}" th:object="${invoice}">
+                    <tr>
+                        <td th:text="${theCount.index + 1}">#</td>
+                        <td th:text="*{nameCreator}"></td>
+                        <td th:text="*{nameChecker}"></td>
+                        <td th:text="*{#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}"></td>
+                        <td class="text-center">
+                            <a class="btn btn-info" href="#modal-detail-invoice"
+                               data-toggle="modal" data-animation="bounce"
+                               onclick="getDetailInvoice(this)" th:data-id="*{id}">
+                                Chi tiết
+                            </a>
+                            <a class="btn btn-primary" href="#modal-input-invoice"
+                               data-toggle="modal" data-animation="bounce"
+                               onclick="getInvoice(this)" th:data-id="*{id}">
+                                Chỉnh sửa
+                            </a>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <!--end /table-->
+        </div>
+        <!--end /tableresponsive-->
+        <nav th:if="${totalPage > 1}" aria-label="..." class="pagination custom-pagination float-right">
+            <ul class="list-unstyled">
+                <li th:unless="${page == 0}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" style="cursor: pointer" onclick="clickPage(this)"
+                       th:data-index="${page - 1}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                        <div class="ripple-container"></div>
+                    </a>
+                </li>
+                <li th:if="${page - 2 > 0}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${0}">1</a>
+                </li>
+                <li th:if="${page - 2 > 1}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <th:block th:each="index, theCount: ${#numbers.sequence(0, totalPage - 1)}">
+                    <th:block th:if="${index < page + 2 && index >= page - 2}">
+                        <li th:if="${index == page}" class="list-inline-item">
+                            <a class="page-link bg-dark text-white" style="cursor: pointer" tabindex="-1"
+                               th:text="${index + 1}"></a>
+                        </li>
+                        <li th:unless="${index == page}" class="list-inline-item">
+                            <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                               th:data-index="${index}"
+                               th:text="${index + 1}"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <li th:if="${totalPage - 3 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <li th:if="${totalPage - 2 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${totalPage - 1}"
+                       th:text="${totalPage}"></a>
+                </li>
+                <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" onclick="clickPage(this)" style="cursor: pointer"
+                       th:data-index="${page + 1}"
+                       aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+            <!--end pagination-->
+        </nav>
+    </div>
+    <!--end card-body-->
+</div>
+<!--end card-->
+<!--    MODAL-->
+<div class="modal fade" id="modal-detail-invoice" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">
+                    Chi tiết hoá đơn nhập hàng
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!--    MODAL-->
+<div class="modal fade" id="modal-input-invoice" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">
+                    Nhập mã giảm giá
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-input-voucher">
+                    <input type="hidden" name="id"/>
+                    <div class="form-group row">
+                        <label for="code" class="col-sm-2 col-form-label text-right">
+                            Mã áp dụng
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập mã áp dụng" name="code"
+                                   maxlength="32" id="code">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                        Huỷ bỏ
+                    </button>
+                    <button type="button" onclick="saveVoucher()" class="btn btn-primary waves-effect waves-light">
+                        Lưu lại
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,13 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>
+    <div th:replace="/layout/admin/midle-bar.html :: midle-bar-admin"></div>
+
+    <div class="page-wrapper">
+        <div th:replace="/layout/admin/nav.html :: nav-admin"></div>
+        <div class="page-content">
+            <div id="root"></div>
+            <div th:replace="/layout/admin/footer.html :: footer-admin"></div>
+        </div>
+    </div>
+</div>

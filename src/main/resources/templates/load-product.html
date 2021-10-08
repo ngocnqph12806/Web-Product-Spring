@@ -54,7 +54,7 @@
                                        onclick="getProduct(this)" th:data-id="*{id}">
                                         Chỉnh sửa
                                     </a>
-                                    <a href="#" onclick="changeStatus(this)" th:if="*{status}" class="dropdown-item"
+                                    <a href="#" onclick="changeStatusProduct(this)" th:if="*{status}" class="dropdown-item"
                                        data-method="status" data-method-data="false" th:data-id="*{id}">
                                         Ngừng kinh doanh
                                     </a>
@@ -68,6 +68,56 @@
             <!--end /table-->
         </div>
         <!--end /tableresponsive-->
+        <nav th:if="${totalPage > 1}" aria-label="..." class="pagination custom-pagination float-right">
+            <ul class="list-unstyled">
+                <li th:unless="${page == 0}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" style="cursor: pointer" onclick="clickPage(this)"
+                       th:data-index="${page - 1}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                        <div class="ripple-container"></div>
+                    </a>
+                </li>
+                <li th:if="${page - 2 > 0}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${0}">1</a>
+                </li>
+                <li th:if="${page - 2 > 1}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <th:block th:each="index, theCount: ${#numbers.sequence(0, totalPage - 1)}">
+                    <th:block th:if="${index < page + 2 && index >= page - 2}">
+                        <li th:if="${index == page}" class="list-inline-item">
+                            <a class="page-link bg-dark text-white" style="cursor: pointer" tabindex="-1"
+                               th:text="${index + 1}"></a>
+                        </li>
+                        <li th:unless="${index == page}" class="list-inline-item">
+                            <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                               th:data-index="${index}"
+                               th:text="${index + 1}"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <li th:if="${totalPage - 3 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <li th:if="${totalPage - 2 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${totalPage - 1}"
+                       th:text="${totalPage}"></a>
+                </li>
+                <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" onclick="clickPage(this)" style="cursor: pointer"
+                       th:data-index="${page + 1}"
+                       aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+            <!--end pagination-->
+        </nav>
     </div>
     <!--end card-body-->
 </div>
@@ -263,3 +313,186 @@
 <script src="/js/jquery.repeater.min.js"></script>
 <script src="/js/jquery.smartWizard.min.js"></script>
 <script src="/js/jquery.form-wizard.init.js"></script>
+
+<script>
+    let objFileImage = {
+        data: [],
+        nameFile: [],
+    }
+
+    let objFileUseManual = {
+        data: null,
+        nameFile: null,
+    }
+
+    async function onChangeImage(e) {
+        if (!checkImage(e.files[0].name, 'File ')) return;
+        let index = e.dataset.index
+        // objFileUseManual.targetFile = e
+        // objFileImage.targetFile[index] = e
+        objFileImage.nameFile[index] = getNameTime() + e.files[0].name
+        let data = await toBase64(e.files[0])
+        objFileImage.data[index] = data
+    }
+
+    function changeNameProductAndChangePathProduct() {
+        $('#path-product').val(strToPath($('#name-product').val()))
+    }
+
+    function changePathUrlProduct() {
+        let pathUrl = strToPath($('#path-product').val())
+        $('#path-product').val(pathUrl)
+    }
+
+    async function onChangeFile(e) {
+        objFileUseManual.nameFile = getNameTime() + e.files[0].name
+        let data = await toBase64(e.files[0])
+        objFileUseManual.data = data
+    }
+
+    async function saveProduct() {
+        let form = $("#form-input-product").serializeArray()
+        let obj = {};
+        for (let i = 0; i < form.length; i++) {
+            let name = form[i].name;
+            obj[name] = form[i].value;
+        }
+        console.log(obj)
+        if (!checkFileDoc(objFileUseManual.nameFile, 'File hướng dẫn sử dụng')) {
+            return
+        } else {
+            obj['pathUserManual'] = objFileUseManual.nameFile
+        }
+        for (let i = 0; i < objFileImage.nameFile.length; i++) {
+            if (objFileImage.nameFile[i] !== null
+                && objFileImage.nameFile[i] !== undefined
+                && objFileImage.nameFile[i] !== '') {
+                if (!checkImage(objFileImage.nameFile[i], 'Hình ảnh số ' + (i + 1))) {
+                    objFileImage.nameFile[i] = null;
+                    return;
+                }
+            }
+        }
+        obj.images = objFileImage.nameFile
+        console.log(obj)
+        swal('Đang lưu...', 'Vui lòng đợi', 'success')
+        if (objFileUseManual.data !== null && objFileUseManual.data !== undefined) {
+            let data = objFileUseManual.data + '';
+            console.log(data)
+            let base = data.substring(data.indexOf(",") + 1, data.length)
+            await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileUseManual.nameFile, {
+                method: 'PUT',
+                headers: {
+                    "Authorization": "Bearer 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",
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "message": "uploading a file in date: " + getNameTime(),
+                    "content": base
+                }),
+            })
+                .then(response => response.json())
+                .then(out => {
+                    console.log("up thành công");
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            objFileUseManual.data = null
+        }
+        for (let i = 0; i < objFileImage.nameFile.length; i++) {
+            if (objFileImage.nameFile[i] !== null
+                && objFileImage.nameFile[i] !== undefined
+                && objFileImage.nameFile[i] !== '') {
+                if (!checkImage(objFileImage.nameFile[i], 'Hình ảnh số ' + (i + 1))) {
+                    objFileImage.nameFile[i] = null;
+                    return;
+                } else if (objFileImage.data[i] !== null && objFileImage.data[i] !== undefined
+                    && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
+                    let data = objFileImage.data[i] + '';
+                    console.log(data)
+                    let base = data.substring(data.indexOf(",") + 1, data.length)
+                    await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileImage.nameFile[i], {
+                        method: 'PUT',
+                        headers: {
+                            "Authorization": "Bearer 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",
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            "message": "uploading a file in date: " + getNameTime(),
+                            "content": base
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(out => {
+                            console.log("up thành công");
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    objFileImage.data[i] = null;
+                }
+            }
+        }
+        if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
+            saveWithAPI(JSON.stringify(obj), '/api/product/' + obj.id, 'PUT', '/admin/product/load', 0, 5)
+        } else {
+            saveWithAPI(JSON.stringify(obj), '/api/product', 'POST', '/admin/product/load', 0, 5)
+        }
+    }
+
+    async function saveFile() {
+        if (objFileUseManual.targetFile !== null && objFileUseManual.targetFile !== undefined) {
+            await writeFileGitHub(objFileUseManual.targetFile, objFileUseManual.nameFile)
+            objFileUseManual.targetFile = null
+        }
+        for (let i = 0; i < objFileImage.nameFile.length; i++) {
+            if (objFileImage.nameFile[i] !== null
+                && objFileImage.nameFile[i] !== undefined
+                && objFileImage.nameFile[i] !== '') {
+                if (!checkImage(objFileImage.nameFile[i], 'Hình ảnh số ' + (i + 1))) {
+                    objFileImage.nameFile[i] = null;
+                    return false;
+                } else if (objFileImage.targetFile[i] !== null && objFileImage.targetFile[i] !== undefined
+                    && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
+                    await writeFileGitHub(objFileImage.targetFile[i], objFileImage.nameFile[i])
+                    objFileImage.nameFile[i] = null;
+                }
+            }
+        }
+        return true;
+    }
+
+    function getProduct(e) {
+        $.ajax({
+            url: '/api/product/' + e.dataset.id + '?modal',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (response) {
+                appendFormdata('form-input-product', response, objFileUseManual)
+            }
+        });
+    }
+
+    function changeStatusProduct(e) {
+        let data = e.dataset.methodData;
+        let id = e.dataset.id
+        if (e.dataset.method === 'status') {
+            $.ajax({
+                url: '/api/product/' + id + '/status',
+                type: 'PUT',
+                data: {"status": (data === 'true')},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+                },
+                success: function (response) {
+                    swal("Thành công", "Thay đổi trạng thái sản phẩm thành công", "success")
+                    loadData('/admin/product/load', 0, 5)
+                },
+                error: function (data) {
+                    swal("Thất bại", data.responseJSON.message, "warning")
+                }
+            });
+        }
+    }
+</script>

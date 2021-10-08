@@ -30,6 +30,7 @@ public class InvoiceDto {
     private String description;
     private Boolean status;
     private Date dateCreated;
+    private Long totalPrice;
     private List<InvoiceDetailDto> invoiceDetails;
 
 }

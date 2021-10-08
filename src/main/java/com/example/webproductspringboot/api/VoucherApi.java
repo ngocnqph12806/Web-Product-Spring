@@ -2,6 +2,7 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
@@ -74,6 +75,16 @@ public class VoucherApi extends AbstractApi {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<VoucherDto> result = new ResultDto<>(UPDATED, _iVoucherService.update(voucher));
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping(value = "/{id}/{status}")
+    public ResponseEntity<?> changeStatusProduct(@PathVariable("id") String id, Boolean status) {
+        System.out.println(status);
+        VoucherDto dtoVoucher = _iVoucherService.findById(id);
+        if (dtoVoucher == null)
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
+        dtoVoucher.setStatus(status);
+        return ResponseEntity.ok(_iVoucherService.update(dtoVoucher));
     }
 
     private List<VoucherDto> search(List<VoucherDto> lst, SearchVoucherVo obj, String[] type, Integer index) {

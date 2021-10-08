@@ -37,16 +37,21 @@
     <link th:href="@{/css/sweetalert2.min.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-<div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>
-<div th:replace="/layout/admin/midle-bar.html :: midle-bar-admin"></div>
+<!--<div th:replace="/layout/admin/top-bar.html :: top-bar-admin"></div>-->
+<!--<div th:replace="/layout/admin/midle-bar.html :: midle-bar-admin"></div>-->
 
-<div class="page-wrapper">
-    <div th:replace="/layout/admin/nav.html :: nav-admin"></div>
-    <div class="page-content">
-        <div id="data-user"></div>
-        <div th:replace="/layout/admin/footer.html :: footer-admin"></div>
-    </div>
+<!--<div class="page-wrapper">-->
+<!--    <div th:replace="/layout/admin/nav.html :: nav-admin"></div>-->
+<!--    <div class="page-content">-->
+<!--        <div id="root"></div>-->
+<!--        <div th:replace="/layout/admin/footer.html :: footer-admin"></div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div id="content">
+
 </div>
+
 
 <!-- Sweet-Alert  -->
 <script th:src="@{/js/sweetalert2.min.js}"></script>
@@ -60,45 +65,13 @@
 <script th:src="@{'/js/jquery.dashboard.init.js'}"></script>
 
 <script th:src="@{/load-api.js}"></script>
-<script th:src="@{/load-user.js}"></script>
-<script th:src="@{/load-category-brand.js}"></script>
-<script th:src="@{/load-product.js}"></script>
-<script th:src="@{/load-voucher.js}"></script>
+<!--<script th:src="@{/load-user.js}"></script>-->
+<!--<script th:src="@{/load-category-brand.js}"></script>-->
+<!--<script th:src="@{/load-product.js}"></script>-->
+<!--<script th:src="@{/load-voucher.js}"></script>-->
 <!-- App js -->
 <script th:src="@{'/js/app.js'}"></script>
 
-<script>
-
-    function openInvoice() {
-        loadData('/admin/invoice/load', 0, 5)
-        document.title = 'Quản lý nhập hàng'
-    }
-
-    function openOrder() {
-        loadData('/admin/bill-order/load', 0, 5)
-        document.title = 'Quản lý hoá đơn thanh toán'
-    }
-
-    function openReturns() {
-        loadData('/admin/returns/load', 0, 5)
-        document.title = 'Quản lý hoá đơn trả hàng'
-    }
-
-    function openTransport() {
-        loadData('/admin/transport/load', 0, 5)
-        document.title = 'Quản lý hoá đơn vận chuyển'
-    }
-
-    function openVoucher() {
-        loadData('/admin/voucher/load', 0, 5)
-        document.title = 'Quản lý thương hiệu'
-    }
-
-    function openHistory() {
-        loadData('/admin/history/load', 0, 5)
-        document.title = 'Quản lý thương hiệu'
-    }
-</script>
 </body>
 </html>
 

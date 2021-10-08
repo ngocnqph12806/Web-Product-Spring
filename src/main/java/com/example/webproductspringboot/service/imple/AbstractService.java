@@ -308,15 +308,16 @@ public abstract class AbstractService {
                     .build();
         }
 //        HISTORY
-        else if (data instanceof HistoryVo) {
-            HistoryVo dto = (HistoryVo) data;
-            return HistoryEntity.builder()
-                    .id(dto.getId())
-                    .idStaff(UserEntity.builder().id(dto.getIdStaff()).build())
-                    .details(dto.getDescription())
-                    .created(dto.getDateCreated())
-                    .build();
-        } else if (data instanceof HistoryEntity) {
+//        else if (data instanceof HistoryVo) {
+//            HistoryVo dto = (HistoryVo) data;
+//            return HistoryEntity.builder()
+//                    .id(dto.getId())
+//                    .idStaff(UserEntity.builder().id(dto.getIdStaff()).build())
+//                    .description(dto.getDescription())
+//                    .created(dto.getDateCreated())
+//                    .build();
+//        }
+        else if (data instanceof HistoryEntity) {
             HistoryEntity entity = (HistoryEntity) data;
             return HistoryVo.builder()
                     .id(entity.getId())
@@ -324,7 +325,8 @@ public abstract class AbstractService {
                             ? entity.getIdStaff().getId() : null)
                     .nameStaff(entity.getIdStaff() != null
                             ? entity.getIdStaff().getFullName() : null)
-                    .description(entity.getDetails())
+                    .description(entity.getDescription())
+                    .detail(entity.getDetails())
                     .dateCreated(entity.getCreated())
                     .build();
         }
@@ -353,6 +355,10 @@ public abstract class AbstractService {
                             ? entity.getIdStaffCheck().getFullName() : null)
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
+                    .totalPrice(entity.getLstInvoiceDetailsEntities() != null
+                            ? entity.getLstInvoiceDetailsEntities().stream()
+                            .mapToLong(e -> e.getPrice() * e.getQuantity()).sum()
+                            : Long.parseLong("0"))
                     .invoiceDetails(entity.getLstInvoiceDetailsEntities() != null
                             ? entity.getLstInvoiceDetailsEntities().stream()
                             .map(e -> (InvoiceDetailDto) map(e)).collect(Collectors.toList())

@@ -1,3 +1,8 @@
+function openProduct() {
+    loadData('/admin/product/load', 0, 5)
+    document.title = 'Quản lý sản phẩm'
+}
+
 let objFileImage = {
     data: [],
     nameFile: [],
@@ -6,11 +11,6 @@ let objFileImage = {
 let objFileUseManual = {
     data: null,
     nameFile: null,
-}
-
-async function openProduct() {
-    await loadData('/admin/product/load', 0, 5)
-    document.title = 'Quản lý sản phẩm'
 }
 
 async function onChangeImage(e) {
@@ -162,7 +162,7 @@ function getProduct(e) {
     });
 }
 
-function changeStatus(e) {
+function changeStatusProduct(e) {
     let data = e.dataset.methodData;
     let id = e.dataset.id
     if (e.dataset.method === 'status') {

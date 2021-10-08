@@ -1,158 +1,209 @@
 <div class="card">
-  <div class="card-body">
-    <div class="d-flex mb-3">
-      <h3 class="flex-grow-1 mt-0 header-title">
-        Danh sách mã giảm giá
-      </h3>
-      <a class="btn btn-primary" href="#modal-input-voucher"
-         data-toggle="modal" data-animation="bounce"
-         onclick="getVoucher(this)" data-username="1">
-        Thêm mã giảm giá
-      </a>
+    <div class="card-body">
+        <div class="d-flex mb-3">
+            <h3 class="flex-grow-1 mt-0 header-title">
+                Danh sách mã giảm giá
+            </h3>
+            <a class="btn btn-primary" href="#modal-input-voucher"
+               data-toggle="modal" data-animation="bounce"
+               onclick="getVoucher(this)" data-username="1">
+                Thêm mã giảm giá
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0 table-centered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Mã áp dụng</th>
+                    <th>Người thêm</th>
+                    <th>Số lượng</th>
+                    <th>Đã dùng</th>
+                    <th>Giá trị</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Ngày tạo</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="voucher, theCount: ${lstVoucher}" th:object="${voucher}">
+                    <tr>
+                        <td th:text="${theCount.index +1}">#</td>
+                        <td th:text="*{code}">Mã áp dụng</td>
+                        <td th:text="*{nameStaff}">Người thêm</td>
+                        <td th:text="*{quantity}">Số lượng</td>
+                        <td th:text="*{quantityUsed}">Đã dùng</td>
+                        <td th:text="*{#numbers.formatDecimal(priceSale, 0, 'COMMA', 0, 'POINT')}">Giá trị</td>
+                        <td th:text="*{#dates.format(dateStart, 'dd-MM-yyyy')}">Ngày bắt đầu</td>
+                        <td th:text="*{#dates.format(dateEnd, 'dd-MM-yyyy')}">Ngày kết thúc</td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}">Ngày tạo</td>
+                        <td>
+                            <div class="dropdown d-inline-block float-right">
+                                <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
+                                   data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v font-20 text-muted"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
+                                    <a class="dropdown-item" href="#modal-input-voucher"
+                                       data-toggle="modal" data-animation="bounce"
+                                       onclick="getVoucher(this)" th:data-id="*{id}">
+                                        Chỉnh sửa
+                                    </a>
+                                    <a th:unless="*{status}" class="dropdown-item" href="#"
+                                       data-method="status" data-method-data="true"
+                                       th:data-id="*{id}" onclick="changeStatusVoucher(this)">
+                                        Kích hoạt
+                                    </a>
+                                    <a th:if="*{status}" class="dropdown-item" href="#voucher"
+                                       data-method="status" data-method-data="false"
+                                       th:data-id="*{id}" onclick="changeStatusVoucher(this)">
+                                        Huỷ kích hoạt
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <!--end /table-->
+        </div>
+        <!--end /tableresponsive-->
+        <nav th:if="${totalPage > 1}" aria-label="..." class="pagination custom-pagination float-right">
+            <ul class="list-unstyled">
+                <li th:unless="${page == 0}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" style="cursor: pointer" onclick="clickPage(this)"
+                       th:data-index="${page - 1}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                        <div class="ripple-container"></div>
+                    </a>
+                </li>
+                <li th:if="${page - 2 > 0}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${0}">1</a>
+                </li>
+                <li th:if="${page - 2 > 1}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <th:block th:each="index, theCount: ${#numbers.sequence(0, totalPage - 1)}">
+                    <th:block th:if="${index < page + 2 && index >= page - 2}">
+                        <li th:if="${index == page}" class="list-inline-item">
+                            <a class="page-link bg-dark text-white" style="cursor: pointer" tabindex="-1"
+                               th:text="${index + 1}"></a>
+                        </li>
+                        <li th:unless="${index == page}" class="list-inline-item">
+                            <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                               th:data-index="${index}"
+                               th:text="${index + 1}"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <li th:if="${totalPage - 3 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <li th:if="${totalPage - 2 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${totalPage - 1}"
+                       th:text="${totalPage}"></a>
+                </li>
+                <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" onclick="clickPage(this)" style="cursor: pointer"
+                       th:data-index="${page + 1}"
+                       aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+            <!--end pagination-->
+        </nav>
     </div>
-    <div class="table-responsive">
-      <table class="table mb-0 table-centered">
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Mã áp dụng</th>
-          <th>Người thêm</th>
-          <th>Số lượng</th>
-          <th>Đã dùng</th>
-          <th>Giá trị</th>
-          <th>Ngày bắt đầu</th>
-          <th>Ngày kết thúc</th>
-          <th>Ngày tạo</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="voucher, theCount: ${lstVoucher}" th:object="${voucher}">
-          <tr>
-            <td th:text="${theCount.index +1}">#</td>
-            <td th:text="*{code}">Mã áp dụng</td>
-            <td th:text="*{nameStaff}">Người thêm</td>
-            <td th:text="*{quantity}">Số lượng</td>
-            <td th:text="*{quantityUsed}">Đã dùng</td>
-            <td th:text="*{#numbers.formatDecimal(priceSale, 0, 'COMMA', 0, 'POINT')}">Giá trị</td>
-            <td th:text="*{#dates.format(dateStart, 'dd-MM-yyyy')}">Ngày bắt đầu</td>
-            <td th:text="*{#dates.format(dateEnd, 'dd-MM-yyyy')}">Ngày kết thúc</td>
-            <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}">Ngày tạo</td>
-            <td>
-              <div class="dropdown d-inline-block float-right">
-                <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
-                   data-toggle="dropdown" href="#" role="button"
-                   aria-haspopup="false" aria-expanded="false">
-                  <i class="fas fa-ellipsis-v font-20 text-muted"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
-                  <a class="dropdown-item" href="#modal-input-voucher"
-                     data-toggle="modal" data-animation="bounce"
-                     onclick="getVoucher(this)" th:data-id="*{id}">
-                    Chỉnh sửa
-                  </a>
-                  <a th:unless="*{status}" class="dropdown-item" href="#"
-                     data-method="block" data-method-data="true"
-                     th:data-id="*{id}" onclick="changeStatus(this)">
-                    Kích hoạt
-                  </a>
-                  <a th:if="*{status}" class="dropdown-item" href="#"
-                     data-method="block" data-method-data="false"
-                     th:data-id="*{id}" onclick="changeStatus(this)">
-                    Huỷ kích hoạt
-                  </a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </th:block>
-        </tbody>
-      </table>
-      <!--end /table-->
-    </div>
-    <!--end /tableresponsive-->
-  </div>
-  <!--end card-body-->
+    <!--end card-body-->
 </div>
 <!--end card-->
 <!--    MODAL-->
 <div class="modal fade" id="modal-input-voucher" tabindex="-1" role="dialog"
      aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title mt-0">
-          Nhập mã giảm giá
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      </div>
-      <div class="modal-body">
-        <form id="form-input-voucher">
-          <input type="hidden" name="id"/>
-          <div class="form-group row">
-            <label for="code" class="col-sm-2 col-form-label text-right">
-              Mã áp dụng
-            </label>
-            <div class="col-sm-10">
-              <input class="form-control" type="text" placeholder="Nhập mã áp dụng" name="code"
-                     maxlength="32" id="code">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">
+                    Nhập mã giảm giá
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-          </div>
-          <div class="form-group row">
-            <label for="title" class="col-sm-2 col-form-label text-right">
-              Tiêu đề
-            </label>
-            <div class="col-sm-10">
-              <input class="form-control" type="text"
-                     placeholder="Nhập tiêu đề sự kiện giảm giá" name="title"
-                     maxlength="32" id="title">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="quantity" class="col-sm-2 col-form-label text-right">
-              Số lượng
-            </label>
-            <div class="col-sm-10">
-              <input class="form-control" type="text" placeholder="Nhập số lượng mã áp dụng"
-                     name="quantity"
-                     maxlength="50" id="quantity">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="priceSale" class="col-sm-2 col-form-label text-right">
-              Giá trị
-            </label>
-            <div class="col-sm-10">
-              <input class="form-control" type="text" placeholder="Nhập giá trị mã giảm giá"
-                     name="priceSale"
-                     maxlength="50" id="priceSale">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="date-time-voucher" class="col-sm-2 col-form-label text-right">Thời hạn</label>
-            <div class="col-sm-10">
-              <input type="text" id="date-time-voucher"
-                     class="form-control" value="10/24/1984">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-sm-2 col-form-label text-right">Mô tả</label>
-            <div class="col-sm-10">
+            <div class="modal-body">
+                <form id="form-input-voucher">
+                    <input type="hidden" name="id"/>
+                    <div class="form-group row">
+                        <label for="code" class="col-sm-2 col-form-label text-right">
+                            Mã áp dụng
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập mã áp dụng" name="code"
+                                   maxlength="32" id="code">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="title" class="col-sm-2 col-form-label text-right">
+                            Tiêu đề
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text"
+                                   placeholder="Nhập tiêu đề sự kiện giảm giá" name="title"
+                                   maxlength="32" id="title">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="quantity" class="col-sm-2 col-form-label text-right">
+                            Số lượng
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập số lượng mã áp dụng"
+                                   name="quantity"
+                                   maxlength="50" id="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="priceSale" class="col-sm-2 col-form-label text-right">
+                            Giá trị
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" placeholder="Nhập giá trị mã giảm giá"
+                                   name="priceSale"
+                                   maxlength="50" id="priceSale">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="date-time-voucher" class="col-sm-2 col-form-label text-right">Thời hạn</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="date-time-voucher"
+                                   class="form-control" value="10/24/1984">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label text-right">Mô tả</label>
+                        <div class="col-sm-10">
                            <textarea id="textarea" class="form-control" name="description" minlength="100" rows="3"
                                      placeholder="Nhập mô tả sự kiện"></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                        Huỷ bỏ
+                    </button>
+                    <button type="button" onclick="saveVoucher()" class="btn btn-primary waves-effect waves-light">
+                        Lưu lại
+                    </button>
+                </div>
             </div>
-          </div>
-        </form>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Huỷ bỏ
-          </button>
-          <button type="button" onclick="saveVoucher()" class="btn btn-primary waves-effect waves-light">
-            Lưu lại
-          </button>
-        </div>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
 
@@ -170,3 +221,75 @@
 <script th:src="@{/js/jquery.bootstrap-touchspin.min.js}"></script>
 <script th:src="@{/js/jquery.clock-img.init.js}"></script>
 <script th:src="@{/js/jquery.forms-advanced.js}"></script>
+
+<script>
+
+    function getVoucher(e) {
+        $.ajax({
+            url: '/api/vouchers/' + e.dataset.id + '?modal',
+            type: 'GET',
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+            },
+            success: function (response) {
+                appendFormdata('form-input-voucher', response.data)
+            }
+        });
+    }
+
+    function changeStatusVoucher(e) {
+        let data = e.dataset.methodData;
+        let id = e.dataset.id
+        if (e.dataset.method === 'status') {
+            $.ajax({
+                url: '/api/vouchers/' + id + '/status',
+                type: 'PUT',
+                data: {"status": (data === 'true')},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+                },
+                success: function (response) {
+                    swal("Thành công", "Thay đổi trạng thái mã giảm giá thành công", "success")
+                    loadData('/admin/voucher/load', 0, 5)
+                },
+                error: function (data) {
+                    swal("Thất bại", data.responseJSON.message, "warning")
+                }
+            });
+        }
+    }
+
+    function saveVoucher() {
+        let data = JSON.parse(JSON.stringify($("#form-input-voucher").serializeArray()))
+        let obj = {};
+        for (let i = 0; i < data.length; i++) {
+            let name = data[i].name;
+            let value = data[i].value;
+            // họ tên không chứa số
+            if (name === 'code' && !checkCode(value, 'Mã áp dụng')) return;
+            if (name === 'title' && !checkName(value, 'Tiêu đề')) return;
+            if (name === 'quantity' && !checkQuantity(value, 'Số lượng mã áp dụng')) return;
+            if (name === 'priceSale' && !checkQuantity(value, 'Giá trị mã giảm giá')) return;
+            if (name === 'description' && !checkDescription(value, 'Mô tả mã giảm giá')) return;
+            obj[name] = value;
+        }
+        let dateTime = $('#date-time-voucher').val() + ''
+        console.log(dateTime);
+        let dateStart = dateTime.substring(0, dateTime.lastIndexOf('-')).trim()
+        dateStart = dateStart.substring(dateStart.lastIndexOf('/') + 1) + '-' + dateStart.substring(0, dateStart.lastIndexOf('/')).replaceAll('/', '-');
+        let dateEnd = dateTime.substring(dateTime.lastIndexOf('-') + 1).trim()
+        dateEnd = dateEnd.substring(dateEnd.lastIndexOf('/') + 1) + '-' + dateEnd.substring(0, dateEnd.lastIndexOf('/')).replaceAll('/', '-');
+        obj.dateStart = dateStart
+        obj.dateEnd = dateEnd
+        console.log(obj)
+        setTimeout(function () {
+            console.log(obj.id)
+            if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
+                saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, 'PUT', '/admin/voucher/load', 0, 5)
+            } else {
+                saveWithAPI(JSON.stringify(obj), '/api/vouchers', 'POST', '/admin/voucher/load', 0, 5)
+            }
+        }, 10)
+    }
+</script>

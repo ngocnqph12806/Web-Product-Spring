@@ -1,0 +1,169 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex mb-3">
+            <h3 class="flex-grow-1 mt-0 header-title">
+                Lịch sử thoa tác
+            </h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0 table-centered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nhân viên</th>
+                    <th>Ngày thao tác</th>
+                    <th>Nội dung</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="history, theCount: ${lstHistory}" th:object="${history}">
+                    <tr>
+                        <td th:text="${theCount.index +1}">#</td>
+                        <td th:text="*{nameStaff}"></td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                        <td th:text="*{description}"></td>
+                        <td>
+                            <button class="btn btn-info" href="#modal-detail-history"
+                                    data-toggle="modal" data-animation="bounce" th:data-id="*{id}"
+                                    onclick="showDetailsHistory(this)">
+                                Chi tiết
+                            </button>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <!--end /table-->
+        </div>
+        <!--end /tableresponsive-->
+        <nav th:if="${totalPage > 1}" aria-label="..." class="pagination custom-pagination float-right">
+            <ul class="list-unstyled">
+                <li th:unless="${page == 0}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" style="cursor: pointer" onclick="clickPage(this)"
+                       th:data-index="${page - 1}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Previous</span>
+                        <div class="ripple-container"></div>
+                    </a>
+                </li>
+                <li th:if="${page - 2 > 0}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${0}">1</a>
+                </li>
+                <li th:if="${page - 2 > 1}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <th:block th:each="index, theCount: ${#numbers.sequence(0, totalPage - 1)}">
+                    <th:block th:if="${index < page + 2 && index >= page - 2}">
+                        <li th:if="${index == page}" class="list-inline-item">
+                            <a class="page-link bg-dark text-white" style="cursor: pointer" tabindex="-1"
+                               th:text="${index + 1}"></a>
+                        </li>
+                        <li th:unless="${index == page}" class="list-inline-item">
+                            <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                               th:data-index="${index}"
+                               th:text="${index + 1}"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <li th:if="${totalPage - 3 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1">...</a>
+                </li>
+                <li th:if="${totalPage - 2 > page}" class="list-inline-item">
+                    <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
+                       th:data-index="${totalPage - 1}"
+                       th:text="${totalPage}"></a>
+                </li>
+                <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
+                    <a class="page-link bg-primary text-light" onclick="clickPage(this)" style="cursor: pointer"
+                       th:data-index="${page + 1}"
+                       aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+            <!--end pagination-->
+        </nav>
+    </div>
+    <!--end card-body-->
+</div>
+
+<!--    MODAL-->
+<div class="modal fade" id="modal-detail-history" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">
+                    Chi tiết lịch sử thao tác
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Người thao tác: </label>
+                        </div>
+                        <div class="col-lg-8">
+                            <span id="name-staff-history"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Ngày thao tác: </label>
+                        </div>
+                        <div class="col-lg-8">
+                            <span id="date-created-history"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Nội dung: </label>
+                        </div>
+                        <div class="col-lg-8">
+                            <span id="description-history"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>Chi tiết: </label>
+                        </div>
+                        <div class="col-lg-8">
+                            <textarea id="textarea" class="form-control" name="description" maxlength="1000" rows="10"
+                                      placeholder="Chi tiết lịch sử thao tác"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script>
+    function showDetailsHistory(e) {
+        $.ajax({
+            url: '/api/history/' + e.dataset.id,
+            type: 'GET',
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+            },
+            success: function (response) {
+                document.getElementById('name-staff-history').innerHTML = response.nameStaff
+                document.getElementById('date-created-history').innerHTML = response.dateCreated
+                document.getElementById('description-history').innerHTML = response.description
+                document.getElementById('textarea').value = response.detail
+            }
+        });
+    }
+</script>

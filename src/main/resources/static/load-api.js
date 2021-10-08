@@ -1,3 +1,60 @@
+function openInvoice() {
+    loadData('/admin/invoice/load', 0, 5)
+    document.title = 'Quản lý nhập hàng'
+}
+
+function openOrder() {
+    loadData('/admin/bill-order/load', 0, 5)
+    document.title = 'Quản lý hoá đơn thanh toán'
+}
+
+function openReturns() {
+    loadData('/admin/returns/load', 0, 5)
+    document.title = 'Quản lý hoá đơn trả hàng'
+}
+
+function openTransport() {
+    loadData('/admin/transport/load', 0, 5)
+    document.title = 'Quản lý hoá đơn vận chuyển'
+}
+
+function openHistory() {
+    loadData('/admin/history/load', 0, 5)
+    document.title = 'Quản lý lịch sử thao tác'
+}
+
+function openCategory() {
+    urlCallDataCategoryOrBrand = '/admin/category/load'
+    loadData('/admin/category/load', 0, 5)
+    document.title = 'Quản lý loại sản phẩm'
+}
+
+function openBrand() {
+    urlCallDataCategoryOrBrand = '/admin/brand/load'
+    loadData('/admin/brand/load', 0, 5)
+    document.title = 'Quản lý thương hiệu'
+}
+
+function openProduct() {
+    loadData('/admin/product/load', 0, 5)
+    document.title = 'Quản lý sản phẩm'
+}
+
+function openStaff() {
+    loadData('/admin/user/load', 0, 5, 'staff')
+    document.title = 'Quản lý nhân viên'
+}
+
+function openVisit() {
+    loadData('/admin/user/load', 0, 5, 'visit')
+    document.title = 'Quản lý khách hàng'
+}
+
+function openVoucher() {
+    loadData('/admin/voucher/load', 0, 5)
+    document.title = 'Quản lý thương hiệu'
+}
+
 //LOAD LINK GITHUB
 // function getLinkGithub() {
 //     let fileGithub = $('.file-github')
@@ -9,23 +66,37 @@
 //     }
 // }
 
-$(document).ready(function () {
+$(document).ready(async function () {
     let token = getSession('access_token')
     if (token !== null && token !== undefined && token !== '') {
-        $.ajax({
-            url: '/token/refresh',
-            type: 'GET',
-            // contentType: 'application/json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: function (response) {
-                window.sessionStorage.setItem('access_token', JSON.stringify(response.access_token))
-            },
-            error: function (response) {
-                // window.location = '/login'
+        await fetch('/token/refresh', {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer "+ token,
             }
-        });
+        })
+            .then(response => response.json())
+            .then(out => {
+                $.ajax({
+                    url: '/admin/load-page',
+                    type: 'POST',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+                    },
+                    success: function (response) {
+                        response === null || response === undefined ? response = '' : response = response
+                        $('#content').html(response)
+                        // document.getElementById('data-user').innerHTML = response
+                    },
+                    error: function (e) {
+                        $('#content').html('<h3>' + e.status + '</h3>')
+                        // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
+                    }
+                });
+            })
+            .catch((error) => {
+                window.location = '/login'
+            });
     } else {
         window.location = '/login'
     }
@@ -41,7 +112,36 @@ function reloadPage() {
             break;
         case 'visit':
             openVisit()
-            break
+            break;
+        case 'category':
+            openCategory()
+            break;
+        case 'brand':
+            openBrand();
+            break;
+        case 'step-1':
+        case 'step-2':
+        case 'product':
+            openProduct()
+            break;
+        case 'voucher':
+            openVoucher()
+            break;
+        case 'invoice':
+            openInvoice()
+            break;
+        case 'bill-order':
+            openOrder()
+            break;
+        case 'returns':
+            openReturns();
+            break;
+        case 'history':
+            openHistory()
+            break;
+        case 'transport':
+            openTransport()
+            break;
     }
 }
 
@@ -69,7 +169,7 @@ function clickPage(e) {
 
 function loadData(url, page, size, typeUser) {
     urlApiLoadPage = url
-    typeUser == null || typeUser == undefined ? typeUser = '' : typeUser = typeUser
+    typeUser === null || typeUser == undefined ? typeUser = '' : typeUser = typeUser
     $.ajax({
         url: url + '?_p=' + page + '&_s=' + size + '&_type=' + typeUser,
         type: 'POST',
@@ -78,11 +178,13 @@ function loadData(url, page, size, typeUser) {
             xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
         },
         success: function (response) {
-            $('#data-user').html(response)
+            response === null || response === undefined ? response = '' : response = response
+            $('#root').html(response)
+            // document.getElementById('data-user').innerHTML = response
         },
         error: function (e) {
-            console.log(e)
-            $('#data-user').html('<h3>' + e.status + '</h3>')
+            $('#root').html('<h3>' + e.status + '</h3>')
+            // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
         }
     });
 }

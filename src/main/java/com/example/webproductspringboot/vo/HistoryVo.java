@@ -17,6 +17,7 @@ public class HistoryVo {
     private String idStaff;
     private String nameStaff;
     private String description;
+    private String detail;
     private Date dateCreated;
 
 }

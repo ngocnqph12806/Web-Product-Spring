@@ -23,11 +23,12 @@ public class HistoryAdmin {
     public String listHistory(@RequestParam("_p") Integer page,
                               @RequestParam(value = "_s", defaultValue = "10") Integer size,
                               Model model) {
+        System.out.println(page);
         PageDto<List<HistoryVo>> pageDto = _iHistoryService.findByPage(page, size);
         model.addAttribute("lstHistory", pageDto.getContent());
         model.addAttribute("totalPage", pageDto.getTotalPages());
         model.addAttribute("page", page);
-        return "/load-history";
+        return "load-history";
     }
 
 }

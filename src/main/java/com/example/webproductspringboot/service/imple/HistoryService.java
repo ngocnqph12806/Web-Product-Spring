@@ -41,9 +41,8 @@ public class HistoryService extends AbstractService implements IHistoryService {
     public PageDto<List<HistoryVo>> findByPage(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
         Page<HistoryEntity> entities = _iHistoryReponsitory.findAll(pageable);
-        List<HistoryEntity> lst = entities.getContent();
-        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
-                lst.stream().map(e -> (HistoryVo) map(e)).collect(Collectors.toList()));
+        List<HistoryVo> lst = entities.getContent().stream().map(e -> (HistoryVo) map(e)).collect(Collectors.toList());
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(), lst);
     }
 
     @Override

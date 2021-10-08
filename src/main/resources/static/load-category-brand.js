@@ -12,7 +12,7 @@ var objFileBannerCategory = {
     data: null
 }
 
-async function onChangeFile(e) {
+async function onChangeFileBanner(e) {
     objFileBannerCategory.targetFileAvatar = e
     objFileBannerCategory.nameFile = getNameTime() + e.files[0].name
     let data = await toBase64(e.files[0])
@@ -67,7 +67,7 @@ async function saveCategory() {
         if (obj.id === null || obj.id === undefined || obj.id === '') {
             saveWithAPI(JSON.stringify(obj), '/api/categories', 'POST', '/admin/category/load', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/categories' + obj.id, 'PUT', '/admin/category/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/categories/' + obj.id, 'PUT', '/admin/category/load', 0, 5)
         }
     }, 10)
 }
@@ -121,7 +121,7 @@ function saveBrand() {
         if (obj.id === null || obj.id === undefined || obj.id === '') {
             saveWithAPI(JSON.stringify(obj), '/api/brand', 'POST', '/admin/brand/load', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/brand' + obj.id, 'PUT', '/admin/brand/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/brand/' + obj.id, 'PUT', '/admin/brand/load', 0, 5)
         }
     }, 10)
 }
@@ -156,7 +156,7 @@ function saveCollection() {
         if (obj.id === null || obj.id === undefined || obj.id === '') {
             saveWithAPI(JSON.stringify(obj), '/api/collections', 'POST', urlCallDataCategoryOrBrand, 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/collections' + obj.id, 'PUT', urlCallDataCategoryOrBrand, 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/collections/' + obj.id, 'PUT', urlCallDataCategoryOrBrand, 0, 5)
         }
     }, 10)
 }
@@ -177,7 +177,7 @@ function changeStatusCollecton(e) {
                 let obj = response.data;
                 console.log(obj)
                 obj.status = data
-                saveWithAPI(JSON.stringify(obj), '/api/collections' + obj.id, 'PUT', urlCallDataCategoryOrBrand, 0, 5)
+                saveWithAPI(JSON.stringify(obj), '/api/collections/' + obj.id, 'PUT', urlCallDataCategoryOrBrand, 0, 5)
             } else {
                 swal('Hmmm!', 'Đừng sửa code...', 'warning')
             }
