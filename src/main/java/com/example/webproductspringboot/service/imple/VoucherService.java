@@ -34,8 +34,7 @@ public class VoucherService extends AbstractService implements IVoucherService {
 
     @Override
     public List<VoucherDto> findAll() {
-        List<VoucherEntity> lst = _iVoucherReponsitory.findAll();
-        Collections.reverse(lst);
+        List<VoucherEntity> lst = _iVoucherReponsitory.findAll(sortAZByCreated());
         return lst.stream().map(e -> (VoucherDto) map(e)).collect(Collectors.toList());
     }
 

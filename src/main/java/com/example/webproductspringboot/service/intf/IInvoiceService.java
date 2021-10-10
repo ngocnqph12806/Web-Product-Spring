@@ -1,6 +1,7 @@
 package com.example.webproductspringboot.service.intf;
 
 
+import com.example.webproductspringboot.dto.InvoiceDetailDto;
 import com.example.webproductspringboot.dto.InvoiceDto;
 import com.example.webproductspringboot.dto.PageDto;
 
@@ -18,4 +19,9 @@ public interface IInvoiceService {
 
     InvoiceDto update(InvoiceDto dto);
 
+    void saveDetailInvoice(InvoiceDetailDto  detail);
+
+    void removeInvoice(InvoiceDto dtoFake);
+
+    void removeDetailInvoiceById(String id);
 }

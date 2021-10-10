@@ -93,9 +93,8 @@ public class ProductApi extends AbstractApi {
         return ResponseEntity.ok(_iProductService.findProductById(dtoSave.getId()));
     }
 
-    @PutMapping(value = "/{id}/{status}")
+    @PutMapping(value = "/{id}/status")
     public ResponseEntity<?> changeStatusProduct(@PathVariable("id") String id, Boolean status) {
-        System.out.println(status);
         ProductDto dtoProduct = _iProductService.findProductById(id);
         if (dtoProduct == null)
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "product", "product.not.found"));

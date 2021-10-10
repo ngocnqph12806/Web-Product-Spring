@@ -49,9 +49,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
         if (optional.isEmpty()) {
             log.error("Người dùng không tồn tại trong database");
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
-        } else {
-            log.error("Người dùng tồn tại trong database: {}", username);
-        }
+        } else log.error("Người dùng tồn tại trong database: {}", username);
         UserEntity user = optional.get();
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole()));
@@ -61,21 +59,18 @@ public class UserService extends AbstractService implements IUserService, UserDe
     @Override
     public List<UserDto> findAll() {
         List<UserEntity> lst = _iUserReponsitory.findAll(sortAZByCreated());
-        Collections.reverse(lst);
         return lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
     public List<UserDto> findAllStaff() {
-        List<UserEntity> lst = _iUserReponsitory.findAllStaff();
-        Collections.reverse(lst);
+        List<UserEntity> lst = _iUserReponsitory.findAllStaff(sortAZByCreated());
         return lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
     public List<UserDto> findAllVisit() {
-        List<UserEntity> lst = _iUserReponsitory.findAllVisit();
-        Collections.reverse(lst);
+        List<UserEntity> lst = _iUserReponsitory.findAllVisit(sortAZByCreated());
         return lst.stream().map(e -> (UserDto) map(e)).collect(Collectors.toList());
     }
 
@@ -119,9 +114,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
         if (optional.isEmpty()) {
             log.error("User not fount in the database");
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
-        } else {
-            log.error("User fount in the database: {}", username);
-        }
+        } else             log.error("User fount in the database: {}", username);
         return (UserDto) map(optional.get());
     }
 
@@ -132,7 +125,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
-        entity.setStatus(true);
+        entity.setStatus(false);
         entity.setBlock(false);
 //        entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
         entity.setPassword(_passwordEncoder.encode("123445678"));

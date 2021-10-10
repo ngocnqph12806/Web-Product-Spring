@@ -1,3 +1,64 @@
+function openFormInvoice() {
+    // $.ajax({
+    //     url: '/admin/invoice/form/load',
+    //     type: 'POST',
+    //     beforeSend: function (xhr) {
+    //         xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+    //     },
+    //     success: function (response) {
+    //         response === null || response === undefined ? response = '' : null
+    //         $('#root').html(response)
+    //     },
+    //     error: function (e) {
+    //         $('#root').html('<h3>' + e.status + '</h3>')
+    //     }
+    // })
+
+    loadData('/admin/invoice/form/load')
+    document.title = 'Nhập thông tin nhập hàng'
+}
+
+function openFormOrder() {
+    $.ajax({
+        url: '/admin/bill-order/form/load',
+        type: 'POST',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+        },
+        success: function (response) {
+            response === null || response === undefined ? response = '' : null
+            $('#root').html(response)
+        },
+        error: function (e) {
+            $('#root').html('<h3>' + e.status + '</h3>')
+        }
+    })
+    document.title = 'Nhập thông tin bán hàng'
+}
+
+function openFormEditInvoice(e) {
+    let id = e.dataset.id
+    id === null || id === undefined || id === '' ? id = '-1-1-1' : null
+    // $.ajax({
+    //     url: '/admin/invoice/form/' + id + '/load',
+    //     type: 'POST',
+    //     beforeSend: function (xhr) {
+    //         xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+    //     },
+    //     success: function (response) {
+    //         response === null || response === undefined ? response = '' : null
+    //         $('#root').html(response)
+    //         // document.getElementById('data-user').innerHTML = response
+    //     },
+    //     error: function (e) {
+    //         $('#root').html('<h3>' + e.status + '</h3>')
+    //         // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
+    //     }
+    // })
+    loadData('/admin/invoice/form/' + id + '/load')
+    document.title = 'Sửa thông tin nhập hàng'
+}
+
 function openInvoice() {
     loadData('/admin/invoice/load', 0, 5)
     document.title = 'Quản lý nhập hàng'
@@ -72,7 +133,7 @@ $(document).ready(async function () {
         await fetch('/token/refresh', {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer "+ token,
+                "Authorization": "Bearer " + token,
             }
         })
             .then(response => response.json())
@@ -127,11 +188,19 @@ function reloadPage() {
         case 'voucher':
             openVoucher()
             break;
+        case 'form-invoice':
+            openFormInvoice()
+            break;
         case 'invoice':
+        case 'form-edit-invoice':
             openInvoice()
             break;
         case 'bill-order':
+        case 'form-edit-order':
             openOrder()
+            break;
+        case 'form-order':
+            openFormOrder()
             break;
         case 'returns':
             openReturns();
@@ -169,7 +238,7 @@ function clickPage(e) {
 
 function loadData(url, page, size, typeUser) {
     urlApiLoadPage = url
-    typeUser === null || typeUser == undefined ? typeUser = '' : typeUser = typeUser
+    typeUser === null || typeUser === undefined ? typeUser = '' : null
     $.ajax({
         url: url + '?_p=' + page + '&_s=' + size + '&_type=' + typeUser,
         type: 'POST',
@@ -178,13 +247,11 @@ function loadData(url, page, size, typeUser) {
             xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
         },
         success: function (response) {
-            response === null || response === undefined ? response = '' : response = response
+            response === null || response === undefined ? response = '' : null
             $('#root').html(response)
-            // document.getElementById('data-user').innerHTML = response
         },
         error: function (e) {
             $('#root').html('<h3>' + e.status + '</h3>')
-            // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
         }
     });
 }

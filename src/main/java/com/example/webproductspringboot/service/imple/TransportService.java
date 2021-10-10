@@ -30,8 +30,7 @@ public class TransportService extends AbstractService implements ITransportServi
 
     @Override
     public List<TransportDto> findAll() {
-        List<TransportEntity> lst = _iTransportReponsitory.findAll();
-        Collections.reverse(lst);
+        List<TransportEntity> lst = _iTransportReponsitory.findAll(sortAZByCreated());
         return lst.stream().map(e -> (TransportDto) map(e)).collect(Collectors.toList());
     }
 
@@ -58,7 +57,7 @@ public class TransportService extends AbstractService implements ITransportServi
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
-        entity.setStatus(true);
+        entity.setStatus(false);
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iTransportReponsitory.save(entity);
         saveHistory(userEntity, "Thêm hoá đơn vận chuyển", entity.toString());

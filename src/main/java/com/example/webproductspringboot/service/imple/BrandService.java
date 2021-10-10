@@ -31,8 +31,7 @@ public class BrandService extends AbstractService implements IBrandService {
 
     @Override
     public List<BrandDto> findAll() {
-        List<BrandEntity> lst = _iBrandReponsitory.findAll();
-        Collections.reverse(lst);
+        List<BrandEntity> lst = _iBrandReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (BrandDto) map(e)).collect(Collectors.toList());
     }
 

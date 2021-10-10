@@ -26,17 +26,15 @@ public class BannerService extends AbstractService implements IBannerService {
 
     @Override
     public List<BannerDto> findAll() {
-        List<BannerEntity> entities = _iBannerReponsitory.findAll();
-        Collections.reverse(entities);
+        List<BannerEntity> entities = _iBannerReponsitory.findAll(sortAZ("created"));
         return entities.stream().map(e -> (BannerDto) map(e)).collect(Collectors.toList());
     }
 
     @Override
     public BannerDto findById(String id) {
         Optional<BannerEntity> optional = _iBannerReponsitory.findById(id);
-        if (optional.isEmpty()) {
+        if (optional.isEmpty())
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "banner", "banner.not.found"));
-        }
         return (BannerDto) map(optional.get());
     }
 

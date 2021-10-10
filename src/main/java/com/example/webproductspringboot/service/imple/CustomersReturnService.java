@@ -32,8 +32,7 @@ public class CustomersReturnService extends AbstractService implements ICustomer
 
     @Override
     public List<ReturnDto> findAll() {
-        List<CustomersReturnEntity> lst = _iCustomersReturnReponsitory.findAll();
-        Collections.reverse(lst);
+        List<CustomersReturnEntity> lst = _iCustomersReturnReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (ReturnDto) map(e)).collect(Collectors.toList());
     }
 
@@ -60,7 +59,7 @@ public class CustomersReturnService extends AbstractService implements ICustomer
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
-        entity.setStatus(true);
+        entity.setStatus(false);
         entity.setCreated(new Date(System.currentTimeMillis()));
         entity.setIdStaff(userEntity);
         _iCustomersReturnReponsitory.save(entity);

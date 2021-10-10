@@ -26,8 +26,7 @@ public class ReviewProductService extends AbstractService implements IReviewProd
 
     @Override
     public List<ReviewDto> findAll() {
-        List<ReviewProductEntity> lst = _iReviewProductReponsitory.findAll();
-        Collections.reverse(lst);
+        List<ReviewProductEntity> lst = _iReviewProductReponsitory.findAll(sortAZByCreated());
         return lst.stream().map(e -> (ReviewDto) map(e)).collect(Collectors.toList());
     }
 

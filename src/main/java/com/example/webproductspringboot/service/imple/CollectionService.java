@@ -26,8 +26,7 @@ public class CollectionService extends AbstractService implements ICollectionSer
 
     @Override
     public List<CollectionDto> findAll() {
-        List<CollectionEntity> lst = _iCollectionReponsitory.findAll();
-        Collections.reverse(lst);
+        List<CollectionEntity> lst = _iCollectionReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (CollectionDto) map(e)).collect(Collectors.toList());
     }
 

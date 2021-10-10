@@ -32,8 +32,7 @@ public class OrderService extends AbstractService implements IOrderService {
 
     @Override
     public List<OrderDto> findAll() {
-        List<OrderEntity> lst = _iOrderReponsitory.findAll();
-        Collections.reverse(lst);
+        List<OrderEntity> lst = _iOrderReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (OrderDto) map(e)).collect(Collectors.toList());
     }
 
@@ -60,7 +59,7 @@ public class OrderService extends AbstractService implements IOrderService {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
-        entity.setStatus(true);
+        entity.setStatus(false);
         entity.setCreated(new Date(System.currentTimeMillis()));
         entity.setStaffCreate(userEntity);
         _iOrderReponsitory.save(entity);

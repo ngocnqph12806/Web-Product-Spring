@@ -1,15 +1,21 @@
-<div class="card">
+<div class="card" xmlns:th="http://www.thymeleaf.org">
     <div class="card-body">
         <div class="d-flex mb-3">
-            <h3 class="flex-grow-1 mt-0 header-title">
-                <th:block th:if="${isStaff}" th:text="'Danh sách nhân viên'"></th:block>
-                <th:block th:unless="${isStaff}" th:text="'Danh sách khách hàng'"></th:block>
+            <h3 th:if="${isStaff}" class="flex-grow-1 mt-0 header-title">
+                Danh sách nhân viên
             </h3>
-            <a class="btn btn-primary" href="#modal-input-staff"
+            <h3 th:unless="${isStaff}" class="flex-grow-1 mt-0 header-title">
+                Danh sách khách hàng
+            </h3>
+            <a th:if="${isStaff}" class="btn btn-primary" href="#modal-input-staff"
                data-toggle="modal" data-animation="bounce"
                onclick="getStaff(this)" data-username="1">
-                <th:block th:if="${isStaff}" th:text="'Thêm nhân viên'"></th:block>
-                <th:block th:unless="${isStaff}" th:text="'Thêm khách hàng'"></th:block>
+                Thêm nhân viên
+            </a>
+            <a th:unless="${isStaff}" class="btn btn-primary" href="#modal-input-staff"
+               data-toggle="modal" data-animation="bounce"
+               onclick="getStaff(this)" data-username="1">
+                Thêm khách hàng
             </a>
         </div>
         <div class="table-responsive">
@@ -35,8 +41,8 @@
                         </td>
                         <td th:text="*{fullName}"></td>
                         <td th:text="*{#dates.format(dateOfBirth, 'dd-MM-yyyy')}"></td>
-                        <td th:text="*{phoneNumber}"></td>
                         <td th:text="*{username}"></td>
+                        <td th:text="*{phoneNumber}"></td>
                         <td th:text="*{email}"></td>
                         <td th:if="${isStaff}">
                                 <span th:unless="*{role == 'SUPPER_ADMIN'}" class="badge badge-success"
@@ -126,7 +132,7 @@
                 </li>
                 <li th:if="${totalPage - 2 > page}" class="list-inline-item">
                     <a class="page-link" style="cursor: pointer" tabindex="-1" onclick="clickPage(this)"
-                       th:data-index="${totalPage-1}"
+                       th:data-index="${totalPage - 1}"
                        th:text="${totalPage}"></a>
                 </li>
                 <li th:unless="${page + 1 == totalPage}" class="list-inline-item">
@@ -248,24 +254,25 @@
 </div>
 <!-- /.modal -->
 
-<script src="/js/daterangepicker.js"></script>
-<script src="/js/tempusdominus-bootstrap-4.js"></script>
-<script src="/js/bootstrap-material-datetimepicker.js"></script>
-<script src="/js/jquery-clockpicker.min.js"></script>
-<script src="/js/jquery-asColor.js"></script>
-<script src="/js/jquery-asGradient.js"></script>
-<script src="/js/jquery-asColorPicker.min.js"></script>
-<script src="/js/select2.min.js"></script>
-<script src="/js/bootstrap-colorpicker.min.js"></script>
-<script src="/js/bootstrap-datepicker.min.js"></script>
+<script th:src="@{/js/daterangepicker.js}"></script>
+<script th:src="@{/js/tempusdominus-bootstrap-4.js}"></script>
+<script th:src="@{/js/bootstrap-material-datetimepicker.js}"></script>
+<script th:src="@{/js/jquery-clockpicker.min.js}"></script>
+<script th:src="@{/js/jquery-asColor.js}"></script>
+<script th:src="@{/js/jquery-asGradient.js}"></script>
+<script th:src="@{/js/jquery-asColorPicker.min.js}"></script>
+<script th:src="@{/js/select2.min.js}"></script>
+<script th:src="@{/js/bootstrap-colorpicker.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
 <script th:src="@{/js/bootstrap-maxlength.min.js}"></script>
 <script th:src="@{/js/jquery.bootstrap-touchspin.min.js}"></script>
 <script th:src="@{/js/jquery.clock-img.init.js}"></script>
 <script th:src="@{/js/jquery.forms-advanced.js}"></script>
 
+
 <!--    UPLOAD-->
-<script src="/js/dropify.min.js"></script>
-<script src="/js/jquery.form-upload.init.js"></script>
+<script th:src="@{/js/dropify.min.js}"></script>
+<script th:src="@{/js/jquery.form-upload.init.js}"></script>
 
 <script>
 

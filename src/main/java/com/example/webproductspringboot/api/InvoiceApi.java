@@ -1,12 +1,14 @@
 package com.example.webproductspringboot.api;
 
+import com.example.webproductspringboot.dto.InvoiceDetailDto;
 import com.example.webproductspringboot.dto.InvoiceDto;
-import com.example.webproductspringboot.dto.ResultDto;
+import com.example.webproductspringboot.dto.ProductDto;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IInvoiceService;
+import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchInvoiceVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,31 +25,48 @@ import java.util.stream.Collectors;
 public class InvoiceApi extends AbstractApi {
 
     private final IInvoiceService _iInvoiceService;
+    private final IProductService _iProductService;
 
-    protected InvoiceApi(HttpServletRequest request, IInvoiceService iInvoiceService) {
+    protected InvoiceApi(HttpServletRequest request, IInvoiceService iInvoiceService, IProductService iProductService) {
         super(request);
         _iInvoiceService = iInvoiceService;
+        _iProductService = iProductService;
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(SearchInvoiceVo searchInvoiceVo) {
         List<InvoiceDto> lst = _iInvoiceService.findAll();
         lst = search(lst, searchInvoiceVo, searchInvoiceVo.getIdCreator(), 0);
-        ResultDto<List<InvoiceDto>> result = new ResultDto<>(OK, lst);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(lst);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iInvoiceService.findById(id)));
+        return ResponseEntity.ok(_iInvoiceService.findById(id));
+    }
+
+    @GetMapping(value = "/{id}", params = "modal")
+    public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok(_iInvoiceService.findById(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(new InvoiceDto());
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid InvoiceDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "invoice", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<InvoiceDto> result = new ResultDto<>(CREATED, _iInvoiceService.save(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getInvoiceDetails() == null || dto.getInvoiceDetails().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "invoice", "details.invoice.not.found"));
+        InvoiceDto dtoFake = _iInvoiceService.save(dto);
+        if (dtoFake != null) {
+            saveDetailInvoiceWithUpdateQuantityProduct(dto, dtoFake);
+            return ResponseEntity.ok(dtoFake);
+        }
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping("/{id}")
@@ -56,8 +76,56 @@ public class InvoiceApi extends AbstractApi {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "invoice", errors.getFieldErrors().get(0).getDefaultMessage()));
         if (!dto.getId().equals(id))
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
-        ResultDto<InvoiceDto> result = new ResultDto<>(UPDATED, _iInvoiceService.update(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getInvoiceDetails() == null || dto.getInvoiceDetails().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "invoice", "details.invoice.not.found"));
+        InvoiceDto dtoFindById = _iInvoiceService.findById(id);
+        InvoiceDto dtoSave = _iInvoiceService.update(dto);
+        if (dtoSave != null) {
+            saveDetailInvoiceWithUpdateQuantityProduct(dto, dtoSave);
+            for (InvoiceDetailDto x : dtoFindById.getInvoiceDetails()) {
+                _iInvoiceService.removeDetailInvoiceById(x.getId());
+                ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                _iProductService.updateProduct(productDto);
+            }
+            return ResponseEntity.ok(dtoSave);
+        }
+        return ResponseEntity.ok(null);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatusInvoice(@PathVariable("id") String id, Boolean status) {
+        InvoiceDto dtoFindById = _iInvoiceService.findById(id);
+        if (dtoFindById == null)
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "invoice", "invoice.not.found"));
+        dtoFindById.setStatus(status);
+        if (_iInvoiceService.update(dtoFindById) != null) {
+            for (InvoiceDetailDto x : dtoFindById.getInvoiceDetails()) {
+                ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                if (status) {
+                    productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                } else {
+                    productDto.setQuantity(productDto.getQuantity() + x.getQuantity());
+                }
+                _iProductService.updateProduct(productDto);
+            }
+        }
+        return ResponseEntity.ok(dtoFindById);
+    }
+
+    private void saveDetailInvoiceWithUpdateQuantityProduct(@RequestBody @Valid InvoiceDto dto, InvoiceDto dtoSave) {
+        for (InvoiceDetailDto x : dto.getInvoiceDetails()) {
+            x.setIdInvoice(dtoSave.getId());
+            try {
+                _iInvoiceService.saveDetailInvoice(x);
+                ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                productDto.setQuantity(productDto.getQuantity() + x.getQuantity());
+                _iProductService.updateProduct(productDto);
+            } catch (Exception e) {
+                _iInvoiceService.removeInvoice(dtoSave);
+                throw new BadRequestException(e.getMessage());
+            }
+        }
     }
 
     private List<InvoiceDto> search(List<InvoiceDto> lst, SearchInvoiceVo obj, String[] type, Integer index) {

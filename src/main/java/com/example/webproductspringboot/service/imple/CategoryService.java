@@ -33,8 +33,7 @@ public class CategoryService extends AbstractService implements ICategoryService
 
     @Override
     public List<CategoryDto> findAll() {
-        List<CategoryEntity> lst = _iCategoryReponsitory.findAll();
-        Collections.reverse(lst);
+        List<CategoryEntity> lst = _iCategoryReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (CategoryDto) map(e)).collect(Collectors.toList());
     }
 

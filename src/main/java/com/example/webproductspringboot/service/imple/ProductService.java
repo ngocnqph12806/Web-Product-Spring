@@ -39,7 +39,6 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public List<ProductDto> findAllProduct() {
         List<ProductEntity> lst = _iProductReponsitory.findAll(sortAZByCreated());
-        Collections.reverse(lst);
         return lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList());
     }
 
@@ -62,17 +61,13 @@ public class ProductService extends AbstractService implements IProductService {
 
     @Override
     public Set<String> getSetCategoryDetailsByIdCategory(String idCategory) {
-        if (idCategory == null) {
-            return _iProductReponsitory.getAllNameCategory();
-        }
+        if (idCategory == null) return _iProductReponsitory.getAllNameCategory();
         return _iProductReponsitory.getSetCategoryDetailsByIdCategory(idCategory);
     }
 
     @Override
     public Set<String> getSetColorByIdCategory(String idCategory) {
-        if (idCategory == null) {
-            return _iProductReponsitory.getAllColor();
-        }
+        if (idCategory == null) return _iProductReponsitory.getAllColor();
         return _iProductReponsitory.getSetColorByIdCategory(idCategory);
     }
 

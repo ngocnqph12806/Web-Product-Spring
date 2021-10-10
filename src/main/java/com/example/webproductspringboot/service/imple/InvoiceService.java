@@ -1,16 +1,17 @@
 package com.example.webproductspringboot.service.imple;
 
+import com.example.webproductspringboot.dto.InvoiceDetailDto;
 import com.example.webproductspringboot.dto.InvoiceDto;
 import com.example.webproductspringboot.dto.PageDto;
-import com.example.webproductspringboot.entity.HistoryEntity;
+import com.example.webproductspringboot.entity.InvoiceDetailsEntity;
 import com.example.webproductspringboot.entity.InvoiceEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.reponsitory.InvoiceDetailsReponsitory;
 import com.example.webproductspringboot.reponsitory.InvoiceReponsitory;
 import com.example.webproductspringboot.service.intf.IInvoiceService;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.HistoryVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +25,17 @@ import java.util.stream.Collectors;
 public class InvoiceService extends AbstractService implements IInvoiceService {
 
     private final InvoiceReponsitory _invoiceReponsitory;
+    private final InvoiceDetailsReponsitory _invoiceDetailsReponsitory;
 
-    protected InvoiceService(HttpServletRequest request, InvoiceReponsitory invoiceReponsitory) {
+    protected InvoiceService(HttpServletRequest request, InvoiceReponsitory invoiceReponsitory, InvoiceDetailsReponsitory invoiceDetailsReponsitory) {
         super(request);
         _invoiceReponsitory = invoiceReponsitory;
+        _invoiceDetailsReponsitory = invoiceDetailsReponsitory;
     }
 
     @Override
     public List<InvoiceDto> findAll() {
-        List<InvoiceEntity> lst = _invoiceReponsitory.findAll();
-        Collections.reverse(lst);
+        List<InvoiceEntity> lst = _invoiceReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (InvoiceDto) map(e)).collect(Collectors.toList());
     }
 
@@ -61,7 +63,7 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setCreated(new Date(System.currentTimeMillis()));
-        entity.setStatus(true);
+        entity.setStatus(false);
         entity.setIdStaffCreate(userEntity);
         _invoiceReponsitory.save(entity);
         saveHistory(userEntity, "Thêm hoá đơn nhập hàng", entity.toString());
@@ -84,5 +86,28 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
         _invoiceReponsitory.save(entity);
         saveHistory(userEntity, "Sửa hoá đơn nhập hàng", fake + "\n" + entity);
         return (InvoiceDto) map(entity);
+    }
+
+    @Override
+    public void saveDetailInvoice(InvoiceDetailDto detail) {
+        InvoiceDetailsEntity entity = (InvoiceDetailsEntity) map(detail);
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        UserEntity userEntity = getUserLogin();
+        entity.setId(UUID.randomUUID().toString());
+        _invoiceDetailsReponsitory.save(entity);
+        saveHistory(userEntity, "Thêm chi tiết hoá đơn nhập hàng", entity.toString());
+        map(entity);
+    }
+
+    @Override
+    public void removeInvoice(InvoiceDto dtoFake) {
+        _invoiceDetailsReponsitory.deleteAllByIdInvoice(dtoFake.getId());
+        _invoiceReponsitory.deleteById(dtoFake.getId());
+    }
+
+    @Override
+    public void removeDetailInvoiceById(String id) {
+        _invoiceDetailsReponsitory.deleteById(id);
     }
 }

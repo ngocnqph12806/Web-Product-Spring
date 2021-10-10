@@ -32,8 +32,7 @@ public class HistoryService extends AbstractService implements IHistoryService {
 
     @Override
     public List<HistoryVo> findAll() {
-        List<HistoryEntity> lst = _iHistoryReponsitory.findAll();
-        Collections.reverse(lst);
+        List<HistoryEntity> lst = _iHistoryReponsitory.findAll(sortAZ("created"));
         return lst.stream().map(e -> (HistoryVo) map(e)).collect(Collectors.toList());
     }
 

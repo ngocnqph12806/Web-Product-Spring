@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -17,16 +18,12 @@ public class InvoiceDetailDto {
     private String id;
     private String idInvoice;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String idProduct;
-    @NotNull
-    @NotEmpty
     private String nameProduct;
     @NotNull
-    @NotEmpty
     private Long price;
     @NotNull
-    @NotEmpty
     private Integer quantity;
 
 }
