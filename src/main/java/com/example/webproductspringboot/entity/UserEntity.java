@@ -69,8 +69,6 @@ public class UserEntity {
 //    private List<VoucherUseEntity> lstVoucherUseEntityList;
     @OneToMany(mappedBy = "idVisit")
     private List<OrderEntity> lstOrderEntities;
-    @OneToMany(mappedBy = "idVisit")
-    private List<CustomersReturnEntity> lstCustomersReturnEntitiesWithVisit;
 
     @Override
     public String toString() {

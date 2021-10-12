@@ -22,8 +22,6 @@ public class OrderDetailDto {
     @NotEmpty
     private String idProduct;
     private String nameProduct;
-    @NotNull
-    @NotEmpty
     private Long price;
     @NotNull
     @NotEmpty
@@ -31,6 +29,7 @@ public class OrderDetailDto {
     @NotNull
     @NotEmpty
     private Integer quantity;
+    private Integer quantityReturn;
     private List<ReturnDetailDto> returns;
 
 }

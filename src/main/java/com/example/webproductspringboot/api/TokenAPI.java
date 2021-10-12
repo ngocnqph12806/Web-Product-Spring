@@ -8,6 +8,7 @@ import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,10 @@ public class TokenAPI {
     @Autowired
     private IUserService _iUserService;
 
-    @GetMapping("/token/refresh")
+    @GetMapping(value = {"/token/refresh", "/api/token/refresh"})
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+        System.out.println("auth " + authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());

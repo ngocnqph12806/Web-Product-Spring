@@ -1,10 +1,12 @@
 package com.example.webproductspringboot.service.imple;
 
 import com.example.webproductspringboot.dto.ReviewDto;
+import com.example.webproductspringboot.entity.ReviewImageEntity;
 import com.example.webproductspringboot.entity.ReviewProductEntity;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.reponsitory.IReviewImageProductReponsitory;
 import com.example.webproductspringboot.reponsitory.IReviewProductReponsitory;
 import com.example.webproductspringboot.service.intf.IReviewProductService;
 import com.example.webproductspringboot.utils.CookieUtils;
@@ -18,10 +20,12 @@ import java.util.stream.Collectors;
 public class ReviewProductService extends AbstractService implements IReviewProductService {
 
     private final IReviewProductReponsitory _iReviewProductReponsitory;
+    private final IReviewImageProductReponsitory _iReviewImageProductReponsitory;
 
-    protected ReviewProductService(HttpServletRequest request, IReviewProductReponsitory iReviewProductReponsitory) {
+    protected ReviewProductService(HttpServletRequest request, IReviewProductReponsitory iReviewProductReponsitory, IReviewImageProductReponsitory iReviewImageProductReponsitory) {
         super(request);
         _iReviewProductReponsitory = iReviewProductReponsitory;
+        _iReviewImageProductReponsitory = iReviewImageProductReponsitory;
     }
 
     @Override
@@ -39,6 +43,7 @@ public class ReviewProductService extends AbstractService implements IReviewProd
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
         entity.setCreated(new Date(System.currentTimeMillis()));
+        entity.setIdVisit(userEntity);
         _iReviewProductReponsitory.save(entity);
         saveHistory(userEntity, "Thêm đánh giá", entity.toString());
         return (ReviewDto) map(entity);
@@ -59,5 +64,14 @@ public class ReviewProductService extends AbstractService implements IReviewProd
         _iReviewProductReponsitory.save(entity);
         saveHistory(userEntity, "Sửa đánh giá", fake + "\n" + entity);
         return (ReviewDto) map(entity);
+    }
+
+    @Override
+    public void saveImageReview(String x, ReviewDto reviewDtoSave) {
+        _iReviewImageProductReponsitory.save(ReviewImageEntity.builder()
+                .id(UUID.randomUUID().toString())
+                .idReviewProduct(ReviewProductEntity.builder().id(reviewDtoSave.getId()).build())
+                .pathImage(x)
+                .build());
     }
 }

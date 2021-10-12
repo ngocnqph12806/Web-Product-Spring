@@ -46,8 +46,13 @@ public class ReviewApi extends AbstractApi {
     public ResponseEntity<?> save(@RequestBody @Valid ReviewDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "review", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<ReviewDto> result = new ResultDto<>(CREATED, _iReviewProductService.save(dto));
-        return ResponseEntity.ok(result);
+        ReviewDto reviewDtoSave = _iReviewProductService.save(dto);
+        if (dto.getImages() != null && !dto.getImages().isEmpty()) {
+            for (String x : dto.getImages()) {
+                _iReviewProductService.saveImageReview(x, reviewDtoSave);
+            }
+        }
+        return ResponseEntity.ok(reviewDtoSave);
     }
 
     @PutMapping("/{id}")

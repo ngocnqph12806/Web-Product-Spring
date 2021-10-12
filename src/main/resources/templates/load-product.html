@@ -376,11 +376,9 @@
             }
         }
         obj.images = objFileImage.nameFile
-        console.log(obj)
         swal('Đang lưu...', 'Vui lòng đợi', 'success')
         if (objFileUseManual.data !== null && objFileUseManual.data !== undefined) {
             let data = objFileUseManual.data + '';
-            console.log(data)
             let base = data.substring(data.indexOf(",") + 1, data.length)
             await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileUseManual.nameFile, {
                 method: 'PUT',
@@ -412,7 +410,6 @@
                 } else if (objFileImage.data[i] !== null && objFileImage.data[i] !== undefined
                     && objFileImage.nameFile[i] !== null && objFileImage.nameFile[i] !== undefined) {
                     let data = objFileImage.data[i] + '';
-                    console.log(data)
                     let base = data.substring(data.indexOf(",") + 1, data.length)
                     await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileImage.nameFile[i], {
                         method: 'PUT',

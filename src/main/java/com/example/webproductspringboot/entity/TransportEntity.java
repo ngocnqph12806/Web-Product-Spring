@@ -22,16 +22,10 @@ public class TransportEntity {
     @ManyToOne
     @JoinColumn
     private OrderEntity idOrder;
-    @Column(nullable = false, length = 50)
-    private String fullName;
-    @Column(nullable = false, length = 15)
-    private String phoneNumber;
-    @Column(nullable = false, length = 100)
-    private String address;
     @Column
     private String description;
-    @Column(nullable = false, columnDefinition = "bit default 1")
-    private Boolean status;
+    @Column(nullable = false)
+    private String statusTransport;
     @Column(columnDefinition = "timestamp default current_timestamp")
     private Date created;
 
@@ -40,11 +34,8 @@ public class TransportEntity {
         return "TransportEntity{" +
                 "id='" + id + '\'' +
                 ", idOrder=" + (idOrder != null ? idOrder.getId() : null) +
-                ", fullName='" + fullName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
                 ", description='" + description + '\'' +
-                ", status=" + status +
+                ", status=" + statusTransport +
                 '}';
     }
 }

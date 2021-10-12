@@ -15,30 +15,26 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Người nhập</th>
-                    <th>Người kiểm tra</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày nhập</th>
+                    <th>Nhân viên nhận trả</th>
+                    <th>Tên khách hàng</th>
+                    <th>Ngày mua hàng</th>
+                    <th>Ngày trả hàng</th>
+                    <th>Giá trị trả hàng</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="invoice, theCount: ${lstInvoice}" th:object="${invoice}">
+                <th:block th:each="return, theCount: ${lstReturns}" th:object="${return}">
                     <tr>
                         <td th:text="${theCount.index + 1}">#</td>
-                        <td th:text="*{nameCreator}"></td>
-                        <td th:text="*{nameChecker}"></td>
-                        <td th:text="*{#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
-                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}"></td>
+                        <td th:text="*{nameStaff}"></td>
+                        <td th:text="*{nameUser}"></td>
+                        <td th:text="*{#dates.format(dateOrder, 'dd/MM/yyyy')}"></td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy hh:mm:ss')}"></td>
+                        <td th:text="*{#numbers.formatDecimal(totalMoney, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
                         <td class="text-center">
-                            <a class="btn btn-info" href="#modal-detail-invoice"
-                               data-toggle="modal" data-animation="bounce"
-                               onclick="getDetailInvoice(this)" th:data-id="*{id}">
-                                Chi tiết
-                            </a>
-                            <a class="btn btn-primary" href="#modal-input-invoice"
-                               data-toggle="modal" data-animation="bounce"
-                               onclick="getInvoice(this)" th:data-id="*{id}">
+                            <a class="btn btn-primary" href="#form-edit-returns"
+                               onclick="openFormEditReturn(this)" th:data-id="*{id}">
                                 Chỉnh sửa
                             </a>
                         </td>

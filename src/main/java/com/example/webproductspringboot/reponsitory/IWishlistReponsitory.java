@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface IWishlistReponsitory extends JpaRepository<WishlistEntity, String> {
 
     @Query(value = "select o from WishlistEntity o where o.idVisit.id = ?1")
-    List<WishlistEntity> findAllByUserLogin(String idVisit, Sort sort);
+    List<WishlistEntity> findAllByUserLogin(String idVisit);
 
     @Query(value = "select o from WishlistEntity o where o.idProduct.id = ?1 and o.idVisit.id = ?2")
     Optional<WishlistEntity> existWishlist(String idProduct, String id);

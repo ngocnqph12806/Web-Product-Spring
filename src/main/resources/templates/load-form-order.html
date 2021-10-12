@@ -4,43 +4,57 @@
             <h3 class="flex-grow-1 mt-0 header-title">
                 Danh sách mã giảm giá
             </h3>
-            <a class="btn btn-primary" href="#invoice" onclick="openInvoice()">
+            <a class="btn btn-primary" href="#bill-order" onclick="openOrder()">
                 Quay lại
             </a>
         </div>
-        <form id="form-input-invoice" class="container">
-            <input type="hidden" name="id" th:value="${invoice.id}"/>
+        <form id="form-input-order" class="container">
+            <h3 class="card-title text-dark">Thông tin đơn hàng</h3>
+            <input type="hidden" name="id" th:value="${order.id}"/>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label text-right">
-                    Người kiểm tra
+                    Khách hàng
                 </label>
                 <div class="col-sm-10">
-                    <select class="select2 form-control mb-3 custom-select" name="idChecker"
-                            style="width: 100%; height:36px;" th:each="user : ${lstUser}" th:object="${user}">
-                        <option th:unless="${invoice.idChecker == user.id}" th:value="*{id}"
-                                th:text="*{fullName}"></option>
-                        <option th:if="${invoice.idChecker == user.id}" th:value="*{id}" selected
-                                th:text="*{fullName}"></option>
+                    <select class="select2 form-control mb-3 custom-select" name="idUser"
+                            id="idVisitOrder" style="width: 100%; height:36px;">
+                        <option value="null" selected>... (Không có tài khoản)</option>
+                        <th:block th:each="visit : ${lstVisit}" th:object="${visit}">
+                            <option th:value="*{id}" th:selected="${order.idUser == visit.id}"
+                                    th:text="*{fullName}"></option>
+                        </th:block>
                     </select>
                 </div>
             </div>
-            <div id="input-product-form-invoice">
-                <th:block th:unless="${#lists.isEmpty(invoice.invoiceDetails)}"
-                          th:each="detail : ${invoice.invoiceDetails}" th:object="${detail}">
-                    <div class="form-group row load-input-product-form-invoice">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">
+                    Nhân viên bán hàng
+                </label>
+                <div class="col-sm-10">
+                    <select class="select2 form-control mb-3 custom-select" name="idSaller"
+                            style="width: 100%; height:36px;">
+                        <th:block th:each="staff : ${lstStaff}" th:object="${staff}">
+                            <option th:value="*{id}" th:selected="${order.idSaller == staff.id}"
+                                    th:text="*{fullName}"></option>
+                        </th:block>
+                    </select>
+                </div>
+            </div>
+            <div id="input-product-form-order">
+                <th:block th:unless="${#lists.isEmpty(order.details)}"
+                          th:each="detail : ${order.details}" th:object="${detail}">
+                    <div class="form-group row load-input-product-form-order">
                         <label class="col-sm-2 col-form-label text-right">
                             Sản phẩm
                         </label>
                         <div class="col-sm-10 row">
                             <div class="col-12">
                                 <select class="select2 form-control mb-3 custom-select"
-                                        name="idProduct" style="width: 100%; height:36px;"
-                                        th:each="product : ${lstProduct}"
-                                        th:object="${product}">
-                                    <option th:if="${product.id == detail.idProduct}" th:value="*{id}" selected
-                                            th:text="*{name}"></option>
-                                    <option th:unless="${product.id == detail.idProduct}" th:value="*{id}"
-                                            th:text="*{name}"></option>
+                                        name="idProduct" style="width: 100%; height:36px;">
+                                    <th:block th:each="product : ${lstProduct}" th:object="${product}">
+                                        <option th:value="*{id}" th:selected="${product.id == detail.idProduct}"
+                                                th:text="*{name + ' - Giá: ' + #numbers.formatDecimal(price - priceSale, 0, 'COMMA', 0, 'POINT')+'đ'}"></option>
+                                    </th:block>
                                 </select>
                             </div>
                             <div class="col-sm-5 row">
@@ -48,21 +62,21 @@
                                     Số lượng
                                 </label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" placeholder="Nhập giá trị mã giảm giá"
+                                    <input class="form-control" type="text" placeholder="Nhập số lượng mua"
                                            name="quantity" maxlength="5" th:value="*{quantity}">
                                 </div>
                             </div>
                             <div class="col-sm-6 row">
                                 <label class="col-sm-4 col-form-label text-right">
-                                    Giá nhập
+                                    Giá giảm
                                 </label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" placeholder="Nhập giá trị mã giảm giá"
-                                           name="price" maxlength="10" th:value="*{price}">
+                                    <input class="form-control" type="text" placeholder="Nhập giá giảm cho sản phẩm"
+                                           name="priceSale" maxlength="10" th:value="*{priceSale}">
                                 </div>
                             </div>
                             <div class="col-sm-1">
-                                <span class="btn btn-danger btn-sm delete-input-product-form-invoice">
+                                <span class="btn btn-danger btn-sm delete-input-product-form-order">
                                     <span class="far fa-trash-alt mr-1"></span>
                                 </span>
                             </div>
@@ -73,7 +87,7 @@
             </div>
             <div class="form-group row mb-0">
                 <div class="col-sm-12">
-                    <span class="btn btn-primary btn-md" onclick="addInputProductFormInvoice()">
+                    <span class="btn btn-primary btn-md" onclick="addInputProductFormOrder()">
                         <span class="fa fa-plus"></span>
                         Thêm sản phẩm
                     </span>
@@ -82,11 +96,86 @@
             </div>
             <!--end row-->
             <hr/>
+            <h3 class="card-title text-dark">Thông tin người nhận</h3>
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck1"
+                       data-parsley-multiple="groups" data-parsley-mincheck="2" onclick="userInfoVisitIntoOrder(this)">
+                <label class="custom-control-label" for="customCheck1">Sử dụng thông tin khách hàng</label>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Họ tên người nhận</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập họ tên" id="full-name-order"
+                           name="fullName" maxlength="10" th:value="${order.fullName}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Số điện thoại</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập số điện thoại" id="phone-number-order"
+                           name="phoneNumber" maxlength="10" th:value="${order.phoneNumber}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Địa chỉ email</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập địa chỉ email" id="email-order"
+                           name="email" maxlength="10" th:value="${order.email}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Thôn / xóm</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập số nhà, thôn / xóm"
+                           id="village-order" name="village" maxlength="10" th:value="${order.village}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Phường / xã</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập phường / xã"
+                           id="ward-order" name="ward" maxlength="10" th:value="${order.ward}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Quận / huyện</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập quận / huyện"
+                           id="district-order" name="district" maxlength="10" th:value="${order.district}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">Tỉnh / thành phố</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" placeholder="Nhập tỉnh / thành phố"
+                           id="city-order" name="city" maxlength="10" th:value="${order.city}">
+                </div>
+            </div>
+            <h3 class="card-title text-dark">Hình thức thanh toán</h3>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right">
+                    Hình thức thanh toán
+                </label>
+                <div class="col-sm-10">
+                    <select class="select2 form-control mb-3 custom-select" name="paymentMethod"
+                            style="width: 100%; height:36px;">
+                        <option value="COD" th:selected="${order.paymentMethod == 'COD'}">Thanh toán khi nhận hàng
+                        </option>
+                        <option value="VND" th:selected="${order.paymentMethod == 'VND'}">Thanh toán tiền mặt (tại
+                            quầy)
+                        </option>
+                        <option value="VNPAY" th:selected="${order.paymentMethod == 'VNPAY'}">Quét mã thanh toán VNPay
+                        </option>
+                        <option value="MOMO" th:selected="${order.paymentMethod == 'MOMO'}">Quét mã thanh toán MOMO
+                        </option>
+                    </select>
+                </div>
+            </div>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label text-right">Ghi chú</label>
                 <div class="col-sm-10">
-                    <textarea id="textarea" class="form-control" name="description" maxlength="100"
-                              rows="3" placeholder="Nhập mô tả sự kiện" th:value="${invoice.description}"></textarea>
+                    <textarea id="textarea" class="form-control" name="note" maxlength="255"
+                              rows="3" placeholder="Nhập ghi chú đặt hàng" th:value="${order.note}"></textarea>
                 </div>
             </div>
             <button class="btn btn-primary">Lưu lại</button>
@@ -111,5 +200,138 @@
 <script th:src="@{/js/jquery.clock-img.init.js}"></script>
 <script th:src="@{/js/jquery.forms-advanced.js}"></script>
 
-<script th:src="@{/js/jquery.repeater.min.js}"></script>
-<script th:src="@{/js/jquery.form-repeater.js}"></script>
+<script>
+
+    $(document).ready(function () {
+        addEventRemoveInputProductFormOrder();
+        let url = window.location.href + ''
+        let path = url.substring(url.lastIndexOf("#") + 1)
+        if (path !== 'form-edit-order') {
+            addInputProductFormOrder()
+        }
+    });
+
+    $('#form-input-order').submit(function (e) {
+        e.preventDefault();
+        let form = $("#form-input-order").serializeArray()
+        let obj = {};
+        let arrIdProduct = []
+        let arrQuantityProduct = []
+        let arrPriceProduct = []
+        let indexArrIdProduct = 0;
+        let indexArrQuantityProduct = 0;
+        let indexArrPriceProduct = 0;
+        for (let i = 0; i < form.length; i++) {
+            let name = form[i].name;
+            let value = form[i].value;
+            if (name === 'idProduct') {
+                if (value === null || value === undefined || value === '') {
+                    swal('Lỗi', 'Vui lòng chọn sản phẩm', 'error');
+                    return;
+                }
+                arrIdProduct[indexArrIdProduct] = value
+                indexArrIdProduct++;
+                continue
+            }
+            if (name === 'quantity') {
+                let REGEX_NUMBER = /^[0-9]{1,4}$/
+                if (value === null || value === undefined || value === '') {
+                    swal('Lỗi', 'Vui lòng nhập số lượng sản hẩm', 'error');
+                    return;
+                } else if (!REGEX_NUMBER.test(value)) {
+                    swal('Lỗi', 'Số lượng sản phẩm nhập phải là số nguyên dương', 'warning')
+                    return
+                } else if (Number(value) <= 0) {
+                    swal('Lỗi', 'Số lượng sản phẩm nhập tối thiểu 1 sản phẩm', 'warning')
+                    return
+                }
+                arrQuantityProduct[indexArrQuantityProduct] = value
+                indexArrQuantityProduct++;
+                continue
+            }
+            if (name === 'priceSale') {
+                let REGEX_NUMBER = /^[0-9]{1,10}$/
+                if (value === null || value === undefined || value === '') {
+                    swal('Lỗi', 'Vui lòng nhập giá nhập của sản phẩm', 'error');
+                    return;
+                } else if (!REGEX_NUMBER.test(value)) {
+                    swal('Lỗi', 'Giá nhập là một số nguyên dương', 'warning')
+                    return
+                }
+                arrPriceProduct[indexArrPriceProduct] = value
+                indexArrPriceProduct++;
+                continue
+            }
+            if (name === 'idSaller') {
+                if (value === null || value === undefined || value === '') {
+                    swal('Lỗi', 'Vui lòng nhân viên bán hàng', 'error');
+                    return;
+                }
+            }
+            obj[name] = form[i].value;
+        }
+        let arrProduct = [arrIdProduct.length]
+        for (let i = 0; i < arrIdProduct.length; i++) {
+            arrProduct[i] = {idProduct: arrIdProduct[i], quantity: arrQuantityProduct[i], priceSale: arrPriceProduct[i]}
+        }
+        obj['details'] = arrProduct
+        console.log(obj)
+        if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
+            saveWithAPI(JSON.stringify(obj), '/api/orders/' + obj.id, 'PUT', '/admin/bill-order/load', 0, 5)
+        } else {
+            saveWithAPI(JSON.stringify(obj), '/api/orders', 'POST', '/admin/bill-order/load', 0, 5)
+        }
+    })
+
+    function userInfoVisitIntoOrder(e) {
+        if (e.checked) {
+            let id = $('#idVisitOrder').val()
+            $.ajax({
+                url: '/api/users/' + id + '?modal',
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+                },
+                success: function (response) {
+                    console.log(response)
+                    $('#full-name-order').val(response.fullName)
+                    $('#phone-number-order').val(response.phoneNumber)
+                    $('#email-order').val(response.email)
+                }
+            })
+        }
+    }
+
+    function addInputProductFormOrder() {
+        let countInputProductFormInvoice = document.getElementsByClassName('load-input-product-form-order')
+        if (countInputProductFormInvoice === null || countInputProductFormInvoice === undefined || countInputProductFormInvoice.length < 15) {
+            $.ajax({
+                url: '/admin/bill-order/form/product/load',
+                type: 'POST',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+                },
+                success: function (response) {
+                    $('#input-product-form-order').append(response)
+                    addEventRemoveInputProductFormOrder();
+                }
+            })
+        } else {
+            swal('Thông báo!', 'Mỗi hoá đơn tối đa 15 sản phẩm', 'warning')
+        }
+    }
+
+    function addEventRemoveInputProductFormOrder() {
+        let classParent = document.getElementsByClassName('load-input-product-form-order')
+        let classRemove = document.getElementsByClassName('delete-input-product-form-order')
+        if (classParent !== null && classParent !== undefined && classRemove !== null && classRemove !== undefined) {
+            setTimeout(function () {
+                for (let i = 0; i < classRemove.length; i++) {
+                    classRemove[i].onclick = function () {
+                        classParent[i].remove();
+                    }
+                }
+            }, 10)
+        }
+    }
+</script>

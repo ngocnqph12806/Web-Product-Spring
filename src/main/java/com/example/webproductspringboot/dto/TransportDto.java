@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -17,21 +17,13 @@ public class TransportDto {
 
     private String id;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String idOrder;
-    @NotNull
-    @NotEmpty
     private String fullName;
-    @NotNull
-    @NotEmpty
     private String phoneNumber;
-    @NotNull
-    @NotEmpty
     private String address;
-    @NotNull
-    @NotEmpty
     private String description;
-    private Boolean status;
+    private String statusTransport;
     private Date dateCreated;
 
 }

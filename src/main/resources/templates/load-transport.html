@@ -10,31 +10,27 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Người nhập</th>
-                    <th>Người kiểm tra</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày nhập</th>
+                    <th>Người nhập hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="invoice, theCount: ${lstInvoice}" th:object="${invoice}">
+                <th:block th:each="transport, theCount: ${lstTransport}" th:object="${transport}">
                     <tr>
                         <td th:text="${theCount.index + 1}">#</td>
-                        <td th:text="*{nameCreator}"></td>
-                        <td th:text="*{nameChecker}"></td>
-                        <td th:text="*{#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
-                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy')}"></td>
+                        <td th:text="*{fullName}"></td>
+                        <td th:text="*{phoneNumber}"></td>
+                        <td th:text="*{address}"></td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                        <td th:id="*{id}" th:text="*{statusTransport}"></td>
                         <td class="text-center">
-                            <a class="btn btn-info" href="#modal-detail-invoice"
-                               data-toggle="modal" data-animation="bounce"
-                               onclick="getDetailInvoice(this)" th:data-id="*{id}">
-                                Chi tiết
-                            </a>
-                            <a class="btn btn-primary" href="#modal-input-invoice"
-                               data-toggle="modal" data-animation="bounce"
-                               onclick="getInvoice(this)" th:data-id="*{id}">
-                                Chỉnh sửa
+                            <a class="btn btn-primary" href="#transport" onclick="updateStatusTransport(this)"
+                               th:data-id="*{id}" th:data-status-transport="*{statusTransport}">
+                                Cập nhật
                             </a>
                         </td>
                     </tr>
@@ -98,3 +94,38 @@
     <!--end card-body-->
 </div>
 <!--end card-->
+
+<script>
+    function updateStatusTransport(e) {
+        let id = e.dataset.id
+        let textHtml = '<div class="input-group">' +
+            '<input type="email" class="form-control" value="' + e.dataset.statusTransport + '">' +
+            '<span class="input-group-append">' +
+            '<button type="button" class="btn btn-success" data-id="' + id + '" onclick="changeStatusTransport(this)">Submit</button>' +
+            '</span>' +
+            '</div>'
+        $('#' + id).html(textHtml)
+    }
+
+    function changeStatusTransport(e) {
+        console.log(e.dataset.id)
+        let id = e.dataset.id
+        let value = $('#' + id + ' input').val()
+        $.ajax({
+            url: '/api/transports/' + id + '/status-transport',
+            type: 'PUT',
+            data: {"result": value},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+            },
+            success: function (response) {
+                swal("Thành công", "Thay đổi trạng thái vận chuyểm", "success")
+                $('#' + id).html(value)
+                $("td").find("[data-id='" + id + "']").attr('data-status-transport', value)
+            },
+            error: function (data) {
+                swal("Thất bại", data.responseJSON.message, "warning")
+            }
+        });
+    }
+</script>

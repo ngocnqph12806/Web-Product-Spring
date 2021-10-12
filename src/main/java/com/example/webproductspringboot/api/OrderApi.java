@@ -2,10 +2,11 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IOrderService;
+import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchOrderVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -21,35 +22,67 @@ import java.util.stream.Collectors;
 public class OrderApi extends AbstractApi {
 
     private final IOrderService _iOrderService;
+    private final IProductService _iProductService;
 
-    protected OrderApi(HttpServletRequest request, IOrderService iOrderService) {
+    protected OrderApi(HttpServletRequest request, IOrderService iOrderService, IProductService iProductService) {
         super(request);
         _iOrderService = iOrderService;
+        _iProductService = iProductService;
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(SearchOrderVo searchOrderVo) {
         List<OrderDto> lst = _iOrderService.findAll();
         lst = search(lst, searchOrderVo, searchOrderVo.getIdUser(), 0);
-//        ResultDto<List<OrderDto>> result = new ResultDto<>(OK, lst);
-//        lst.add(new OrderDto());
-//        lst.add(new OrderDto());
-//        lst.add(new OrderDto());
         return ResponseEntity.ok(lst);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(new ResultDto<>(OK, _iOrderService.findById(id)));
+        return ResponseEntity.ok(_iOrderService.findById(id));
+    }
+
+    @GetMapping(value = "/get-by-user-login", params = "id")
+    public ResponseEntity<?> getAllOrderByUserLogin(@RequestParam("id") String id) {
+        return ResponseEntity.ok(_iOrderService.getAllOrderByUserLogin(id));
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid OrderDto dto, Errors errors) {
-        System.out.println(dto);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<OrderDto> result = new ResultDto<>(CREATED, _iOrderService.save(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getDetails() == null || dto.getDetails().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", "details.order.not.found"));
+        OrderDto dtoSave = _iOrderService.save(dto);
+        if (dtoSave != null) {
+            saveDetailOrderWithUpdateQuantityProduct(dto, dtoSave);
+        }
+        return ResponseEntity.ok(dtoSave);
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<?> saveCheckout(@RequestBody @Valid ChechoutDto dto, Errors errors) {
+        if (errors.hasErrors())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", errors.getFieldErrors().get(0).getDefaultMessage()));
+        if (dto.getDetails() == null || dto.getDetails().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", "details.order.not.found"));
+        OrderDto dtoSave = _iOrderService.saveCheckout(dto);
+        if (dtoSave != null) {
+            for (OrderDetailDto x : dto.getDetails()) {
+                x.setIdOrder(dtoSave.getId());
+                try {
+                    ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                    productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                    x.setPrice(productDto.getPrice());
+                    _iOrderService.saveDetailOrder(x);
+                    _iProductService.updateProduct(productDto);
+                } catch (Exception e) {
+                    _iOrderService.removeOrder(dtoSave);
+                    throw new BadRequestException(e.getMessage());
+                }
+            }
+        }
+        return ResponseEntity.ok(dtoSave);
     }
 
     @PutMapping("/{id}")
@@ -59,8 +92,61 @@ public class OrderApi extends AbstractApi {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", errors.getFieldErrors().get(0).getDefaultMessage()));
         if (!dto.getId().equals(id))
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
-        ResultDto<OrderDto> result = new ResultDto<>(UPDATED, _iOrderService.update(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getDetails() == null || dto.getDetails().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", "details.order.not.found"));
+        OrderDto dtoFindById = _iOrderService.findById(id);
+        OrderDto dtoSave = _iOrderService.update(dto);
+        if (dtoSave != null) {
+            saveDetailOrderWithUpdateQuantityProduct(dto, dtoSave);
+            for (OrderDetailDto x : dtoFindById.getDetails()) {
+                _iOrderService.removeDetailOrderById(x.getId());
+                ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                productDto.setQuantity(productDto.getQuantity() + x.getQuantity());
+                _iProductService.updateProduct(productDto);
+            }
+        }
+        return ResponseEntity.ok(dtoSave);
+    }
+
+    @PutMapping("/{id}/{method}")
+    public ResponseEntity<?> updateStatusOrder(@PathVariable("id") String id, @PathVariable("method") String method, Boolean status) {
+        OrderDto dtoFindById = _iOrderService.findById(id);
+        if (dtoFindById == null)
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "order", "order.not.found"));
+        if (method.equals("status")) {
+            dtoFindById.setStatus(status);
+            if (_iOrderService.update(dtoFindById) != null) {
+                for (OrderDetailDto x : dtoFindById.getDetails()) {
+                    ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                    if (status) {
+                        productDto.setQuantity(productDto.getQuantity() + x.getQuantity());
+                    } else {
+                        productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                    }
+                    _iProductService.updateProduct(productDto);
+                }
+            }
+        } else if (method.equals("payment-status")) {
+            dtoFindById.setPaymentStatus(status);
+            _iOrderService.update(dtoFindById);
+        }
+        return ResponseEntity.ok(dtoFindById);
+    }
+
+    private void saveDetailOrderWithUpdateQuantityProduct(OrderDto dto, OrderDto dtoSave) {
+        for (OrderDetailDto x : dto.getDetails()) {
+            x.setIdOrder(dtoSave.getId());
+            try {
+                ProductDto productDto = _iProductService.findProductById(x.getIdProduct());
+                productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                x.setPrice(productDto.getPrice());
+                _iOrderService.saveDetailOrder(x);
+                _iProductService.updateProduct(productDto);
+            } catch (Exception e) {
+                _iOrderService.removeOrder(dtoSave);
+                throw new BadRequestException(e.getMessage());
+            }
+        }
     }
 
     private List<OrderDto> search(List<OrderDto> lst, SearchOrderVo obj, String[] type, Integer index) {

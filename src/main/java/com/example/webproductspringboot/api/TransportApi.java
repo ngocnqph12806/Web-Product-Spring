@@ -2,10 +2,10 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.service.intf.IOrderService;
 import com.example.webproductspringboot.service.intf.ITransportService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchTransportVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -21,10 +21,12 @@ import java.util.stream.Collectors;
 public class TransportApi extends AbstractApi {
 
     private final ITransportService _iTransportService;
+    private final IOrderService _iOrderService;
 
-    protected TransportApi(HttpServletRequest request, ITransportService iTransportService) {
+    protected TransportApi(HttpServletRequest request, ITransportService iTransportService, IOrderService iOrderService) {
         super(request);
         _iTransportService = iTransportService;
+        _iOrderService = iOrderService;
     }
 
     @GetMapping
@@ -44,8 +46,16 @@ public class TransportApi extends AbstractApi {
     public ResponseEntity<?> save(@RequestBody @Valid TransportDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "transport", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<TransportDto> result = new ResultDto<>(CREATED, _iTransportService.save(dto));
-        return ResponseEntity.ok(result);
+        OrderDto orderDtoFindById = _iOrderService.findById(dto.getIdOrder());
+        if (orderDtoFindById == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "order", "order.not.found"));
+        dto.setFullName(orderDtoFindById.getFullName());
+        dto.setPhoneNumber(orderDtoFindById.getPhoneNumber());
+        dto.setAddress(orderDtoFindById.getVillage()
+                + " " + orderDtoFindById.getWard()
+                + " " + orderDtoFindById.getDistrict()
+                + " " + orderDtoFindById.getCity());
+        return ResponseEntity.ok(_iTransportService.save(dto));
     }
 
     @PutMapping("/{id}")
@@ -57,6 +67,16 @@ public class TransportApi extends AbstractApi {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         ResultDto<TransportDto> result = new ResultDto<>(UPDATED, _iTransportService.update(dto));
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{id}/status-transport")
+    public ResponseEntity<?> updateStatusTransport(@PathVariable("id") String id, String result) {
+        System.out.println(result);
+        if (result == null || result.isEmpty() || result.isBlank())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        TransportDto transportDtoFindById = _iTransportService.findById(id);
+        transportDtoFindById.setStatusTransport(result);
+        return ResponseEntity.ok(_iTransportService.update(transportDtoFindById));
     }
 
     private List<TransportDto> search(List<TransportDto> lst, SearchTransportVo obj, String[] type, Integer index) {
@@ -75,7 +95,7 @@ public class TransportApi extends AbstractApi {
                 case 4:
                     lst = lst.stream().filter(e -> e.getDescription().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
                 case 5:
-                    lst = lst.stream().filter(e -> e.getStatus().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+                    lst = lst.stream().filter(e -> e.getStatusTransport().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
                 case 6:
                     lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x.toLowerCase())).collect(Collectors.toList());
             }

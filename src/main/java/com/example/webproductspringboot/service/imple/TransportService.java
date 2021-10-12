@@ -57,7 +57,7 @@ public class TransportService extends AbstractService implements ITransportServi
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
-        entity.setStatus(false);
+        entity.setStatusTransport("Chờ xác nhận");
         entity.setCreated(new Date(System.currentTimeMillis()));
         _iTransportReponsitory.save(entity);
         saveHistory(userEntity, "Thêm hoá đơn vận chuyển", entity.toString());
@@ -74,7 +74,7 @@ public class TransportService extends AbstractService implements ITransportServi
         if (optional.isEmpty())
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "transport", "transport.not.found"));
         TransportEntity fake = optional.get();
-        if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        if (entity.getStatusTransport() == null) entity.setStatusTransport(fake.getStatusTransport());
         entity.setCreated(fake.getCreated());
         _iTransportReponsitory.save(entity);
         saveHistory(userEntity, "Sửa hoá đơn vận chuyển", fake + "\n" + entity);

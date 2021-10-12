@@ -31,4 +31,7 @@ public interface IUserReponsitory extends JpaRepository<UserEntity, String> {
 
     @Query(value = "select s from UserEntity s where s.role = '" + ContainsUtils.ROLE_USER + "'")
     Page<UserEntity> findVisitByPage(Pageable pageable);
+
+    @Query(value = "select o.id from UserEntity o where o.username = ?1")
+    String getIdByUserName(String username);
 }

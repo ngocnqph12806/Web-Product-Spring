@@ -8,6 +8,7 @@ import com.example.webproductspringboot.service.intf.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +26,9 @@ public class ProductAdmin {
     @Autowired
     private ICategoryService _iCategoryService;
 
-    @PostMapping("product/load")
-    public String listProduct(@RequestParam("_p") Integer page,
-                              @RequestParam(value = "_s", defaultValue = "10") Integer size,
+    @GetMapping("product/load")
+    public String listProduct(@RequestParam(value = "_p", defaultValue = "0") Integer page,
+                              @RequestParam(value = "_s", defaultValue = "5") Integer size,
                               Model model) {
         PageDto<List<ProductDto>> pageDto = _iProductService.findByPage(page, size);
         model.addAttribute("lstProduct", pageDto.getContent());

@@ -377,7 +377,7 @@
                 xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
             },
             success: function (response) {
-                appendFormdata('form-input-staff', response.data, objFileAvatar)
+                appendFormdata('form-input-staff', response, objFileAvatar)
             }
         });
     }

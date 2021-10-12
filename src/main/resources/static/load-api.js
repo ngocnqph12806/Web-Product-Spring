@@ -1,61 +1,36 @@
-function openFormInvoice() {
-    // $.ajax({
-    //     url: '/admin/invoice/form/load',
-    //     type: 'POST',
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
-    //     },
-    //     success: function (response) {
-    //         response === null || response === undefined ? response = '' : null
-    //         $('#root').html(response)
-    //     },
-    //     error: function (e) {
-    //         $('#root').html('<h3>' + e.status + '</h3>')
-    //     }
-    // })
-
-    loadData('/admin/invoice/form/load')
-    document.title = 'Nhập thông tin nhập hàng'
+function openFormReturn(e) {
+    loadData('/admin/returns/form/add-by-id-order/' + e.dataset.id + '/load')
+    document.title = 'Nhập thông tin hoá đơn tả hàng'
 }
 
-function openFormOrder() {
-    $.ajax({
-        url: '/admin/bill-order/form/load',
-        type: 'POST',
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
-        },
-        success: function (response) {
-            response === null || response === undefined ? response = '' : null
-            $('#root').html(response)
-        },
-        error: function (e) {
-            $('#root').html('<h3>' + e.status + '</h3>')
-        }
-    })
-    document.title = 'Nhập thông tin bán hàng'
+function openFormEditReturn(e) {
+    let id = e.dataset.id
+    id === null || id === undefined || id === '' ? id = '-1-1-1' : null
+    loadData('/admin/returns/form/' + id + '/load')
+    document.title = 'Sửa thông tin hoá đơn trả hàng'
+}
+
+function openFormInvoice() {
+    loadData('/admin/invoice/form/load')
+    document.title = 'Nhập thông tin nhập hàng'
 }
 
 function openFormEditInvoice(e) {
     let id = e.dataset.id
     id === null || id === undefined || id === '' ? id = '-1-1-1' : null
-    // $.ajax({
-    //     url: '/admin/invoice/form/' + id + '/load',
-    //     type: 'POST',
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
-    //     },
-    //     success: function (response) {
-    //         response === null || response === undefined ? response = '' : null
-    //         $('#root').html(response)
-    //         // document.getElementById('data-user').innerHTML = response
-    //     },
-    //     error: function (e) {
-    //         $('#root').html('<h3>' + e.status + '</h3>')
-    //         // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
-    //     }
-    // })
     loadData('/admin/invoice/form/' + id + '/load')
+    document.title = 'Sửa thông tin nhập hàng'
+}
+
+function openFormOrder() {
+    loadData('/admin/bill-order/form/load')
+    document.title = 'Nhập thông tin bán hàng'
+}
+
+function openFormEditOrder(e) {
+    let id = e.dataset.id
+    id === null || id === undefined || id === '' ? id = '-1-1-1' : null
+    loadData('/admin/bill-order/form/' + id + '/load')
     document.title = 'Sửa thông tin nhập hàng'
 }
 
@@ -147,11 +122,12 @@ $(document).ready(async function () {
                     success: function (response) {
                         response === null || response === undefined ? response = '' : response = response
                         $('#content').html(response)
-                        // document.getElementById('data-user').innerHTML = response
                     },
                     error: function (e) {
                         $('#content').html('<h3>' + e.status + '</h3>')
-                        // document.getElementById('data-user').innerHTML = '<h3>' + e.status + '</h3>'
+                        if (e.status === 403) {
+                            window.location = '/login'
+                        }
                     }
                 });
             })
@@ -241,7 +217,7 @@ function loadData(url, page, size, typeUser) {
     typeUser === null || typeUser === undefined ? typeUser = '' : null
     $.ajax({
         url: url + '?_p=' + page + '&_s=' + size + '&_type=' + typeUser,
-        type: 'POST',
+        type: 'GET',
         contentType: 'application/json',
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));

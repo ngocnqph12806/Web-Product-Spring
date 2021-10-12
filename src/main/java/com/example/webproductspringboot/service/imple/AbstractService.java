@@ -256,7 +256,6 @@ public abstract class AbstractService {
             return CustomersReturnEntity.builder()
                     .id(dto.getId())
                     .idOrder(OrderEntity.builder().id(dto.getIdOrder()).build())
-                    .idVisit(UserEntity.builder().id(dto.getIdUser()).build())
                     .idStaff(UserEntity.builder().id(dto.getIdStaff()).build())
                     .description(dto.getDescription())
                     .status(dto.getStatus())
@@ -270,10 +269,8 @@ public abstract class AbstractService {
                             ? entity.getIdOrder().getId() : null)
                     .dateOrder(entity.getIdOrder() != null
                             ? entity.getIdOrder().getCreated() : null)
-                    .idUser(entity.getIdVisit() != null
-                            ? entity.getIdVisit().getId() : null)
-                    .nameUser(entity.getIdVisit() != null
-                            ? entity.getIdVisit().getFullName() : null)
+                    .nameUser(entity.getIdOrder() != null
+                            ? entity.getIdOrder().getFullName() : null)
                     .idStaff(entity.getIdStaff() != null
                             ? entity.getIdStaff().getId() : null)
                     .nameStaff(entity.getIdStaff() != null
@@ -281,6 +278,10 @@ public abstract class AbstractService {
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
+                    .totalMoney(entity.getLstCustomersReturnDetailsEntities() != null
+                            ? entity.getLstCustomersReturnDetailsEntities().stream()
+                            .mapToLong(e -> (e.getQuantity() * e.getIdOrderDtails().getPrice())).sum()
+                            : Long.parseLong("0"))
                     .details(entity.getLstCustomersReturnDetailsEntities() != null
                             ? entity.getLstCustomersReturnDetailsEntities().stream()
                             .map(e -> (ReturnDetailDto) map(e)).collect(Collectors.toList())
@@ -394,10 +395,35 @@ public abstract class AbstractService {
             OrderDto dto = (OrderDto) data;
             return OrderEntity.builder()
                     .id(dto.getId())
-                    .idVisit(UserEntity.builder().id(dto.getIdUser()).build())
-                    .idVoucher(VoucherEntity.builder().id(dto.getIdVoucher()).code(dto.getCodeVoucher()).build())
+                    .idVisit(dto.getIdUser() != null
+                            ? UserEntity.builder().id(dto.getIdUser()).build()
+                            : null)
+                    .idVoucher(dto.getIdVoucher() != null
+                            ? VoucherEntity.builder().id(dto.getIdVoucher()).code(dto.getCodeVoucher()).build()
+                            : null)
                     .staffCreate(UserEntity.builder().id(dto.getIdCreator()).build())
                     .staffSales(UserEntity.builder().id(dto.getIdSaller()).build())
+                    .paymentMethod(dto.getPaymentMethod())
+                    .paymentStatus(dto.getPaymentStatus())
+                    .fullName(dto.getFullName())
+                    .phoneNumber(dto.getPhoneNumber())
+                    .email(dto.getEmail())
+                    .village(dto.getVillage())
+                    .ward(dto.getWard())
+                    .district(dto.getDistrict())
+                    .city(dto.getCity())
+                    .note(dto.getNote())
+                    .description(dto.getDescription())
+                    .status(dto.getStatus())
+                    .created(dto.getDateCreated())
+                    .build();
+        }else if (data instanceof ChechoutDto) {
+            ChechoutDto dto = (ChechoutDto) data;
+            return OrderEntity.builder()
+                    .id(dto.getId())
+                    .idVoucher(dto.getIdVoucher() != null
+                            ? VoucherEntity.builder().id(dto.getIdVoucher()).code(dto.getCodeVoucher()).build()
+                            : null)
                     .paymentMethod(dto.getPaymentMethod())
                     .paymentStatus(dto.getPaymentStatus())
                     .fullName(dto.getFullName())
@@ -447,6 +473,10 @@ public abstract class AbstractService {
                     .description(entity.getDescription())
                     .status(entity.getStatus())
                     .dateCreated(entity.getCreated())
+                    .totalPrice(entity.getLstOrderDetailsEntities() != null
+                            ? entity.getLstOrderDetailsEntities().stream()
+                            .mapToLong(e -> e.getPrice() * e.getQuantity() - e.getPriceSale()).sum()
+                            : Long.parseLong("0"))
                     .details(entity.getLstOrderDetailsEntities() != null
                             ? entity.getLstOrderDetailsEntities().stream()
                             .map(e -> (OrderDetailDto) map(e)).collect(Collectors.toList())
@@ -454,6 +484,40 @@ public abstract class AbstractService {
                     .transports(entity.getLstTransportEntities() != null
                             ? entity.getLstTransportEntities().stream()
                             .map(e -> (TransportDto) map(e)).collect(Collectors.toList())
+                            : null)
+                    .build();
+        }
+//ODER DETAIL
+        else if (data instanceof OrderDetailDto) {
+            OrderDetailDto dto = (OrderDetailDto) data;
+            return OrderDetailsEntity.builder()
+                    .id(dto.getId())
+                    .idProduct(ProductEntity.builder().id(dto.getIdProduct()).build())
+                    .idOrder(OrderEntity.builder().id(dto.getIdOrder()).build())
+                    .price(dto.getPrice())
+                    .priceSale(dto.getPriceSale())
+                    .quantity(dto.getQuantity())
+                    .build();
+        } else if (data instanceof OrderDetailsEntity) {
+            OrderDetailsEntity entity = (OrderDetailsEntity) data;
+            return OrderDetailDto.builder()
+                    .id(entity.getId())
+                    .idOrder(entity.getIdOrder() != null
+                            ? entity.getIdOrder().getId() : null)
+                    .idProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getId() : null)
+                    .nameProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getName() : null)
+                    .price(entity.getPrice())
+                    .priceSale(entity.getPriceSale())
+                    .quantity(entity.getQuantity())
+                    .quantityReturn(entity.getLstCustomersReturnDetailsEntities() != null
+                            ? entity.getLstCustomersReturnDetailsEntities().stream()
+                            .mapToInt(CustomersReturnDetailsEntity::getQuantity).sum()
+                            : 0)
+                    .returns(entity.getLstCustomersReturnDetailsEntities() != null
+                            ? entity.getLstCustomersReturnDetailsEntities().stream()
+                            .map(e -> (ReturnDetailDto) map(e)).collect(Collectors.toList())
                             : null)
                     .build();
         }
@@ -555,11 +619,8 @@ public abstract class AbstractService {
             return TransportEntity.builder()
                     .id(dto.getId())
                     .idOrder(OrderEntity.builder().id(dto.getIdOrder()).build())
-                    .fullName(dto.getFullName())
-                    .phoneNumber(dto.getPhoneNumber())
-                    .address(dto.getAddress())
                     .description(dto.getDescription())
-                    .status(dto.getStatus())
+                    .statusTransport(dto.getStatusTransport())
                     .created(dto.getDateCreated())
                     .build();
         } else if (data instanceof TransportEntity) {
@@ -568,11 +629,18 @@ public abstract class AbstractService {
                     .id(entity.getId())
                     .idOrder(entity.getIdOrder() != null
                             ? entity.getIdOrder().getId() : null)
-                    .fullName(entity.getFullName())
-                    .phoneNumber(entity.getPhoneNumber())
-                    .address(entity.getAddress())
+                    .fullName(entity.getIdOrder() != null
+                            ? entity.getIdOrder().getFullName() : null)
+                    .phoneNumber(entity.getIdOrder() != null
+                            ? entity.getIdOrder().getPhoneNumber() : null)
+                    .address(entity.getIdOrder() != null
+                            ? entity.getIdOrder().getVillage()
+                            + " " + entity.getIdOrder().getWard()
+                            + " " + entity.getIdOrder().getDistrict()
+                            + " " + entity.getIdOrder().getCity()
+                            : null)
                     .description(entity.getDescription())
-                    .status(entity.getStatus())
+                    .statusTransport(entity.getStatusTransport())
                     .dateCreated(entity.getCreated())
                     .build();
         }
@@ -613,10 +681,10 @@ public abstract class AbstractService {
                             ? entity.getLstOrderEntities().stream()
                             .map(e -> (OrderDto) map(e)).collect(Collectors.toList())
                             : null)
-                    .returns(entity.getLstCustomersReturnEntitiesWithVisit() != null
-                            ? entity.getLstCustomersReturnEntitiesWithVisit().stream()
-                            .map(e -> (ReturnDto) map(e)).collect(Collectors.toList())
-                            : null)
+//                    .returns(entity.getLstCustomersReturnEntitiesWithVisit() != null
+//                            ? entity.getLstCustomersReturnEntitiesWithVisit().stream()
+//                            .map(e -> (ReturnDto) map(e)).collect(Collectors.toList())
+//                            : null)
                     .reviews(entity.getLstReviewProductEntities() != null
                             ? entity.getLstReviewProductEntities().stream()
                             .map(e -> (ReviewDto) map(e)).collect(Collectors.toList())

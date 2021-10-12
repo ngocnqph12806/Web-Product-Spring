@@ -2,10 +2,13 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.ICustomersReturnService;
+import com.example.webproductspringboot.service.intf.IOrderService;
+import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
+import com.example.webproductspringboot.vo.ReturnDetailDto;
 import com.example.webproductspringboot.vo.SearchReturnVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -21,10 +24,14 @@ import java.util.stream.Collectors;
 public class ReturnApi extends AbstractApi {
 
     private final ICustomersReturnService _iCustomersReturnService;
+    private final IOrderService _iOrderService;
+    private final IProductService _iProductService;
 
-    protected ReturnApi(HttpServletRequest request, ICustomersReturnService iCustomersReturnService) {
+    protected ReturnApi(HttpServletRequest request, ICustomersReturnService iCustomersReturnService, IOrderService iOrderService, IProductService iProductService) {
         super(request);
         _iCustomersReturnService = iCustomersReturnService;
+        _iOrderService = iOrderService;
+        _iProductService = iProductService;
     }
 
     @GetMapping
@@ -44,19 +51,83 @@ public class ReturnApi extends AbstractApi {
     public ResponseEntity<?> save(@RequestBody @Valid ReturnDto dto, Errors errors) {
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<ReturnDto> result = new ResultDto<>(CREATED, _iCustomersReturnService.save(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getDetails() == null || dto.getDetails().isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "return", "return.not.found"));
+        if (dto.getDetails().stream().mapToInt(ReturnDetailDto::getQuantity).sum() <= 0)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", "not.product.return")); // không có sản phẩm nào được trả lại
+        OrderDto orderDtoFindById = _iOrderService.findById(dto.getIdOrder());
+        for (OrderDetailDto x : orderDtoFindById.getDetails()) {
+            for (ReturnDetailDto s : dto.getDetails()) {
+                if (x.getId().equals(s.getIdOrderDetail()) && (x.getQuantity() - x.getQuantityReturn()) < s.getQuantity())
+                    throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", "quantity.return.not.enough"));
+            }
+        }
+        ReturnDto returnDtoSave = _iCustomersReturnService.save(dto);
+        if (returnDtoSave != null) {
+            try {
+                saveReturnDetailWithUpdateProduct(dto, returnDtoSave);
+            } catch (Exception e) {
+                _iCustomersReturnService.removeReturnDetailByIdReturn(returnDtoSave.getId());
+                _iCustomersReturnService.removeReturn(returnDtoSave);
+                return ResponseEntity.ok(null);
+            }
+        }
+        return ResponseEntity.ok(returnDtoSave);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") String id,
                                     @RequestBody @Valid ReturnDto dto, Errors errors) {
+        ReturnDto returnDtoSession = (ReturnDto) request.getSession().getAttribute("session_dto_return");
+        System.out.println(dto);
+        if (returnDtoSession == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", errors.getFieldErrors().get(0).getDefaultMessage()));
         if (!dto.getId().equals(id))
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "id.not.equal.dto"));
-        ResultDto<ReturnDto> result = new ResultDto<>(UPDATED, _iCustomersReturnService.update(dto));
-        return ResponseEntity.ok(result);
+        if (dto.getDetails() == null || dto.getDetails().isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "return", "return.not.found"));
+        if (dto.getDetails().stream().mapToInt(ReturnDetailDto::getQuantity).sum() <= 0)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", "not.product.return")); // không có sản phẩm nào được trả lại
+        OrderDto orderDtoFindById = _iOrderService.findById(dto.getIdOrder());
+        for (OrderDetailDto x : orderDtoFindById.getDetails()) {
+            for (ReturnDetailDto s : dto.getDetails()) {
+                for (ReturnDetailDto m : returnDtoSession.getDetails()) {
+                    if (x.getId().equals(s.getIdOrderDetail())
+                            && x.getId().equals(m.getIdOrderDetail())
+                            && s.getIdOrderDetail().equals(m.getIdOrderDetail())
+                            && (x.getQuantity() - x.getQuantityReturn() + m.getQuantity()) < s.getQuantity())
+                        throw new BadRequestException(CookieUtils.get().errorsProperties(request, "return", "quantity.return.not.enough"));
+                }
+            }
+        }
+        ReturnDto returnDtoFindById = _iCustomersReturnService.findById(id);
+        ReturnDto returnDtoSave = _iCustomersReturnService.update(dto);
+        if (returnDtoSave != null) {
+            saveReturnDetailWithUpdateProduct(dto, returnDtoSave);
+            for (ReturnDetailDto x : returnDtoFindById.getDetails()) {
+                _iCustomersReturnService.removeReturnDetailById(x.getId());
+                OrderDetailDto orderDetailDto = _iOrderService.findOrderDetailById(x.getIdOrderDetail());
+                ProductDto productDto = _iProductService.findProductById(orderDetailDto.getIdProduct());
+                productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
+                _iProductService.updateProduct(productDto);
+            }
+        }
+        return ResponseEntity.ok(returnDtoSave);
+    }
+
+    private void saveReturnDetailWithUpdateProduct(@RequestBody @Valid ReturnDto dto, ReturnDto returnDtoSave) {
+        for (ReturnDetailDto x : dto.getDetails()) {
+            if (x.getQuantity() > 0) {
+                x.setIdReturn(returnDtoSave.getId());
+                _iCustomersReturnService.saveReturnDetail(x);
+                OrderDetailDto orderDetailDto = _iOrderService.findOrderDetailById(x.getIdOrderDetail());
+                ProductDto productDtoFindById = _iProductService.findProductById(orderDetailDto.getIdProduct());
+                productDtoFindById.setQuantity(productDtoFindById.getQuantity() + x.getQuantity());
+                _iProductService.updateProduct(productDtoFindById);
+            }
+        }
     }
 
     private List<ReturnDto> search(List<ReturnDto> lst, SearchReturnVo obj, String[] type, Integer index) {
@@ -71,7 +142,7 @@ public class ReturnApi extends AbstractApi {
                     lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateOrder()).contains(x.toLowerCase())).collect(Collectors.toList());
                     break;
                 case 2:
-                    lst = lst.stream().filter(e -> e.getIdUser().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
+//                    lst = lst.stream().filter(e -> e.getIdUser().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
                     break;
                 case 3:
                     lst = lst.stream().filter(e -> e.getNameUser().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());

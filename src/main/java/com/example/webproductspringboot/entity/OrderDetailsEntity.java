@@ -25,11 +25,11 @@ public class OrderDetailsEntity {
     @ManyToOne
     @JoinColumn
     private ProductEntity idProduct;
-    @Column
+    @Column(nullable = false)
     private Long price;
-    @Column
+    @Column(nullable = false)
     private Integer quantity;
-    @Column
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Long priceSale;
     @OneToMany(mappedBy = "idOrderDtails")
     private List<CustomersReturnDetailsEntity> lstCustomersReturnDetailsEntities;

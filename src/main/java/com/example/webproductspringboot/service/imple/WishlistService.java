@@ -27,11 +27,8 @@ public class WishlistService extends AbstractService implements IWishlistService
     }
 
     @Override
-    public List<WishlistVo> findAllByUserLogin() {
-        UserEntity userLogin = getUserLogin();
-        if (userLogin == null) throw new IllegalArgumentException("Vui lòng đăng nhập.");
-        List<WishlistEntity> lst = _iWishlistReponsitory.findAllByUserLogin(userLogin.getId(), sortAZByCreated());
-        return lst.stream().map(e -> (WishlistVo) map(e)).collect(Collectors.toList());
+    public List<WishlistVo> findAllByUserLogin(String id) {
+        return _iWishlistReponsitory.findAllByUserLogin(id).stream().map(e -> (WishlistVo) map(e)).collect(Collectors.toList());
     }
 
     @Override

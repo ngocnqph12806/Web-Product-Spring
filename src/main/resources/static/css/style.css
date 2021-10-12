@@ -14,7 +14,7 @@ body {
 }
 
 .page-wrapper-img {
-    background-image: url(overlay.png) /*tpa=https://mannatthemes.com/frogetor/horizontal/assets/images/overlay.png*/;
+    background-image: url(/images/overlay.png) /*tpa=https://mannatthemes.com/frogetor/horizontal/assets/images/overlay.png*/;
     background-size: cover;
     background-position: center center;
     min-height: 220px;

@@ -9,6 +9,7 @@ import com.example.webproductspringboot.service.intf.ICollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,9 +27,9 @@ public class CategoryAdmin {
     @Autowired
     private IBrandService _iBrandService;
 
-    @PostMapping("category/load")
-    public String loadCategory(@RequestParam("_p") Integer page,
-                               @RequestParam(value = "_s", defaultValue = "10") Integer size,
+    @GetMapping("category/load")
+    public String loadCategory(@RequestParam(value = "_p", defaultValue = "0") Integer page,
+                               @RequestParam(value = "_s", defaultValue = "5") Integer size,
                                Model model) {
         PageDto<List<CategoryDto>> pageDto = _iCategoryService.findByPage(page, size);
         model.addAttribute("lstCategoriesAndBrand", pageDto.getContent());
@@ -39,9 +40,9 @@ public class CategoryAdmin {
         return "/load-not-product";
     }
 
-    @PostMapping("brand/load")
-    public String loadBrand(@RequestParam("_p") Integer page,
-                            @RequestParam(value = "_s", defaultValue = "10") Integer size,
+    @GetMapping("brand/load")
+    public String loadBrand(@RequestParam(value = "_p", defaultValue = "0") Integer page,
+                            @RequestParam(value = "_s", defaultValue = "5") Integer size,
                             Model model) {
         PageDto<List<BrandDto>> pageDto = _iBrandService.findByPage(page, size);
         model.addAttribute("lstCategoriesAndBrand", pageDto.getContent());

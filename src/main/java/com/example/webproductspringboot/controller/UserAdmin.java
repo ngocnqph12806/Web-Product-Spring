@@ -17,10 +17,10 @@ public class UserAdmin {
     @Autowired
     private IUserService _iUserService;
 
-    @PostMapping(value = "user/load", params = "_type")
+    @GetMapping(value = "user/load", params = "_type")
     public String loadPageStaff(@RequestParam("_type") String typeUser,
-                                @RequestParam("_p") Integer page,
-                                @RequestParam(value = "_s", defaultValue = "10") Integer size,
+                                @RequestParam(value = "_p", defaultValue = "0") Integer page,
+                                @RequestParam(value = "_s", defaultValue = "5") Integer size,
                                 Model model) {
         if (typeUser.equals("staff")) {
             PageDto<List<UserDto>> pageDto = _iUserService.findStaffByPage(page, size);

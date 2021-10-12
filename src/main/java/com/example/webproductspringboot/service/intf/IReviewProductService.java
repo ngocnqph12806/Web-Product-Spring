@@ -12,4 +12,5 @@ public interface IReviewProductService {
 
     ReviewDto update(ReviewDto dto);
 
+    void saveImageReview(String x, ReviewDto reviewDtoSave);
 }

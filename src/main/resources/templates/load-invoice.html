@@ -119,9 +119,6 @@
 <script th:src="@{/js/jquery.clock-img.init.js}"></script>
 <script th:src="@{/js/jquery.forms-advanced.js}"></script>
 
-<script th:src="@{/js/jquery.repeater.min.js}"></script>
-<script th:src="@{/js/jquery.form-repeater.js}"></script>
-
 <script>
     function removeInvoice(e) {
         let id = e.dataset.id
@@ -133,7 +130,7 @@
                 xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
             },
             success: function (response) {
-                swal("Thành công", "Thay đổi trạng thái sản phẩm thành công", "success")
+                swal("Thành công", "Thay đổi trạng thái hoá đơn nhập hàng", "success")
                 loadData('/admin/invoice/load', 0, 5)
             },
             error: function (data) {

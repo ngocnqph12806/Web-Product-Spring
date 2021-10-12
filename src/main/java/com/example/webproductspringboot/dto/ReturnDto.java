@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Scope;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -15,26 +17,25 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Scope("session")
 public class ReturnDto {
 
     private String id;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String idOrder;
     private Date dateOrder;
-    @NotNull
-    @NotEmpty
-    private String idUser;
     private String nameUser;
-    @NotNull
-    @NotEmpty
+//    @NotNull
+//    @NotBlank
     private String idStaff;
     private String nameStaff;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String description;
     private Boolean status;
     private Date dateCreated;
+    private Long totalMoney;
     List<ReturnDetailDto> details;
 
 

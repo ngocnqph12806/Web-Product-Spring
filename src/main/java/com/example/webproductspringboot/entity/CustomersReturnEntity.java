@@ -25,9 +25,6 @@ public class CustomersReturnEntity {
     private OrderEntity idOrder;
     @ManyToOne
     @JoinColumn
-    private UserEntity idVisit;
-    @ManyToOne
-    @JoinColumn
     private UserEntity idStaff;
     @Column
     private String description;
@@ -43,7 +40,6 @@ public class CustomersReturnEntity {
         return "CustomersReturnEntity{" +
                 "id='" + id + '\'' +
                 ", idOrder=" + (idOrder != null ? idOrder.getId() : null) +
-                ", idVisit=" + (idVisit != null ? idVisit.getId() : null) +
                 ", idStaff=" + (idStaff != null ? idStaff.getId() : null) +
                 ", description='" + description + '\'' +
                 ", status=" + status +

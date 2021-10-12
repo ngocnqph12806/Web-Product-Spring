@@ -88,9 +88,8 @@ public class InvoiceApi extends AbstractApi {
                 productDto.setQuantity(productDto.getQuantity() - x.getQuantity());
                 _iProductService.updateProduct(productDto);
             }
-            return ResponseEntity.ok(dtoSave);
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(dtoSave);
     }
 
     @PutMapping("/{id}/status")
@@ -113,7 +112,7 @@ public class InvoiceApi extends AbstractApi {
         return ResponseEntity.ok(dtoFindById);
     }
 
-    private void saveDetailInvoiceWithUpdateQuantityProduct(@RequestBody @Valid InvoiceDto dto, InvoiceDto dtoSave) {
+    private void saveDetailInvoiceWithUpdateQuantityProduct( InvoiceDto dto, InvoiceDto dtoSave) {
         for (InvoiceDetailDto x : dto.getInvoiceDetails()) {
             x.setIdInvoice(dtoSave.getId());
             try {

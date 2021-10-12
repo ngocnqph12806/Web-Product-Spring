@@ -53,6 +53,16 @@ public class UserApi extends AbstractApi {
         return ResponseEntity.ok(_iUserService.findAllVisit());
     }
 
+    @GetMapping(path = "/get-info-checkout", params = "id")
+    public ResponseEntity<?> getInfoCheckoutByUserLogin(@RequestParam("id") String id) {
+        return ResponseEntity.ok(_iUserService.getInfoCheckoutByUserLogin(id));
+    }
+
+    @GetMapping(path = "/get-id-by-user-login", params = "username")
+    public ResponseEntity<?> getIdByUserName(@RequestParam("username") String username) {
+        return ResponseEntity.ok(_iUserService.getIdByUserName(username));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") String id) {
 //        ResultDto<UserDto> result = new ResultDto<>(OK, _iUserService.findById(id));
@@ -61,13 +71,12 @@ public class UserApi extends AbstractApi {
 
     @GetMapping(value = "/{id}", params = "modal")
     public ResponseEntity<?> getByIdWithModal(@PathVariable("id") String id) {
-        ResultDto<UserDto> result = new ResultDto<>(OK, null);
         try {
-            result.setData(_iUserService.findById(id));
+            return ResponseEntity.ok(_iUserService.findById(id));
         } catch (Exception e) {
-            result.setData(new UserDto());
+            e.printStackTrace();
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(new UserDto());
     }
 
     @PostMapping

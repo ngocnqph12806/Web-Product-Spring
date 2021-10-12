@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
-@CrossOrigin(origins = "http://localhost:3000/")
+//@CrossOrigin(origins = "http://localhost:3000/")
 public class ProductApi extends AbstractApi {
 
     private final IProductService _iProductService;
@@ -35,8 +35,10 @@ public class ProductApi extends AbstractApi {
 
     @GetMapping
     public ResponseEntity<?> getAll(SearchProductVo searchProductVo) {
+        System.out.println(searchProductVo);
         List<ProductDto> lst = _iProductService.findAllProduct();
-        lst = search(lst, searchProductVo, searchProductVo.getName(), 0);
+        List<ProductDto> lstFake = new ArrayList<>();
+        lst = search(lstFake, lst, searchProductVo, searchProductVo.getName(), 0);
 //        ResultDto<List<ProductDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(lst);
     }
@@ -103,98 +105,101 @@ public class ProductApi extends AbstractApi {
         return ResponseEntity.ok(_iProductService.updateProduct(dtoProduct));
     }
 
-    private List<ProductDto> search(List<ProductDto> lst, SearchProductVo obj, String[] type, Integer index) {
+    private List<ProductDto> search(List<ProductDto> lstFake, List<ProductDto> lst, SearchProductVo obj, String[] type, Integer index) {
         String[] arrFake = new String[0];
         if (type != null) arrFake = type;
-        for (String x : arrFake) {
-            switch (index) {
-                case 0:
-                    lst = lst.stream().filter(e -> e.getName().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 1:
-                    lst = lst.stream().filter(e -> e.getIdBrand().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 2:
-                    lst = lst.stream().filter(e -> e.getNameBrand().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 3:
-                    lst = lst.stream().filter(e -> e.getIdCategory().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 4:
-                    lst = lst.stream().filter(e -> e.getNameCategory().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 5:
-                    lst = lst.stream().filter(e -> e.getPrice().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 6:
-                    lst = lst.stream().filter(e -> e.getPriceSale().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 7:
-                    lst = lst.stream().filter(e -> e.getQuantity().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 8:
-                    lst = lst.stream().filter(e -> e.getColor().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 9:
-                    lst = lst.stream().filter(e -> e.getCategoryDetails().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 10:
-                    lst = lst.stream().filter(e -> e.getLocation().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 11:
-                    lst = lst.stream().filter(e -> e.getPath().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 12:
-                    lst = lst.stream().filter(e -> e.getIdPath().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 13:
-                    lst = lst.stream().filter(e -> e.getPathUserManual().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 14:
-                    lst = lst.stream().filter(e -> e.getDescription().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 15:
-                    lst = lst.stream().filter(e -> e.getStatus().toString().toLowerCase().contains(x.toLowerCase())).collect(Collectors.toList());
-                    break;
-                case 16:
-                    lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x.toLowerCase())).collect(Collectors.toList());
-            }
+        StringBuilder x = new StringBuilder();
+        for (String s : arrFake) {
+            x.append("-").append(s);
+        }
+        System.out.println(x);
+        switch (index) {
+            case 0:
+                lst = lst.stream().filter(e -> e.getName().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 1:
+                lst = lst.stream().filter(e -> e.getIdBrand().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 2:
+                lst = lst.stream().filter(e -> e.getNameBrand().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 3:
+                lst = lst.stream().filter(e -> e.getIdCategory().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 4:
+                lst = lst.stream().filter(e -> e.getNameCategory().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 5:
+                lst = lst.stream().filter(e -> e.getPrice().toString().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 6:
+                lst = lst.stream().filter(e -> e.getPriceSale().toString().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 7:
+                lst = lst.stream().filter(e -> e.getQuantity().toString().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 8:
+                lst = lst.stream().filter(e -> e.getColor().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 9:
+                lst = lst.stream().filter(e -> e.getCategoryDetails().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 10:
+                lst = lst.stream().filter(e -> e.getLocation().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 11:
+                lst = lst.stream().filter(e -> e.getPath().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 12:
+                lst = lst.stream().filter(e -> e.getIdPath().toString().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 13:
+                lst = lst.stream().filter(e -> e.getPathUserManual().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 14:
+                lst = lst.stream().filter(e -> e.getDescription().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 15:
+                lst = lst.stream().filter(e -> e.getStatus().toString().toLowerCase().contains(x.toString().toLowerCase())).collect(Collectors.toList());
+                break;
+            case 16:
+                lst = lst.stream().filter(e -> ConvertUtils.get().dateToString(e.getDateCreated()).contains(x.toString().toLowerCase())).collect(Collectors.toList());
         }
         switch (index) {
             case 0:
-                return search(lst, obj, obj.getIdBrand(), 1);
+                return search(lstFake, lst, obj, obj.getIdBrand(), 1);
             case 1:
-                return search(lst, obj, obj.getNameBrand(), 2);
+                return search(lstFake, lst, obj, obj.getNameBrand(), 2);
             case 2:
-                return search(lst, obj, obj.getIdCategory(), 3);
+                return search(lstFake, lst, obj, obj.getIdCategory(), 3);
             case 3:
-                return search(lst, obj, obj.getNameCategory(), 4);
+                return search(lstFake, lst, obj, obj.getNameCategory(), 4);
             case 4:
-                return search(lst, obj, obj.getPrice(), 5);
+                return search(lstFake, lst, obj, obj.getPrice(), 5);
             case 5:
-                return search(lst, obj, obj.getPriceSale(), 6);
+                return search(lstFake, lst, obj, obj.getPriceSale(), 6);
             case 6:
-                return search(lst, obj, obj.getQuantity(), 7);
+                return search(lstFake, lst, obj, obj.getQuantity(), 7);
             case 7:
-                return search(lst, obj, obj.getColor(), 8);
+                return search(lstFake, lst, obj, obj.getColor(), 8);
             case 8:
-                return search(lst, obj, obj.getCategoryDetails(), 9);
+                return search(lstFake, lst, obj, obj.getCategoryDetails(), 9);
             case 9:
-                return search(lst, obj, obj.getLocation(), 10);
+                return search(lstFake, lst, obj, obj.getLocation(), 10);
             case 10:
-                return search(lst, obj, obj.getPath(), 11);
+                return search(lstFake, lst, obj, obj.getPath(), 11);
             case 11:
-                return search(lst, obj, obj.getIdPath(), 12);
+                return search(lstFake, lst, obj, obj.getIdPath(), 12);
             case 12:
-                return search(lst, obj, obj.getPathUserManual(), 13);
+                return search(lstFake, lst, obj, obj.getPathUserManual(), 13);
             case 13:
-                return search(lst, obj, obj.getDescription(), 14);
+                return search(lstFake, lst, obj, obj.getDescription(), 14);
             case 14:
-                return search(lst, obj, obj.getStatus(), 15);
+                return search(lstFake, lst, obj, obj.getStatus(), 15);
             case 15:
-                return search(lst, obj, obj.getDateCreated(), 16);
+                return search(lstFake, lst, obj, obj.getDateCreated(), 16);
             default:
-                return lst;
+                return lstFake;
         }
     }
 }

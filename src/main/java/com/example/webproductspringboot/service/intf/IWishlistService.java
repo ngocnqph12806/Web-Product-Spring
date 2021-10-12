@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IWishlistService {
 
-    List<WishlistVo> findAllByUserLogin();
+    List<WishlistVo> findAllByUserLogin(String id);
 
     WishlistVo save(WishlistVo wishlistVo);
 

@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -18,21 +17,22 @@ public class ReviewDto {
 
     private String id;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String idProduct;
     private String nameProduct;
-    @NotNull
-    @NotEmpty
+//    @NotNull
+//    @NotEmpty
     private String idUser;
     private String nameUser;
     @NotNull
-    @NotEmpty
+    @Min(20)
+    @Max(100)
     private Integer point;
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String description;
-    @NotNull
-    @NotEmpty
+//    @NotNull
+//    @NotEmpty
     private Boolean introduce;
     private Boolean status;
     private Date dateCreated;

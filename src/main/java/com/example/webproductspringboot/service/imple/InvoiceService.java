@@ -97,7 +97,6 @@ public class InvoiceService extends AbstractService implements IInvoiceService {
         entity.setId(UUID.randomUUID().toString());
         _invoiceDetailsReponsitory.save(entity);
         saveHistory(userEntity, "Thêm chi tiết hoá đơn nhập hàng", entity.toString());
-        map(entity);
     }
 
     @Override

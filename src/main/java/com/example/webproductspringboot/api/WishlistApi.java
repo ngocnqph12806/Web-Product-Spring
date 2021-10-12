@@ -23,9 +23,9 @@ public class WishlistApi extends AbstractApi {
         super(request);
     }
 
-    @GetMapping(params = "single")
-    private ResponseEntity<?> getAllByUserLogin() {
-        return ResponseEntity.ok(_iWishlistService.findAllByUserLogin());
+    @GetMapping(path = "/get-by-user-login", params = "id")
+    private ResponseEntity<?> getAllWishListByUserLogin(@RequestParam("id") String id) {
+        return ResponseEntity.ok(_iWishlistService.findAllByUserLogin(id));
     }
 
     @PostMapping
@@ -36,9 +36,10 @@ public class WishlistApi extends AbstractApi {
         WishlistVo wishlistFake = _iWishlistService.existWishlist(wishlistVo.getIdProduct());
         if (wishlistFake != null) {
             _iWishlistService.delete(wishlistFake);
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(false);
         } else {
-            return ResponseEntity.ok(_iWishlistService.save(wishlistVo));
+            _iWishlistService.save(wishlistVo);
+            return ResponseEntity.ok(true);
         }
     }
 

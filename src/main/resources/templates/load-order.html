@@ -4,8 +4,8 @@
             <h3 class="flex-grow-1 mt-0 header-title">
                 Danh sách đặt hàng
             </h3>
-            <a class="btn btn-primary" href="#form-order" onclick="openFormEditOrder()">
-                Thêm hoá đơn
+            <a class="btn btn-primary" href="#form-order" onclick="openFormOrder()">
+                Thêm đặt hàng
             </a>
         </div>
         <div class="table-responsive">
@@ -18,6 +18,9 @@
                     <th>Người đặt</th>
                     <th>Người nhận</th>
                     <th>Mã giảm giá</th>
+                    <th>Phương thức</th>
+                    <th>Đã thanh toán</th>
+                    <th>Tổng tiền</th>
                     <th>Ngày đặt</th>
                     <th>Trạng thái</th>
                     <th></th>
@@ -32,31 +35,66 @@
                         <td th:text="*{nameUser}">Người đặt</td>
                         <td th:text="*{fullName}">Người nhận</td>
                         <td th:text="*{codeVoucher}">Mã giảm giá</td>
-                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}">Ngày đặt</td>
-                        <td th:if="*{status}">
-                            <span class="badge btn-success">Hoạt động</span>
+                        <td th:text="*{paymentMethod}">Phương thức</td>
+                        <td th:if="*{paymentStatus}">
+                            <span class="badge badge-success">Đã thanh toán</span>
                         </td>
+                        <td th:unless="*{paymentStatus}">
+                            <span class="badge badge-warning">Chưa thanh toán</span>
+                        </td>
+                        <td th:text="*{#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')+'đ'}"></td>
+                        <td th:text="*{#dates.format(dateCreated, 'dd-MM-yyyy HH:mm:ss')}">Ngày đặt</td>
                         <td th:unless="*{status}">
-                            <span class="badge btn-danger">Khoá</span>
+                            <span class="badge badge-purple">Hoạt động</span>
+                        </td>
+                        <td th:if="*{status}">
+                            <span class="badge badge-danger">Khoá</span>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-info" href="#modal-detail-invoice"
-                               data-toggle="modal" data-animation="bounce"
-                               onclick="detailOrder(this)" th:data-id="*{id}">
-                                Chi tiết
-                            </a>
-                            <a class="btn btn-primary" href="#form-edit-order" onclick="openFormEditOrder(this)"
-                               th:data-id="*{id}">
-                                Chỉnh sửa
-                            </a>
-                            <a th:if="*{status}" class="btn btn-success" href="#bill-order" th:data-id="*{id}"
-                               data-data="false" onclick="removeOrder(this)">
-                                Mở khoá
-                            </a>
-                            <a th:unless="*{status}" class="btn btn-danger" href="#bill-order" th:data-id="*{id}"
-                               data-data="false" onclick="removeOrder(this)">
-                                Khoá
-                            </a>
+                            <div class="dropdown d-inline-block float-right">
+                                <a class="nav-link dropdown-toggle arrow-none" id="dLabel4"
+                                   data-toggle="dropdown" style="cursor: pointer" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v font-20 text-muted"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel4">
+                                    <a class="dropdown-item" href="#modal-detail-invoice"
+                                       data-toggle="modal" data-animation="bounce"
+                                       onclick="detailOrder(this)" th:data-id="*{id}">
+                                        Chi tiết
+                                    </a>
+                                    <a class="dropdown-item" href="#form-edit-order"
+                                       onclick="openFormEditOrder(this)" th:data-id="*{id}">
+                                        Chỉnh sửa
+                                    </a>
+                                    <a th:if="*{status}" class="dropdown-item" href="#bill-order" th:data-id="*{id}"
+                                       data-data="false" data-method="status" onclick="removeOrder(this)">
+                                        Mở khoá
+                                    </a>
+                                    <a th:unless="*{status}" class="dropdown-item" href="#bill-order" th:data-id="*{id}"
+                                       data-data="true" data-method="status" onclick="removeOrder(this)">
+                                        Khoá
+                                    </a>
+                                    <a th:if="*{paymentStatus}" class="dropdown-item" href="#bill-order"
+                                       th:data-id="*{id}"
+                                       data-data="false" data-method="payment-status" onclick="removeOrder(this)">
+                                        Huỷ thanh toán
+                                    </a>
+                                    <a th:unless="*{paymentStatus}" class="dropdown-item" href="#bill-order"
+                                       th:data-id="*{id}"
+                                       data-data="true" data-method="payment-status" onclick="removeOrder(this)">
+                                        Thanh toán
+                                    </a>
+                                    <a th:if="*{#lists.isEmpty(transports)}" class="dropdown-item" href="#bill-order"
+                                       th:data-id="*{id}" onclick="addTransportWithIdOrder(this)">
+                                        Tạo vận đơn
+                                    </a>
+                                    <a class="dropdown-item" href="#form-returns"
+                                       th:data-id="*{id}" onclick="openFormReturn(this)">
+                                        Trả hàng
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </th:block>
@@ -119,3 +157,36 @@
     <!--end card-body-->
 </div>
 <!--end card-->
+
+<script>
+
+    function addTransportWithIdOrder(e) {
+        let obj = {"idOrder": e.dataset.id}
+        saveWithAPI(JSON.stringify(obj), '/api/transports', 'POST', '/admin/bill-order/load', 0, 5)
+    }
+
+    function detailOrder() {
+
+    }
+
+    function removeOrder(e) {
+        let id = e.dataset.id
+        let method = e.dataset.method
+        console.log(e.dataset.data)
+        $.ajax({
+            url: '/api/orders/' + id + '/' + method,
+            type: 'PUT',
+            data: {'status': (e.dataset.data === 'true')},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
+            },
+            success: function (response) {
+                swal("Thành công", "Thay đổi trạng thái hoá đơn đặt hàng", "success")
+                loadData('/admin/bill-order/load', 0, 5)
+            },
+            error: function (data) {
+                swal("Thất bại", data.responseJSON.message, "warning")
+            }
+        });
+    }
+</script>

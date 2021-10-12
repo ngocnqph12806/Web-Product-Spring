@@ -8,10 +8,7 @@ import com.example.webproductspringboot.service.intf.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,9 +23,9 @@ public class InvoiceAdmin {
     @Autowired
     private IProductService _iProductService;
 
-    @PostMapping("invoice/load")
-    public String loadInvoice(@RequestParam("_p") Integer page,
-                              @RequestParam(value = "_s", defaultValue = "10") Integer size,
+    @GetMapping("invoice/load")
+    public String loadInvoice(@RequestParam(value = "_p", defaultValue = "0") Integer page,
+                              @RequestParam(value = "_s", defaultValue = "5") Integer size,
                               Model model) {
         PageDto<List<InvoiceDto>> pageDto = _iInvoiceService.findByPage(page, size);
         model.addAttribute("lstInvoice", pageDto.getContent());
@@ -37,7 +34,7 @@ public class InvoiceAdmin {
         return "/load-invoice";
     }
 
-    @PostMapping("invoice/form/load")
+    @GetMapping("invoice/form/load")
     public String loadFormInvoice(Model model) {
         model.addAttribute("invoice", new InvoiceDto());
         model.addAttribute("lstUser", _iUserService.findAllStaff());
@@ -45,7 +42,7 @@ public class InvoiceAdmin {
         return "load-form-invoice";
     }
 
-    @PostMapping("invoice/form/{id}/load")
+    @GetMapping("invoice/form/{id}/load")
     public String loadFormEditInvoice(@PathVariable("id") String id, Model model) {
         try {
             model.addAttribute("invoice", _iInvoiceService.findById(id));
@@ -58,7 +55,7 @@ public class InvoiceAdmin {
         return "/load-invoice";
     }
 
-    @PostMapping("invoice/form/product/load")
+    @GetMapping("invoice/form/product/load")
     public String loadInputProductFormInvoice(Model model) {
         model.addAttribute("invoice", new InvoiceDto());
         model.addAttribute("lstProduct", _iProductService.findAllProduct());

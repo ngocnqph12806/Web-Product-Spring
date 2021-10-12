@@ -50,7 +50,9 @@ public class OrderEntity {
     private String district; // quận huyện
     @Column(nullable = false, length = 50)
     private String city; // thành phố
+    @Column
     private String note; // thành phố
+    @Column
     private String description;
     @Column(nullable = false, columnDefinition = "bit default 1")
     private Boolean status;

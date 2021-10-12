@@ -1,6 +1,9 @@
 package com.example.webproductspringboot.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +11,9 @@ import java.util.Date;
 @Entity
 @Table(name = "review_image")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewImageEntity {
 
     @Id

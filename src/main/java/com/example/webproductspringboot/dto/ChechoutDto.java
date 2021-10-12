@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -16,22 +14,14 @@ import java.util.List;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class ChechoutDto {
 
     private String id;
-    @NotNull
-    @NotBlank
     private String idUser;
     private String nameUser;
     private String idVoucher;
     private String codeVoucher;
     private Long priceVoucher;
-    private String idCreator;
-    private String nameCreator;
-    @NotNull
-    @NotBlank
-    private String idSaller;
-    private String nameSaller;
     @NotNull
     @NotBlank
     private String paymentMethod;

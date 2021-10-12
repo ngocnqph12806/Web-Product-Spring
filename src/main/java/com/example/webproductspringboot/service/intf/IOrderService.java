@@ -1,6 +1,8 @@
 package com.example.webproductspringboot.service.intf;
 
 
+import com.example.webproductspringboot.dto.ChechoutDto;
+import com.example.webproductspringboot.dto.OrderDetailDto;
 import com.example.webproductspringboot.dto.OrderDto;
 import com.example.webproductspringboot.dto.PageDto;
 
@@ -18,4 +20,15 @@ public interface IOrderService {
 
     OrderDto update(OrderDto dto);
 
+    void saveDetailOrder(OrderDetailDto x);
+
+    void removeOrder(OrderDto dtoSave);
+
+    void removeDetailOrderById(String id);
+
+    OrderDetailDto findOrderDetailById(String idOrderDetail);
+
+    OrderDto saveCheckout(ChechoutDto dto);
+
+    List<OrderDto> getAllOrderByUserLogin(String id);
 }

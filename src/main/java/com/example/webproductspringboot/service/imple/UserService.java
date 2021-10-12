@@ -11,6 +11,8 @@ import com.example.webproductspringboot.reponsitory.IUserReponsitory;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.utils.ContainsUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
+import com.example.webproductspringboot.utils.MapperModelUtils;
+import com.example.webproductspringboot.vo.InfoCheckoutVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,7 +116,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
         if (optional.isEmpty()) {
             log.error("User not fount in the database");
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
-        } else             log.error("User fount in the database: {}", username);
+        } else log.error("User fount in the database: {}", username);
         return (UserDto) map(optional.get());
     }
 
@@ -158,5 +160,21 @@ public class UserService extends AbstractService implements IUserService, UserDe
         return (UserDto) map(entity);
     }
 
+    @Override
+    public InfoCheckoutVo getInfoCheckoutByUserLogin(String id) {
+        Optional<UserEntity> optional = _iUserReponsitory.findById(id);
+        if (optional.isEmpty())
+            throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
+        return mapEntityToInfoCheckout(optional.get());
+    }
+
+    @Override
+    public String getIdByUserName(String username) {
+        return _iUserReponsitory.getIdByUserName(username);
+    }
+
+    private InfoCheckoutVo mapEntityToInfoCheckout(UserEntity entity) {
+        return (InfoCheckoutVo) MapperModelUtils.get().toDto(entity, InfoCheckoutVo.class);
+    }
 
 }
