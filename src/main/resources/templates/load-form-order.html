@@ -307,7 +307,7 @@
         if (countInputProductFormInvoice === null || countInputProductFormInvoice === undefined || countInputProductFormInvoice.length < 15) {
             $.ajax({
                 url: '/admin/bill-order/form/product/load',
-                type: 'POST',
+                type: 'GET',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));
                 },

@@ -27,7 +27,7 @@ public class CategoryAdmin {
     @Autowired
     private IBrandService _iBrandService;
 
-    @GetMapping("category/load")
+    @GetMapping("load/category")
     public String loadCategory(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                                @RequestParam(value = "_s", defaultValue = "5") Integer size,
                                Model model) {
@@ -40,7 +40,7 @@ public class CategoryAdmin {
         return "/load-not-product";
     }
 
-    @GetMapping("brand/load")
+    @GetMapping("load/brand")
     public String loadBrand(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                             @RequestParam(value = "_s", defaultValue = "5") Integer size,
                             Model model) {

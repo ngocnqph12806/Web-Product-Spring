@@ -1,9 +1,6 @@
 package com.example.webproductspringboot.api;
 
-import com.example.webproductspringboot.dto.BrandDto;
-import com.example.webproductspringboot.dto.ChangeUserDto;
-import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.UserDto;
+import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.utils.ConvertUtils;
@@ -85,6 +82,14 @@ public class UserApi extends AbstractApi {
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
 //        ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
         return ResponseEntity.ok(_iUserService.save(dto));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> saveRegister(@Validated @RequestBody UserRegisterDto dto, Errors errors) {
+        System.out.println(dto);
+        if (errors.hasErrors())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
+        return ResponseEntity.ok(_iUserService.saveRegister(dto));
     }
 
     @PutMapping("/{id}")

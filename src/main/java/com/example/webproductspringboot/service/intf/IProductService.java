@@ -13,6 +13,8 @@ public interface IProductService {
 
     PageDto<List<ProductDto>> findByPage(Integer page, Integer size);
 
+    PageDto<List<ProductDto>> findByPageAndSort(Integer page, Integer size,String field, String sort);
+
     ProductDto findProductById(String id);
 
     ProductDto saveProduct(ProductDto dto);
@@ -29,4 +31,5 @@ public interface IProductService {
 
     void deleteAllImagesByProductId(String id);
 
+    List<ProductDto> getByMostOrder();
 }

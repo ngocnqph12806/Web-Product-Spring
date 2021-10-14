@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,19 @@ public class ProductService extends AbstractService implements IProductService {
     @Override
     public PageDto<List<ProductDto>> findByPage(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, sortAZ("created"));
+        Page<ProductEntity> entities = _iProductReponsitory.findAll(pageable);
+        List<ProductEntity> lst = entities.getContent();
+        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+                lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public PageDto<List<ProductDto>> findByPageAndSort(Integer page, Integer size, String field, String type_sort) {
+        if (field == null || field.isEmpty()) field = "created";
+        if (type_sort == null || type_sort.isEmpty()) type_sort = "desc";
+        Sort sort = sortAZ(field);
+        if (type_sort.equals("asc")) sort = sortZA(field);
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<ProductEntity> entities = _iProductReponsitory.findAll(pageable);
         List<ProductEntity> lst = entities.getContent();
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
@@ -126,6 +140,12 @@ public class ProductService extends AbstractService implements IProductService {
         UserEntity userEntity = getUserLogin();
         _iProductImageReponsitory.deleteAllImagesByProductId(id);
         saveHistory(userEntity, "Xoá toàn bộ ảnh sản phẩm", "Xoá toàn bộ ảnh sản phẩm: " + id);
+    }
+
+    @Override
+    public List<ProductDto> getByMostOrder() {
+        return _iProductReponsitory.getByMostOrder().stream()
+                .map(e -> (ProductDto) map(e)).collect(Collectors.toList());
     }
 
 }

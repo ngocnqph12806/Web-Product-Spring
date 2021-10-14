@@ -32,10 +32,6 @@ public class BannerApi extends AbstractApi {
     public ResponseEntity<?> getAll(SearchBannerVo searchBrandVo) {
         List<BannerDto> lst = _iBannerService.findAll();
         lst = search(lst, searchBrandVo, searchBrandVo.getTitle(), 0);
-//        ResultDto<List<BannerDto>> result = new ResultDto<>(OK, lst);
-//        lst.add(new BannerDto());
-//        lst.add(new BannerDto());
-//        lst.add(new BannerDto());
         return ResponseEntity.ok(lst);
     }
 

@@ -22,5 +22,9 @@ public class SearchProductVo {
     private String[] description;
     private String[] status;
     private String[] dateCreated;
+    private Integer p;
+    private Integer s;
+    private String sort;
+    private String field;
 
 }

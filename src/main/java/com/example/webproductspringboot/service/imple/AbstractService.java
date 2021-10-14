@@ -40,7 +40,7 @@ public abstract class AbstractService {
     }
 
     protected Sort sortZA(String type) {
-        return Sort.by(Sort.Direction.DESC, type);
+        return Sort.by(Sort.Direction.ASC, type);
     }
 
     protected void saveHistory(UserEntity user, String description, String details) {

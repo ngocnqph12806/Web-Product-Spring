@@ -1,5 +1,6 @@
 package com.example.webproductspringboot.reponsitory;
 
+import com.example.webproductspringboot.dto.ProductDto;
 import com.example.webproductspringboot.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -53,4 +54,9 @@ public interface IProductReponsitory extends JpaRepository<ProductEntity, String
     @Query(value = "select max(p.price) as priceMax from ProductEntity p where p.status = true")
     Long findMaxPrice();
 
+    @Query(value = "select p from ProductEntity p, OrderDetailsEntity ord" +
+            " where p.id = ord.idProduct.id" +
+            " group by p" +
+            " order by count (ord.id) desc")
+    List<ProductEntity> getByMostOrder();
 }

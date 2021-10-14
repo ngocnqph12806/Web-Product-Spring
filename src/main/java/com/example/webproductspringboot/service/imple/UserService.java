@@ -3,6 +3,7 @@ package com.example.webproductspringboot.service.imple;
 import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.ChangeUserDto;
 import com.example.webproductspringboot.dto.UserDto;
+import com.example.webproductspringboot.dto.UserRegisterDto;
 import com.example.webproductspringboot.entity.UserEntity;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.InternalServerException;
@@ -138,6 +139,25 @@ public class UserService extends AbstractService implements IUserService, UserDe
     }
 
     @Override
+    public UserDto saveRegister(UserRegisterDto dto) {
+        UserEntity entity = mapRegisterToEntity(dto);
+        if (entity == null)
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "lang", "data.not.found"));
+        if (dto.getPassword() == null || dto.getPassword().isEmpty())
+            throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", "password.not.found"));
+        if (!dto.getPassword().equals(dto.getRegisterPassword()))
+            throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "password.not.equal"));
+        entity.setId(UUID.randomUUID().toString());
+        entity.setStatus(false);
+        entity.setBlock(false);
+        entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
+        entity.setCreated(new Date());
+        _iUserReponsitory.save(entity);
+        saveHistory(entity, "Đăng ký người dùng mới", entity.toString());
+        return (UserDto) map(entity);
+    }
+
+    @Override
     public UserDto update(UserDto dto) {
         UserEntity entity = (UserEntity) map(dto);
         if (entity == null)
@@ -175,6 +195,20 @@ public class UserService extends AbstractService implements IUserService, UserDe
 
     private InfoCheckoutVo mapEntityToInfoCheckout(UserEntity entity) {
         return (InfoCheckoutVo) MapperModelUtils.get().toDto(entity, InfoCheckoutVo.class);
+    }
+
+    private UserEntity mapRegisterToEntity(UserRegisterDto dto) {
+        return UserEntity.builder()
+                .fullName(dto.getFullName())
+                .dateOfBirth(dto.getDateOfBirth())
+                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.getEmail())
+                .username(dto.getUsername())
+                .address(dto.getAddress())
+                .avatar(dto.getAvatar())
+                .role(ContainsUtils.ROLE_USER)
+                .password(dto.getPassword())
+                .build();
     }
 
 }
