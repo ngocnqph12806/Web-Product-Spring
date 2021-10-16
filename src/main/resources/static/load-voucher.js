@@ -1,5 +1,5 @@
 function openVoucher() {
-    loadData('/admin/voucher/load', 0, 5)
+    loadData('/admin/load/voucher', 0, 5)
     document.title = 'Quản lý thương hiệu'
 }
 //
@@ -43,9 +43,9 @@ function openVoucher() {
 //     setTimeout(function () {
 //         console.log(obj.id)
 //         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-//             saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, 'PUT', '/admin/voucher/load', 0, 5)
+//             saveWithAPI(JSON.stringify(obj), '/api/vouchers/' + obj.id, 'PUT', '/admin/voucher', 0, 5)
 //         } else {
-//             saveWithAPI(JSON.stringify(obj), '/api/vouchers', 'POST', '/admin/voucher/load', 0, 5)
+//             saveWithAPI(JSON.stringify(obj), '/api/vouchers', 'POST', '/admin/voucher', 0, 5)
 //         }
 //     }, 10)
 // }

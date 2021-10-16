@@ -20,7 +20,7 @@ public class TransportAdmin {
     @Autowired
     private ITransportService _iTransportService;
 
-    @GetMapping("transport/load")
+    @GetMapping("load/transport")
     public String listCollections(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                                   @RequestParam(value = "_s", defaultValue = "5") Integer size,
                                   Model model) {

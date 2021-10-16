@@ -15,6 +15,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,8 +28,8 @@ public class ReturnApi extends AbstractApi {
     private final IOrderService _iOrderService;
     private final IProductService _iProductService;
 
-    protected ReturnApi(HttpServletRequest request, ICustomersReturnService iCustomersReturnService, IOrderService iOrderService, IProductService iProductService) {
-        super(request);
+    protected ReturnApi(HttpServletRequest request, HttpServletResponse response, ICustomersReturnService iCustomersReturnService, IOrderService iOrderService, IProductService iProductService) {
+        super(request, response);
         _iCustomersReturnService = iCustomersReturnService;
         _iOrderService = iOrderService;
         _iProductService = iProductService;

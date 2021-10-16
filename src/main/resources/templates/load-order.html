@@ -162,7 +162,7 @@
 
     function addTransportWithIdOrder(e) {
         let obj = {"idOrder": e.dataset.id}
-        saveWithAPI(JSON.stringify(obj), '/api/transports', 'POST', '/admin/bill-order/load', 0, 5)
+        saveWithAPI(JSON.stringify(obj), '/api/transports', 'POST', '/admin/load/bill-order', 0, 5)
     }
 
     function detailOrder() {
@@ -182,7 +182,7 @@
             },
             success: function (response) {
                 swal("Thành công", "Thay đổi trạng thái hoá đơn đặt hàng", "success")
-                loadData('/admin/bill-order/load', 0, 5)
+                loadData('/admin/load/bill-order', 0, 5)
             },
             error: function (data) {
                 swal("Thất bại", data.responseJSON.message, "warning")

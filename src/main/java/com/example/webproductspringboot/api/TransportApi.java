@@ -12,6 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,8 @@ public class TransportApi extends AbstractApi {
     private final ITransportService _iTransportService;
     private final IOrderService _iOrderService;
 
-    protected TransportApi(HttpServletRequest request, ITransportService iTransportService, IOrderService iOrderService) {
-        super(request);
+    protected TransportApi(HttpServletRequest request, HttpServletResponse response, ITransportService iTransportService, IOrderService iOrderService) {
+        super(request, response);
         _iTransportService = iTransportService;
         _iOrderService = iOrderService;
     }

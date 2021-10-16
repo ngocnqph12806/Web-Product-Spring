@@ -137,12 +137,22 @@
 <script th:src="@{/js/app.js}"></script>
 <script>
 
-    // $(document).ready(function () {
-    //     let access_token = window.localStorage.getItem('access_token');
-    //     if(access_token !== null && access_token !== undefined && access_token !==''){
-    //         window.location = '/admin'
-    //     }
-    // })
+    $(document).ready(async function () {
+        let token = JSON.parse(window.sessionStorage.getItem('access_token'))
+        console.log(token)
+        if (token !== null && token !== undefined && token !== '') {
+            await fetch('/token/check', {
+                method: 'GET',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                }
+            }).then(response => {
+                if (response.status === 200) {
+                    window.location = '/admin'
+                }
+            })
+        }
+    })
 
     $('#form-login').submit(function (e) {
         e.preventDefault();
@@ -159,7 +169,7 @@
                 window.sessionStorage.setItem('access_token', JSON.stringify(response.access_token))
                 window.location = '/admin'
             },
-            error: function (e){
+            error: function (e) {
                 console.log('Đăng nhập thất bại')
             }
         });

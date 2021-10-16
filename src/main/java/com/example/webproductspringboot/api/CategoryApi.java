@@ -1,13 +1,11 @@
 package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.CategoryDto;
-import com.example.webproductspringboot.dto.OrderDto;
 import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchCategoryVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -15,9 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,8 +24,8 @@ public class CategoryApi extends AbstractApi {
 
     private final ICategoryService _iCategoryService;
 
-    protected CategoryApi(HttpServletRequest request, ICategoryService iCategoryService) {
-        super(request);
+    protected CategoryApi(HttpServletRequest request, HttpServletResponse response, ICategoryService iCategoryService) {
+        super(request, response);
         _iCategoryService = iCategoryService;
     }
 
@@ -57,7 +54,6 @@ public class CategoryApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iCategoryService.findById(id));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new CategoryDto());
     }

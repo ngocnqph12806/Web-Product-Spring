@@ -14,6 +14,7 @@ import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.utils.ContainsUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.ProductImageVo;
+import com.example.webproductspringboot.vo.SearchProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +65,39 @@ public class ProductService extends AbstractService implements IProductService {
         return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
                 lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList()));
     }
+
+//    @Override
+//    public PageDto<List<ProductDto>> findByPageAndSortWithFilter(SearchProductVo searchProductVo) {
+//        if (searchProductVo.getField() == null || searchProductVo.getField().isEmpty())
+//            searchProductVo.setField("created");
+//        if (searchProductVo.getSort() == null || searchProductVo.getSort().isEmpty()) searchProductVo.setSort("desc");
+//        Sort sort = sortAZ(searchProductVo.getField());
+//        if (searchProductVo.getSort().equals("asc")) sort = sortZA(searchProductVo.getField());
+//        Pageable pageable = PageRequest.of(searchProductVo.getP() == null ? 0 : searchProductVo.getP(), searchProductVo.getS() == null ? 0 : searchProductVo.getS(), sort);
+//        Page<ProductEntity> entities = _iProductReponsitory.findByPageAndSortWithFilter(
+//                Arrays.toString(searchProductVo.getName()) == null ? "" : Arrays.toString(searchProductVo.getName()),
+//                Arrays.toString(searchProductVo.getIdBrand()) == null ? "" : Arrays.toString(searchProductVo.getIdBrand()),
+//                Arrays.toString(searchProductVo.getNameBrand()) == null ? "" : Arrays.toString(searchProductVo.getNameBrand()),
+//                Arrays.toString(searchProductVo.getIdCategory()) == null ? "" : Arrays.toString(searchProductVo.getIdCategory()),
+//                Arrays.toString(searchProductVo.getNameCategory()) == null ? "" : Arrays.toString(searchProductVo.getNameCategory()),
+//                searchProductVo.getPrice() == null ? Long.parseLong("0") : Long.parseLong(searchProductVo.getPrice()),
+//                searchProductVo.getPriceSale() == null ? Long.parseLong("0") : Long.parseLong(searchProductVo.getPriceSale()),
+//                searchProductVo.getQuantity() == null ? Integer.parseInt("0") : Integer.parseInt(searchProductVo.getQuantity()),
+//                Arrays.toString(searchProductVo.getColor()) == null ? "" : Arrays.toString(searchProductVo.getColor()),
+//                Arrays.toString(searchProductVo.getCategoryDetails()) == null ? "" : Arrays.toString(searchProductVo.getCategoryDetails()),
+//                Arrays.toString(searchProductVo.getLocation()) == null ? "" : Arrays.toString(searchProductVo.getLocation()),
+//                Arrays.toString(searchProductVo.getPath()) == null ? "" : Arrays.toString(searchProductVo.getPath()),
+//                searchProductVo.getIdPath() == null ? Long.parseLong("0") : Long.parseLong(searchProductVo.getIdPath()),
+//                Arrays.toString(searchProductVo.getPathUserManual()) == null ? "" : Arrays.toString(searchProductVo.getPathUserManual()),
+//                Arrays.toString(searchProductVo.getDescription()) == null ? "" : Arrays.toString(searchProductVo.getDescription()),
+//                Arrays.toString(searchProductVo.getStatus()) == null ? "" : Arrays.toString(searchProductVo.getStatus()),
+//                Arrays.toString(searchProductVo.getDateCreated()) == null ? "" : Arrays.toString(searchProductVo.getDateCreated()),
+//                pageable);
+//        List<ProductEntity> lst = entities.getContent();
+//        return new PageDto<>(entities.getTotalPages(), entities.getTotalPages(),
+//                lst.stream().map(e -> (ProductDto) map(e)).collect(Collectors.toList()));
+////        return null;
+//    }
 
     @Override
     public ProductDto findProductById(String id) {

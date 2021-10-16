@@ -10,6 +10,6 @@ import java.util.List;
 public interface IOrderReponsitory extends JpaRepository<OrderEntity, String> {
 
 
-    @Query(value = "select o from OrderEntity o where o.idVisit.id = ?1")
+    @Query(value = "select o from OrderEntity o where o.idVisit.id = ?1 ORDER BY o.created desc")
     List<OrderEntity> getAllOrderByUserLogin(String id);
 }

@@ -131,7 +131,7 @@
             },
             success: function (response) {
                 swal("Thành công", "Thay đổi trạng thái hoá đơn nhập hàng", "success")
-                loadData('/admin/invoice/load', 0, 5)
+                loadData('/admin/load/invoice', 0, 5)
             },
             error: function (data) {
                 swal("Thất bại", data.responseJSON.message, "warning")

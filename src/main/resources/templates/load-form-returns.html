@@ -115,9 +115,9 @@
         }
         console.log(obj)
         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-            saveWithAPI(JSON.stringify(obj), '/api/returns/' + obj.id, 'PUT', '/admin/returns/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/returns/' + obj.id, 'PUT', '/admin/load/returns', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/returns', 'POST', '/admin/returns/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/returns', 'POST', '/admin/load/returns', 0, 5)
         }
     })
 

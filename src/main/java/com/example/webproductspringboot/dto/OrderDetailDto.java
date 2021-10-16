@@ -22,6 +22,9 @@ public class OrderDetailDto {
     @NotEmpty
     private String idProduct;
     private String nameProduct;
+    private String pathProduct;
+    private Long idPathProduct;
+    private String imageProduct;
     private Long price;
     @NotNull
     @NotEmpty

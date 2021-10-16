@@ -277,9 +277,9 @@
         obj['details'] = arrProduct
         console.log(obj)
         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-            saveWithAPI(JSON.stringify(obj), '/api/orders/' + obj.id, 'PUT', '/admin/bill-order/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/orders/' + obj.id, 'PUT', '/admin/load/bill-order', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/orders', 'POST', '/admin/bill-order/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/orders', 'POST', '/admin/load/bill-order', 0, 5)
         }
     })
 
@@ -306,7 +306,7 @@
         let countInputProductFormInvoice = document.getElementsByClassName('load-input-product-form-order')
         if (countInputProductFormInvoice === null || countInputProductFormInvoice === undefined || countInputProductFormInvoice.length < 15) {
             $.ajax({
-                url: '/admin/bill-order/form/product/load',
+                url: '/admin/load/bill-order/form/product',
                 type: 'GET',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));

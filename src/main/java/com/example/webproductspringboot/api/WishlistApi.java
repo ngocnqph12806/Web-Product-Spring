@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/wish-list")
@@ -19,8 +20,8 @@ public class WishlistApi extends AbstractApi {
     @Autowired
     private IWishlistService _iWishlistService;
 
-    protected WishlistApi(HttpServletRequest request) {
-        super(request);
+    protected WishlistApi(HttpServletRequest request, HttpServletResponse response) {
+        super(request, response);
     }
 
     @GetMapping(path = "/get-by-user-login", params = "id")

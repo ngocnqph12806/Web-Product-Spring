@@ -1,12 +1,7 @@
 package com.example.webproductspringboot.api;
 
-import com.example.webproductspringboot.dto.BrandDto;
-import com.example.webproductspringboot.utils.ConvertUtils;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
 
 public abstract class AbstractApi {
 
@@ -16,9 +11,11 @@ public abstract class AbstractApi {
     protected final Integer DELETED = 204;
 
     protected final HttpServletRequest request;
+    protected final HttpServletResponse response;
 
-    protected AbstractApi(HttpServletRequest request) {
+    protected AbstractApi(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
+        this.response = response;
     }
 
 }

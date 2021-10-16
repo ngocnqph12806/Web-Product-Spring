@@ -6,13 +6,13 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.ICollectionService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchCollectionVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +22,8 @@ public class CollectionsApi extends AbstractApi {
 
     private final ICollectionService _iCollectionService;
 
-    protected CollectionsApi(HttpServletRequest request, ICollectionService iCollectionService) {
-        super(request);
+    protected CollectionsApi(HttpServletRequest request, HttpServletResponse response, ICollectionService iCollectionService) {
+        super(request, response);
         _iCollectionService = iCollectionService;
     }
 
@@ -45,7 +45,6 @@ public class CollectionsApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iCollectionService.findById(idCollection));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new CollectionDto());
     }

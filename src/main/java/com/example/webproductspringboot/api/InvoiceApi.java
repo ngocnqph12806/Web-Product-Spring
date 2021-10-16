@@ -15,8 +15,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +27,8 @@ public class InvoiceApi extends AbstractApi {
     private final IInvoiceService _iInvoiceService;
     private final IProductService _iProductService;
 
-    protected InvoiceApi(HttpServletRequest request, IInvoiceService iInvoiceService, IProductService iProductService) {
-        super(request);
+    protected InvoiceApi(HttpServletRequest request, HttpServletResponse response, IInvoiceService iInvoiceService, IProductService iProductService) {
+        super(request, response);
         _iInvoiceService = iInvoiceService;
         _iProductService = iProductService;
     }
@@ -50,7 +50,6 @@ public class InvoiceApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iInvoiceService.findById(id));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new InvoiceDto());
     }

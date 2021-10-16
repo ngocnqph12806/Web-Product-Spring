@@ -5,14 +5,13 @@ import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IReviewProductService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
-import com.example.webproductspringboot.vo.SearchReturnVo;
 import com.example.webproductspringboot.vo.SearchReviewVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +22,8 @@ public class ReviewApi extends AbstractApi {
 
     private final IReviewProductService _iReviewProductService;
 
-    protected ReviewApi(HttpServletRequest request, IReviewProductService iReviewProductService) {
-        super(request);
+    protected ReviewApi(HttpServletRequest request, HttpServletResponse response, IReviewProductService iReviewProductService) {
+        super(request, response);
         _iReviewProductService = iReviewProductService;
     }
 

@@ -2,7 +2,6 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.BrandDto;
 import com.example.webproductspringboot.dto.ResultDto;
-import com.example.webproductspringboot.dto.UserDto;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.service.intf.IBrandService;
 import com.example.webproductspringboot.utils.ConvertUtils;
@@ -14,8 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collections;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +23,11 @@ public class BrandApi extends AbstractApi {
 
     private final IBrandService _iBrandService;
 
-    protected BrandApi(HttpServletRequest request, IBrandService iBrandService) {
-        super(request);
+    protected BrandApi(HttpServletRequest request, HttpServletResponse response, IBrandService iBrandService) {
+        super(request, response);
         _iBrandService = iBrandService;
     }
+
 
     @GetMapping
     public ResponseEntity<?> getAll(SearchBrandVo searchBrandVo) {
@@ -47,7 +46,6 @@ public class BrandApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iBrandService.findById(id));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new BrandDto());
     }

@@ -31,9 +31,9 @@ public class AccountAdmin {
         return "/account/signin";
     }
 
-    @GetMapping("/admin/signup")
-    public String signupAdmin() {
-        return "/account/signup";
+    @GetMapping("/signout")
+    public String signout() {
+        return "/account/logout";
     }
 
 }

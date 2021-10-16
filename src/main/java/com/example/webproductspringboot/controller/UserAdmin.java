@@ -17,7 +17,7 @@ public class UserAdmin {
     @Autowired
     private IUserService _iUserService;
 
-    @GetMapping(value = "user/load", params = "_type")
+    @GetMapping(value = "load/user", params = "_type")
     public String loadPageStaff(@RequestParam("_type") String typeUser,
                                 @RequestParam(value = "_p", defaultValue = "0") Integer page,
                                 @RequestParam(value = "_s", defaultValue = "5") Integer size,

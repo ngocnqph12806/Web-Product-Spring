@@ -1,8 +1,8 @@
 let urlCallDataCategoryOrBrand = '';
 
 function openCategory() {
-    urlCallDataCategoryOrBrand = '/admin/category/load'
-    loadData('/admin/category/load', 0, 5)
+    urlCallDataCategoryOrBrand = '/admin/load/category'
+    loadData('/admin/load/category', 0, 5)
     document.title = 'Quản lý loại sản phẩm'
 }
 
@@ -63,11 +63,11 @@ async function saveCategory() {
         objFileBannerCategory.targetFileAvatar = null
     }
     setTimeout(function () {
-        urlCallDataCategoryOrBrand = '/admin/category/load'
+        urlCallDataCategoryOrBrand = '/admin/load/category'
         if (obj.id === null || obj.id === undefined || obj.id === '') {
-            saveWithAPI(JSON.stringify(obj), '/api/categories', 'POST', '/admin/category/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/categories', 'POST', '/admin/load/category', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/categories/' + obj.id, 'PUT', '/admin/category/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/categories/' + obj.id, 'PUT', '/admin/load/category', 0, 5)
         }
     }, 10)
 }
@@ -98,8 +98,8 @@ function changePathUrlCategory() {
 }
 
 function openBrand() {
-    urlCallDataCategoryOrBrand = '/admin/brand/load'
-    loadData('/admin/brand/load', 0, 5)
+    urlCallDataCategoryOrBrand = '/admin/load/brand'
+    loadData('/admin/load/brand', 0, 5)
     document.title = 'Quản lý thương hiệu'
 }
 
@@ -117,11 +117,11 @@ function saveBrand() {
     }
     console.log(obj)
     setTimeout(function () {
-        urlCallDataCategoryOrBrand = '/admin/brand/load'
+        urlCallDataCategoryOrBrand = '/admin/load/brand'
         if (obj.id === null || obj.id === undefined || obj.id === '') {
-            saveWithAPI(JSON.stringify(obj), '/api/brand', 'POST', '/admin/brand/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/brand', 'POST', '/admin/load/brand', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/brand/' + obj.id, 'PUT', '/admin/brand/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/brand/' + obj.id, 'PUT', '/admin/load/brand', 0, 5)
         }
     }, 10)
 }

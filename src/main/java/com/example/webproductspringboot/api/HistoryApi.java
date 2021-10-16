@@ -1,15 +1,14 @@
 package com.example.webproductspringboot.api;
 
-import com.example.webproductspringboot.dto.ResultDto;
 import com.example.webproductspringboot.service.intf.IHistoryService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.vo.HistoryVo;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchHistoryVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +18,8 @@ public class HistoryApi extends AbstractApi {
 
     private final IHistoryService _iHistoryService;
 
-    protected HistoryApi(HttpServletRequest request, IHistoryService iHistoryService) {
-        super(request);
+    protected HistoryApi(HttpServletRequest request, HttpServletResponse response, IHistoryService iHistoryService) {
+        super(request, response);
         _iHistoryService = iHistoryService;
     }
 

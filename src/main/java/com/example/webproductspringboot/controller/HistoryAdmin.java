@@ -20,7 +20,7 @@ public class HistoryAdmin {
     @Autowired
     private IHistoryService _iHistoryService;
 
-    @GetMapping("history/load")
+    @GetMapping("load/history")
     public String listHistory(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                               @RequestParam(value = "_s", defaultValue = "5") Integer size,
                               Model model) {

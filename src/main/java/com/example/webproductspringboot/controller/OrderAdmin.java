@@ -24,7 +24,7 @@ public class OrderAdmin {
     @Autowired
     private IProductService _iProductService;
 
-    @GetMapping("bill-order/load")
+    @GetMapping("load/bill-order")
     public String listCollections(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                                   @RequestParam(value = "_s", defaultValue = "5") Integer size,
                                   Model model) {
@@ -35,7 +35,7 @@ public class OrderAdmin {
         return "/load-order";
     }
 
-    @GetMapping("bill-order/form/load")
+    @GetMapping("load/bill-order/form")
     public String loadFormInvoice(Model model) {
         model.addAttribute("order", new OrderDto());
         model.addAttribute("lstVisit", _iUserService.findAll());
@@ -44,7 +44,7 @@ public class OrderAdmin {
         return "load-form-order";
     }
 
-    @GetMapping("bill-order/form/{id}/load")
+    @GetMapping("load/bill-order/form/{id}")
     public String loadFormEditInvoice(@PathVariable("id") String id, Model model) {
         try {
             model.addAttribute("order", _iOrderService.findById(id));
@@ -53,12 +53,11 @@ public class OrderAdmin {
             model.addAttribute("lstProduct", _iProductService.findAllProduct());
             return "load-form-order";
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return "/load-order";
     }
 
-    @GetMapping("bill-order/form/product/load")
+    @GetMapping("load/bill-order/form/product")
     public String loadInputProductFormInvoice(Model model) {
         model.addAttribute("order", new InvoiceDto());
         model.addAttribute("lstProduct", _iProductService.findAllProduct());

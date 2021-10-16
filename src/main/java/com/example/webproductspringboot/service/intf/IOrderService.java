@@ -31,4 +31,6 @@ public interface IOrderService {
     OrderDto saveCheckout(ChechoutDto dto);
 
     List<OrderDto> getAllOrderByUserLogin(String id);
+
+    void updatePayment(String id);
 }

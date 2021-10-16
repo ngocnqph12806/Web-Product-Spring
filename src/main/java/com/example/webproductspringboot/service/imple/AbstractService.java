@@ -417,7 +417,7 @@ public abstract class AbstractService {
                     .status(dto.getStatus())
                     .created(dto.getDateCreated())
                     .build();
-        }else if (data instanceof ChechoutDto) {
+        } else if (data instanceof ChechoutDto) {
             ChechoutDto dto = (ChechoutDto) data;
             return OrderEntity.builder()
                     .id(dto.getId())
@@ -475,7 +475,8 @@ public abstract class AbstractService {
                     .dateCreated(entity.getCreated())
                     .totalPrice(entity.getLstOrderDetailsEntities() != null
                             ? entity.getLstOrderDetailsEntities().stream()
-                            .mapToLong(e -> e.getPrice() * e.getQuantity() - e.getPriceSale()).sum()
+                            .mapToLong(e -> (e.getPrice() * e.getQuantity()) - e.getPriceSale()).sum()
+                            - (entity.getIdVoucher() != null ? entity.getIdVoucher().getPriceSale() : 0)
                             : Long.parseLong("0"))
                     .details(entity.getLstOrderDetailsEntities() != null
                             ? entity.getLstOrderDetailsEntities().stream()
@@ -508,6 +509,15 @@ public abstract class AbstractService {
                             ? entity.getIdProduct().getId() : null)
                     .nameProduct(entity.getIdProduct() != null
                             ? entity.getIdProduct().getName() : null)
+                    .pathProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getPathUrl() : null)
+                    .idPathProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getIdUrl() : null)
+                    .imageProduct(entity.getIdProduct() != null
+                            ? entity.getIdProduct().getLstProductImageEntities() != null
+                            && !entity.getIdProduct().getLstProductImageEntities().isEmpty()
+                            ? urlGit + entity.getIdProduct().getLstProductImageEntities().get(0).getPath()
+                            : null : null)
                     .price(entity.getPrice())
                     .priceSale(entity.getPriceSale())
                     .quantity(entity.getQuantity())

@@ -7,4 +7,6 @@ public class ContainsUtils {
     public final static String ROLE_ADMIN = "ADMIN";
     public final static String ROLE_SUPPER_ADMIN = "SUPPER_ADMIN";
 
+    public final static String CONFIRM_REGISTER = "CONFIRM_REGISTER";
+
 }

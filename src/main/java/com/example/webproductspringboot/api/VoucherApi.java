@@ -3,10 +3,11 @@ package com.example.webproductspringboot.api;
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
 import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.service.intf.ISendmailService;
+import com.example.webproductspringboot.service.intf.IUserService;
 import com.example.webproductspringboot.service.intf.IVoucherService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBannerVo;
 import com.example.webproductspringboot.vo.SearchVoucherVo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +24,14 @@ import java.util.stream.Collectors;
 public class VoucherApi extends AbstractApi {
 
     private final IVoucherService _iVoucherService;
+    private final ISendmailService _iSendmailService;
+    private final IUserService _iUserService;
 
-    protected VoucherApi(HttpServletRequest request, IVoucherService iVoucherService) {
-        super(request);
+    protected VoucherApi(HttpServletRequest request, HttpServletResponse response, IVoucherService iVoucherService, ISendmailService iSendmailService, IUserService iUserService) {
+        super(request, response);
         _iVoucherService = iVoucherService;
+        _iSendmailService = iSendmailService;
+        _iUserService = iUserService;
     }
 
     @GetMapping
@@ -62,7 +68,14 @@ public class VoucherApi extends AbstractApi {
         System.out.println(voucher);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "voucher", errors.getFieldErrors().get(0).getDefaultMessage()));
-        ResultDto<VoucherDto> result = new ResultDto<>(CREATED, _iVoucherService.save(voucher));
+        VoucherDto result = _iVoucherService.save(voucher);
+        List<String> getEmailUsers = _iUserService.getAllEmail();
+        String message = "<h3>Mã giảm giá: " + result.getCode() + "</h3>\n";
+        message += "<h3>Giá trị: " + result.getPriceSale() + "</h3>\n";
+        message += "<h3>Ngày bắt đầu: " + result.getDateStart() + "</h3>\n";
+        message += "<h3>Ngày kết thúc: " + result.getDateEnd() + "</h3>\n";
+        message += result.getDescription();
+        _iSendmailService.pushBcc(getEmailUsers, result.getTitle(), message);
         return ResponseEntity.ok(result);
     }
 

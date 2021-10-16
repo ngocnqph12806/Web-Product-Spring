@@ -121,6 +121,17 @@ public class OrderService extends AbstractService implements IOrderService {
     }
 
     @Override
+    public void updatePayment(String id) {
+        Optional<OrderEntity> optional = _iOrderReponsitory.findById(id);
+        if (optional.isEmpty())
+            throw new NotFoundException(CookieUtils.get().errorsProperties(request, "order", "order.not.found"));
+        OrderEntity fake = optional.get();
+        fake.setPaymentStatus(true);
+        _iOrderReponsitory.save(fake);
+        saveHistory(null, "Thanh toán hoá đơn mua hàng", fake + "\n" + fake);
+    }
+
+    @Override
     public void saveDetailOrder(OrderDetailDto x) {
         OrderDetailsEntity entity = (OrderDetailsEntity) map(x);
         if (entity == null)

@@ -26,7 +26,7 @@ public class ProductAdmin {
     @Autowired
     private ICategoryService _iCategoryService;
 
-    @GetMapping("product/load")
+    @GetMapping("load/product")
     public String listProduct(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                               @RequestParam(value = "_s", defaultValue = "5") Integer size,
                               Model model) {

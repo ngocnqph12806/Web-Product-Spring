@@ -1,5 +1,5 @@
 function openProduct() {
-    loadData('/admin/product/load', 0, 5)
+    loadData('/admin/load/product', 0, 5)
     document.title = 'Quản lý sản phẩm'
 }
 
@@ -123,9 +123,9 @@ async function saveProduct() {
         }
     }
     if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-        saveWithAPI(JSON.stringify(obj), '/api/product/' + obj.id, 'PUT', '/admin/product/load', 0, 5)
+        saveWithAPI(JSON.stringify(obj), '/api/product/' + obj.id, 'PUT', '/admin/load/product', 0, 5)
     } else {
-        saveWithAPI(JSON.stringify(obj), '/api/product', 'POST', '/admin/product/load', 0, 5)
+        saveWithAPI(JSON.stringify(obj), '/api/product', 'POST', '/admin/load/product', 0, 5)
     }
 }
 
@@ -175,7 +175,7 @@ function changeStatusProduct(e) {
             },
             success: function (response) {
                 swal("Thành công", "Thay đổi trạng thái sản phẩm thành công", "success")
-                loadData('/admin/product/load', 0, 5)
+                loadData('/admin/load/product', 0, 5)
             },
             error: function (data) {
                 swal("Thất bại", data.responseJSON.message, "warning")

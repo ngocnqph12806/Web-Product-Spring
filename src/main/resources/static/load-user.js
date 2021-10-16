@@ -1,10 +1,10 @@
 function openStaff() {
-    loadData('/admin/user/load', 0, 5, 'staff')
+    loadData('/admin/load/user', 0, 5, 'staff')
     document.title = 'Quản lý nhân viên'
 }
 
 function openVisit() {
-    loadData('/admin/user/load', 0, 5, 'visit')
+    loadData('/admin/load/user', 0, 5, 'visit')
     document.title = 'Quản lý khách hàng'
 }
 
@@ -93,9 +93,9 @@ async function saveStaff() {
         let url = window.location.href + ''
         let typeUser = url.substring(url.lastIndexOf('#') + 1)
         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-            await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/user/load', 0, 5, typeUser)
+            await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/load/user', 0, 5, typeUser)
         } else {
-            await saveWithAPI(JSON.stringify(obj), '/api/users', 'POST', '/admin/user/load', 0, 5, typeUser)
+            await saveWithAPI(JSON.stringify(obj), '/api/users', 'POST', '/admin/load/user', 0, 5, typeUser)
         }
     }, 10)
 }
@@ -132,11 +132,11 @@ function changeStaff(e) {
             if (method === 'status') {
                 let obj = response;
                 obj.status = data
-                await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/user/load', 0, 5, typeUser)
+                await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/load/user', 0, 5, typeUser)
             } else if (method === 'block') {
                 let obj = response;
                 obj.block = data
-                await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/user/load', 0, 5, typeUser)
+                await saveWithAPI(JSON.stringify(obj), '/api/users/' + obj.id, 'PUT', '/admin/load/user', 0, 5, typeUser)
             } else {
                 swal('Hmmm!', 'Đừng sửa code...', 'warning')
             }

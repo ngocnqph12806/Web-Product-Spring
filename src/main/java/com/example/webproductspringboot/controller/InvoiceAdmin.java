@@ -23,7 +23,7 @@ public class InvoiceAdmin {
     @Autowired
     private IProductService _iProductService;
 
-    @GetMapping("invoice/load")
+    @GetMapping("load/invoice")
     public String loadInvoice(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                               @RequestParam(value = "_s", defaultValue = "5") Integer size,
                               Model model) {
@@ -34,7 +34,7 @@ public class InvoiceAdmin {
         return "/load-invoice";
     }
 
-    @GetMapping("invoice/form/load")
+    @GetMapping("load/invoice/form")
     public String loadFormInvoice(Model model) {
         model.addAttribute("invoice", new InvoiceDto());
         model.addAttribute("lstUser", _iUserService.findAllStaff());
@@ -42,7 +42,7 @@ public class InvoiceAdmin {
         return "load-form-invoice";
     }
 
-    @GetMapping("invoice/form/{id}/load")
+    @GetMapping("load/invoice/form/{id")
     public String loadFormEditInvoice(@PathVariable("id") String id, Model model) {
         try {
             model.addAttribute("invoice", _iInvoiceService.findById(id));
@@ -50,12 +50,11 @@ public class InvoiceAdmin {
             model.addAttribute("lstProduct", _iProductService.findAllProduct());
             return "load-form-invoice";
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return "/load-invoice";
     }
 
-    @GetMapping("invoice/form/product/load")
+    @GetMapping("load/invoice/form/product")
     public String loadInputProductFormInvoice(Model model) {
         model.addAttribute("invoice", new InvoiceDto());
         model.addAttribute("lstProduct", _iProductService.findAllProduct());

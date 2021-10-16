@@ -27,7 +27,7 @@ public class ReturnProductAdmin {
     @Autowired
     private HttpServletRequest request;
 
-    @GetMapping("returns/load")
+    @GetMapping("load/returns")
     public String loadReturn(@RequestParam(value = "_p", defaultValue = "0") Integer page,
                              @RequestParam(value = "_s", defaultValue = "5") Integer size,
                              Model model) {
@@ -38,7 +38,7 @@ public class ReturnProductAdmin {
         return "/load-returns";
     }
 
-    @GetMapping("returns/form/{id}/load")
+    @GetMapping("load/returns/form/{id}")
     public String loadFormReturn(@PathVariable("id") String id, Model model) {
         try {
             ReturnDto returnDtoFindById = _iCustomersReturnService.findById(id);
@@ -49,12 +49,11 @@ public class ReturnProductAdmin {
             model.addAttribute("addNew", false);
             return "load-form-returns";
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return "redirect:/admin/returns/load";
     }
 
-    @GetMapping("returns/form/add-by-id-order/{idOrder}/load")
+    @GetMapping("load/returns/form/add-by-id-order/{idOrder}")
     public String loadFormReturnWithAddByIdOrder(@PathVariable("idOrder") String idOrder, Model model) {
         try {
             model.addAttribute("return", ReturnDto.builder().idOrder(idOrder).build());
@@ -63,7 +62,6 @@ public class ReturnProductAdmin {
             model.addAttribute("addNew", true);
             return "load-form-returns";
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return "redirect:/admin/returns/load";
     }

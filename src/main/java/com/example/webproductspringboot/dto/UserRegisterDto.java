@@ -45,5 +45,8 @@ public class UserRegisterDto {
     @NotNull
     @NotBlank
     private String avatar;
+    @NotNull
+    @NotBlank
+    private String urlClient;
 
 }

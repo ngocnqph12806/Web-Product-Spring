@@ -2,10 +2,13 @@ package com.example.webproductspringboot.api;
 
 import com.example.webproductspringboot.dto.*;
 import com.example.webproductspringboot.exception.BadRequestException;
+import com.example.webproductspringboot.exception.NotFoundException;
+import com.example.webproductspringboot.service.intf.IConfirmService;
+import com.example.webproductspringboot.service.intf.ISendmailService;
 import com.example.webproductspringboot.service.intf.IUserService;
+import com.example.webproductspringboot.utils.ContainsUtils;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
-import com.example.webproductspringboot.vo.SearchBrandVo;
 import com.example.webproductspringboot.vo.SearchUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,17 +31,19 @@ import static java.util.Arrays.stream;
 public class UserApi extends AbstractApi {
 
     private final IUserService _iUserService;
+    private final ISendmailService _iSendmailService;
+    private final IConfirmService _iConfirmService;
 
-    protected UserApi(HttpServletRequest request, IUserService iUserService) {
-        super(request);
+    protected UserApi(HttpServletRequest request, HttpServletResponse response, IUserService iUserService, ISendmailService iSendmailService, IConfirmService iConfirmService) {
+        super(request, response);
         _iUserService = iUserService;
+        _iSendmailService = iSendmailService;
+        _iConfirmService = iConfirmService;
     }
 
     @GetMapping(path = "")
     public ResponseEntity<?> getAll(SearchUserVo searchUserVo) {
-        System.out.println(searchUserVo);
         List<UserDto> lst = _iUserService.findAll();
-        System.out.println(searchUserVo);
         lst = search(lst, searchUserVo, searchUserVo.getFullName(), 0);
 //        ResultDto<List<UserDto>> result = new ResultDto<>(OK, lst);
         return ResponseEntity.ok(lst);
@@ -71,9 +78,20 @@ public class UserApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iUserService.findById(id));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new UserDto());
+    }
+
+    @GetMapping(value = "/{id}", params = "register_Code")
+    public void confirmUser(@PathVariable("id") String id,
+                            @RequestParam("register_Code") Integer register_Code,
+                            @RequestParam("url_Success") String url_Success) throws IOException {
+        _iUserService.findById(id);
+        if (_iConfirmService.put(register_Code, ContainsUtils.CONFIRM_REGISTER)) {
+            _iUserService.confirmUser(id);
+            response.sendRedirect(url_Success);
+        }
+        throw new NotFoundException(CookieUtils.get().errorsProperties(request, "lang", "page.not.found"));
     }
 
     @PostMapping
@@ -89,7 +107,15 @@ public class UserApi extends AbstractApi {
         System.out.println(dto);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
-        return ResponseEntity.ok(_iUserService.saveRegister(dto));
+        UserDto userDto = _iUserService.saveRegister(dto);
+        int code = (int) (Math.random() * 9999999);
+        String message = "<a href=\"http://localhost:8091/api/users/" + userDto.getId()
+                + "?register_Code=" + code
+                + "&url_Success=" + dto.getUrlClient()
+                + "\">Xác nhận tài khoản</a>";
+        _iSendmailService.push(userDto.getEmail(), "Đăng ký tài khoản", message);
+        _iConfirmService.push(code, userDto, ContainsUtils.CONFIRM_REGISTER);
+        return ResponseEntity.ok(userDto);
     }
 
     @PutMapping("/{id}")

@@ -14,6 +14,7 @@ import com.example.webproductspringboot.utils.ContainsUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.utils.MapperModelUtils;
 import com.example.webproductspringboot.vo.InfoCheckoutVo;
+import com.example.webproductspringboot.vo.SearchProductVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -113,7 +114,7 @@ public class UserService extends AbstractService implements IUserService, UserDe
 
     @Override
     public UserDto findByUserName(String username) {
-        Optional<UserEntity> optional = _iUserReponsitory.findByUserName(username);
+        Optional<UserEntity> optional = _iUserReponsitory.findByUserNameOrEmail(username);
         if (optional.isEmpty()) {
             log.error("User not fount in the database");
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
@@ -153,8 +154,13 @@ public class UserService extends AbstractService implements IUserService, UserDe
         entity.setPassword(_passwordEncoder.encode(entity.getPassword()));
         entity.setCreated(new Date());
         _iUserReponsitory.save(entity);
-        saveHistory(entity, "Đăng ký người dùng mới", entity.toString());
+        saveHistory(null, "Đăng ký người dùng mới", entity.toString());
         return (UserDto) map(entity);
+    }
+
+    @Override
+    public List<String> getAllEmail() {
+        return _iUserReponsitory.getAllEmail();
     }
 
     @Override
@@ -177,6 +183,18 @@ public class UserService extends AbstractService implements IUserService, UserDe
         entity.setPassword(fake.getPassword());
         _iUserReponsitory.save(entity);
         saveHistory(userEntity, "Sửa thông tin người dùng", fake + "\n" + entity);
+        return (UserDto) map(entity);
+    }
+
+    @Override
+    public UserDto confirmUser(String id) {
+        Optional<UserEntity> optional = _iUserReponsitory.findById(id);
+        if (optional.isEmpty())
+            throw new InternalServerException(CookieUtils.get().errorsProperties(request, "user", "user.not.found"));
+        UserEntity entity = optional.get();
+        entity.setStatus(true);
+        _iUserReponsitory.save(entity);
+        saveHistory(null, "Xác nhận đăng ký tài khoản", entity.toString());
         return (UserDto) map(entity);
     }
 

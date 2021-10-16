@@ -30,9 +30,13 @@ public interface IUserService {
 
     UserDto update(UserDto dto);
 
+    UserDto confirmUser(String id);
+
     InfoCheckoutVo getInfoCheckoutByUserLogin(String id);
 
     String getIdByUserName(String username);
 
     UserDto saveRegister(UserRegisterDto dto);
+
+    List<String> getAllEmail();
 }

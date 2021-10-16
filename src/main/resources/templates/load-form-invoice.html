@@ -202,9 +202,9 @@
         obj['invoiceDetails'] = arrProduct
         console.log(obj)
         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
-            saveWithAPI(JSON.stringify(obj), '/api/invoices/' + obj.id, 'PUT', '/admin/invoice/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/invoices/' + obj.id, 'PUT', '/admin/load/invoice', 0, 5)
         } else {
-            saveWithAPI(JSON.stringify(obj), '/api/invoices', 'POST', '/admin/invoice/load', 0, 5)
+            saveWithAPI(JSON.stringify(obj), '/api/invoices', 'POST', '/admin/load/invoice', 0, 5)
         }
     })
 
@@ -212,7 +212,7 @@
         let countInputProductFormInvoice = document.getElementsByClassName('load-input-product-form-invoice')
         if (countInputProductFormInvoice === null || countInputProductFormInvoice === undefined || countInputProductFormInvoice.length < 15) {
             $.ajax({
-                url: '/admin/invoice/form/product/load',
+                url: '/admin/load/invoice/form/product',
                 type: 'POST',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + getSession('access_token'));

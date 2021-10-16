@@ -1,93 +1,93 @@
 function openFormReturn(e) {
-    loadData('/admin/returns/form/add-by-id-order/' + e.dataset.id + '/load')
+    loadData('/admin/load/returns/form/add-by-id-order/' + e.dataset.id)
     document.title = 'Nhập thông tin hoá đơn tả hàng'
 }
 
 function openFormEditReturn(e) {
     let id = e.dataset.id
     id === null || id === undefined || id === '' ? id = '-1-1-1' : null
-    loadData('/admin/returns/form/' + id + '/load')
+    loadData('/admin/load/returns/form/' + id)
     document.title = 'Sửa thông tin hoá đơn trả hàng'
 }
 
 function openFormInvoice() {
-    loadData('/admin/invoice/form/load')
+    loadData('/admin/load/invoice/form')
     document.title = 'Nhập thông tin nhập hàng'
 }
 
 function openFormEditInvoice(e) {
     let id = e.dataset.id
     id === null || id === undefined || id === '' ? id = '-1-1-1' : null
-    loadData('/admin/invoice/form/' + id + '/load')
+    loadData('/admin/load/invoice/form/' + id)
     document.title = 'Sửa thông tin nhập hàng'
 }
 
 function openFormOrder() {
-    loadData('/admin/bill-order/form/load')
+    loadData('/admin/load/bill-order/form')
     document.title = 'Nhập thông tin bán hàng'
 }
 
 function openFormEditOrder(e) {
     let id = e.dataset.id
     id === null || id === undefined || id === '' ? id = '-1-1-1' : null
-    loadData('/admin/bill-order/form/' + id + '/load')
+    loadData('/admin/load/bill-order/form/' + id)
     document.title = 'Sửa thông tin nhập hàng'
 }
 
 function openInvoice() {
-    loadData('/admin/invoice/load', 0, 5)
+    loadData('/admin/load/invoice', 0, 5)
     document.title = 'Quản lý nhập hàng'
 }
 
 function openOrder() {
-    loadData('/admin/bill-order/load', 0, 5)
+    loadData('/admin/load/bill-order', 0, 5)
     document.title = 'Quản lý hoá đơn thanh toán'
 }
 
 function openReturns() {
-    loadData('/admin/returns/load', 0, 5)
+    loadData('/admin/load/returns', 0, 5)
     document.title = 'Quản lý hoá đơn trả hàng'
 }
 
 function openTransport() {
-    loadData('/admin/transport/load', 0, 5)
+    loadData('/admin/load/transport', 0, 5)
     document.title = 'Quản lý hoá đơn vận chuyển'
 }
 
 function openHistory() {
-    loadData('/admin/history/load', 0, 5)
+    loadData('/admin/load/history', 0, 5)
     document.title = 'Quản lý lịch sử thao tác'
 }
 
 function openCategory() {
-    urlCallDataCategoryOrBrand = '/admin/category/load'
-    loadData('/admin/category/load', 0, 5)
+    urlCallDataCategoryOrBrand = '/admin/load/category'
+    loadData('/admin/load/category', 0, 5)
     document.title = 'Quản lý loại sản phẩm'
 }
 
 function openBrand() {
-    urlCallDataCategoryOrBrand = '/admin/brand/load'
-    loadData('/admin/brand/load', 0, 5)
+    urlCallDataCategoryOrBrand = '/admin/load/brand'
+    loadData('/admin/load/brand', 0, 5)
     document.title = 'Quản lý thương hiệu'
 }
 
 function openProduct() {
-    loadData('/admin/product/load', 0, 5)
+    loadData('/admin/load/product', 0, 5)
     document.title = 'Quản lý sản phẩm'
 }
 
 function openStaff() {
-    loadData('/admin/user/load', 0, 5, 'staff')
+    loadData('/admin/load/user', 0, 5, 'staff')
     document.title = 'Quản lý nhân viên'
 }
 
 function openVisit() {
-    loadData('/admin/user/load', 0, 5, 'visit')
+    loadData('/admin/load/user', 0, 5, 'visit')
     document.title = 'Quản lý khách hàng'
 }
 
 function openVoucher() {
-    loadData('/admin/voucher/load', 0, 5)
+    loadData('/admin/load/voucher', 0, 5)
     document.title = 'Quản lý thương hiệu'
 }
 

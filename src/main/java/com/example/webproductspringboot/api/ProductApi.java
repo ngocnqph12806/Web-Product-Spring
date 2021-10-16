@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -24,8 +25,8 @@ public class ProductApi extends AbstractApi {
 
     private final IProductService _iProductService;
 
-    protected ProductApi(HttpServletRequest request, IProductService iProductService) {
-        super(request);
+    protected ProductApi(HttpServletRequest request, HttpServletResponse response, IProductService iProductService) {
+        super(request, response);
         _iProductService = iProductService;
     }
 
@@ -66,7 +67,6 @@ public class ProductApi extends AbstractApi {
         try {
             return ResponseEntity.ok(_iProductService.findProductById(id));
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return ResponseEntity.ok(new ProductDto());
     }
