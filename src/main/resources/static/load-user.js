@@ -70,7 +70,7 @@ async function saveStaff() {
         await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileAvatar.nameFile, {
             method: 'PUT',
             headers: {
-                "Authorization": "Bearer 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",
+                "Authorization": "Bearer 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",
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({

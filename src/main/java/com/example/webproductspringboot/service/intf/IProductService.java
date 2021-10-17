@@ -24,10 +24,6 @@ public interface IProductService {
 
     void saveImageProduct(ProductImageVo vo);
 
-    Set<String> getSetCategoryDetailsByIdCategory(String idCategory);
-
-    Set<String> getSetColorByIdCategory(String idCategory);
-
     ProductDto getMinMaxPrice();
 
     void deleteAllImagesByProductId(String id);

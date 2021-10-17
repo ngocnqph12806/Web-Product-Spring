@@ -12,20 +12,6 @@
             <input type="hidden" id="id" th:value="${return.id}"/>
             <input type="hidden" id="idOrder" th:value="${order.id}"/>
             <h4 class="card-title mb-3">Khách hàng: [[${order.nameUser}]]</h4>
-<!--            <div class="form-group row">-->
-<!--                <label class="col-sm-2 col-form-label text-right">-->
-<!--                    Nhân viên nhận trả-->
-<!--                </label>-->
-<!--                <div class="col-sm-10">-->
-<!--                    <select class="select2 form-control mb-3 custom-select" id="idStaff"-->
-<!--                            style="width: 100%; height:36px;">-->
-<!--                        <th:block th:each="staff : ${lstStaff}" th:object="${staff}">-->
-<!--                            <option th:value="*{id}" th:selected="${return.idStaff == staff.id}"-->
-<!--                                    th:text="*{fullName}"></option>-->
-<!--                        </th:block>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
             <th:block th:each="orderDetail : ${order.details}" th:object="${orderDetail}">
                 <th:block th:unless="${addNew}" th:each="returnDetail : ${return.details}"
                           th:if="${returnDetail.idOrderDetail == orderDetail.id}">
@@ -99,12 +85,35 @@
         // let idStaff = $('#idStaff').val()
         let description = $('#textarea').val()
         let details = document.getElementsByClassName('detail')
+        if (description === null || description === undefined || description === '') {
+            swal('Lỗi', 'Vui lòng nhập nội dung trả hàng', 'error')
+            return;
+        }
+        if (description.trim().length < 10) {
+            swal('Lỗi', 'Nội dung trả hàng phải từ 10 ký tự', 'warning')
+            return;
+        }
+        if (details.length <= 0) {
+            swal('Lỗi', 'Vui lòng thêm sản phẩm trả hàng', 'error')
+            return;
+        }
+        for (let i = 0; i < details.length; i++) {
+            let quantity = details[i].value
+            if (quantity === null || quantity === undefined || quantity === '') {
+                swal('Lỗi', 'Vui lòng nhập số lượng trả hàng', 'error')
+                return
+            }
+            if (!/^[0-9]{1,2}$/.test(quantity) || Number(quantity) <= 0) {
+                swal('Lỗi', 'Số lượng hàng trả phài là một số nguyên lớn hơn 0', 'warning')
+                return
+            }
+        }
         let arrDetails = [];
         for (let i = 0; i < details.length; i++) {
-            arrDetails[i] = {
+            arrDetails.push({
                 idOrderDetail: details[i].dataset.idDetail,
                 quantity: details[i].value
-            }
+            })
         }
         let obj = {
             id: id,
@@ -113,7 +122,6 @@
             description: description,
             details: arrDetails
         }
-        console.log(obj)
         if (obj.id !== null && obj.id !== undefined && obj.id !== '') {
             saveWithAPI(JSON.stringify(obj), '/api/returns/' + obj.id, 'PUT', '/admin/load/returns', 0, 5)
         } else {

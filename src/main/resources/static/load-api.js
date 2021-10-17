@@ -1,3 +1,14 @@
+async function openFormProduct() {
+    await loadData('/admin/load/product/form')
+    document.title = 'Nhập thông tin sản phẩm'
+}
+
+async function openFormEditProduct(e) {
+    await loadData('/admin/load/product/form/' + e.dataset.id)
+    document.title = 'Sửa thông tin sản phẩm'
+    CKEDITOR.replace('description')
+}
+
 function openFormReturn(e) {
     loadData('/admin/load/returns/form/add-by-id-order/' + e.dataset.id)
     document.title = 'Nhập thông tin hoá đơn tả hàng'
@@ -304,7 +315,7 @@ function getWithAPI(obj, path) {
 //     + String(today.getMilliseconds()).padStart(3, '0') + '.';
 const nameOwner = 'ngocnqph12806';
 const nameRepo = 'Repo_File';
-const token = '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';
+const token = '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';
 
 function getNameTime() {
     let today = new Date();

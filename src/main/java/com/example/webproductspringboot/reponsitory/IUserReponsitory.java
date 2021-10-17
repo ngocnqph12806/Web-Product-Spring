@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface IUserReponsitory extends JpaRepository<UserEntity, String> {
 
-    @Query(value = "select s from UserEntity s where s.username = ?1 or s.status = true")
+    @Query(value = "select s from UserEntity s where s.username = ?1 and s.status = true and s.block = false")
     Optional<UserEntity> findByUserName(String userNameStaff);
 
     @Query(value = "select s from UserEntity s where s.role = '" + ContainsUtils.ROLE_USER + "'")
@@ -23,7 +23,7 @@ public interface IUserReponsitory extends JpaRepository<UserEntity, String> {
     @Query(value = "select s from UserEntity s where s.role not like '" + ContainsUtils.ROLE_USER + "'")
     List<UserEntity> findAllStaff(Sort sort);
 
-    @Query(value = "select s from UserEntity s where s.username = ?1 or s.email = ?1 and s.status = true")
+    @Query(value = "select s from UserEntity s where s.username = ?1 or s.email = ?1 and s.status = true and s.block = false")
     Optional<UserEntity> findByUserNameOrEmail(String username);
 
     @Query(value = "select s from UserEntity s where s.role not like '" + ContainsUtils.ROLE_USER + "'")

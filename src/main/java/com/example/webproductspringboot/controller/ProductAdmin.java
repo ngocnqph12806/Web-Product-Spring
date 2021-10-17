@@ -2,16 +2,14 @@ package com.example.webproductspringboot.controller;
 
 import com.example.webproductspringboot.dto.PageDto;
 import com.example.webproductspringboot.dto.ProductDto;
+import com.example.webproductspringboot.dto.ReturnDto;
 import com.example.webproductspringboot.service.intf.IBrandService;
 import com.example.webproductspringboot.service.intf.ICategoryService;
 import com.example.webproductspringboot.service.intf.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,6 +35,27 @@ public class ProductAdmin {
         model.addAttribute("lstBrands", _iBrandService.findAll());
         model.addAttribute("lstCategories", _iCategoryService.findAll());
         return "/load-product";
+    }
+
+    @GetMapping("load/product/form")
+    public String formProduct(Model model) {
+        model.addAttribute("product", new ProductDto());
+        model.addAttribute("lstBrand", _iBrandService.findAll());
+        model.addAttribute("lstCategory", _iCategoryService.findAll());
+        return "load-form-product";
+    }
+
+    @GetMapping("load/product/form/{id}")
+    public String formEditProduct(Model model, @PathVariable("id") String id) {
+        try {
+            ProductDto productDtoFindById = _iProductService.findProductById(id);
+            model.addAttribute("product", productDtoFindById);
+            model.addAttribute("lstBrand", _iBrandService.findAll());
+            model.addAttribute("lstCategory", _iCategoryService.findAll());
+            return "load-form-product";
+        } catch (Exception e) {
+        }
+        return "redirect:/admin/product";
     }
 
 }

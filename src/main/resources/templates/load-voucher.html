@@ -188,7 +188,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label text-right">Mô tả</label>
                         <div class="col-sm-10">
-                           <textarea id="textarea" class="form-control" name="description" minlength="100" rows="3"
+                           <textarea id="description" class="form-control" name="description" minlength="100" rows="3"
                                      placeholder="Nhập mô tả sự kiện"></textarea>
                         </div>
                     </div>
@@ -221,8 +221,13 @@
 <script th:src="@{/js/jquery.bootstrap-touchspin.min.js}"></script>
 <script th:src="@{/js/jquery.clock-img.init.js}"></script>
 <script th:src="@{/js/jquery.forms-advanced.js}"></script>
+<script th:src="@{/ckeditor/ckeditor.js}"></script>
 
 <script>
+
+    $(document).ready(function () {
+        CKEDITOR.replace('description')
+    })
 
     function getVoucher(e) {
         $.ajax({
@@ -234,6 +239,7 @@
             },
             success: function (response) {
                 appendFormdata('form-input-voucher', response.data)
+                CKEDITOR.instances.description.setData(response.data.description);
             }
         });
     }
@@ -271,9 +277,11 @@
             if (name === 'title' && !checkName(value, 'Tiêu đề')) return;
             if (name === 'quantity' && !checkQuantity(value, 'Số lượng mã áp dụng')) return;
             if (name === 'priceSale' && !checkQuantity(value, 'Giá trị mã giảm giá')) return;
-            if (name === 'description' && !checkDescription(value, 'Mô tả mã giảm giá')) return;
             obj[name] = value;
         }
+        let description = CKEDITOR.instances.description.getData();
+        if(!checkDescription(description, 'Mô tả mã giảm giá')) return;
+        obj.description = description
         let dateTime = $('#date-time-voucher').val() + ''
         console.log(dateTime);
         let dateStart = dateTime.substring(0, dateTime.lastIndexOf('-')).trim()

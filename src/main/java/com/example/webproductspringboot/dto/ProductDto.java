@@ -39,8 +39,6 @@ public class ProductDto {
     @NotNull
     @NotEmpty
     private Long priceSale;
-    @NotNull
-    @NotEmpty
     private Integer quantity;
     @NotNull
     @NotEmpty
