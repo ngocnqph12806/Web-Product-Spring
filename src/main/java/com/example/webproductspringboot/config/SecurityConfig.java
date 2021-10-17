@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.activation.DataSource;
+
 import static org.springframework.http.HttpMethod.*;
 
 
@@ -52,7 +54,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers(GET, "/admin", "/admin/index.html").permitAll();
 
-        http.authorizeRequests().antMatchers(GET, "/admin/load/**").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+        http.authorizeRequests().antMatchers(GET,
+                "/admin/load/invoice",
+                "/admin/load/invoice/form",
+                "/admin/load/invoice/form/product",
+                "/admin/load/bill-order",
+                "/admin/load/bill-order/form",
+                "/admin/load/bill-order/form/product",
+                "/admin/load/product",
+                "/admin/load/returns",
+                "/admin/load/returns/form/add-by-id-order/**",
+                "/admin/load/transport"
+        ).hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+
+        http.authorizeRequests().antMatchers(GET,
+                "/admin/load/category",
+                "/admin/load/brand",
+                "/admin/load/invoice/form/**",
+                "/admin/load/bill-order/form/**",
+                "/admin/load/product/form",
+                "/admin/load/product/form/**",
+                "/admin/load/returns/form/**",
+                "/admin/load/user",
+                "/admin/load/voucher"
+        ).hasAnyAuthority(ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+
+        http.authorizeRequests().antMatchers(GET,
+                "/admin/load/history"
+        ).hasAnyAuthority(ContainsUtils.ROLE_SUPPER_ADMIN);
 
         http.authorizeRequests().antMatchers(GET, "/admin/**").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
         http.authorizeRequests().antMatchers(POST, "/admin/**").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
@@ -67,7 +96,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/orders/payment"
         ).permitAll();
 
-        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+        http.authorizeRequests().antMatchers(POST,
+                "/api/invoices",
+                "/api/orders",
+                "/api/transports",
+                "/api/returns"
+        ).hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+
+        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
+
         http.authorizeRequests().antMatchers(PUT, "/api/**").hasAnyAuthority(ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
 
         http.authorizeRequests().antMatchers(GET, "/token/check").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);

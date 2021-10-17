@@ -7,6 +7,7 @@ import com.example.webproductspringboot.exception.NotFoundException;
 import com.example.webproductspringboot.service.intf.IOrderService;
 import com.example.webproductspringboot.service.intf.IProductService;
 import com.example.webproductspringboot.service.intf.ISendmailService;
+import com.example.webproductspringboot.service.intf.IVoucherService;
 import com.example.webproductspringboot.utils.ConvertUtils;
 import com.example.webproductspringboot.utils.CookieUtils;
 import com.example.webproductspringboot.vo.SearchOrderVo;
@@ -31,12 +32,14 @@ import java.util.stream.Collectors;
 public class OrderApi extends AbstractApi {
 
     private final IOrderService _iOrderService;
+    private final IVoucherService _iVoucherService;
     private final IProductService _iProductService;
     private final ISendmailService _iSendmailService;
 
-    protected OrderApi(HttpServletRequest request, HttpServletResponse response, IOrderService iOrderService, IProductService iProductService, ISendmailService iSendmailService) {
+    protected OrderApi(HttpServletRequest request, HttpServletResponse response, IOrderService iOrderService, IVoucherService iVoucherService, IProductService iProductService, ISendmailService iSendmailService) {
         super(request, response);
         _iOrderService = iOrderService;
+        _iVoucherService = iVoucherService;
         _iProductService = iProductService;
         _iSendmailService = iSendmailService;
     }
@@ -125,6 +128,11 @@ public class OrderApi extends AbstractApi {
                     throw new BadRequestException(e.getMessage());
                 }
             }
+        }
+        VoucherDto voucherDto = _iVoucherService.findById(dtoSave.getIdVoucher());
+        if (voucherDto != null) {
+            voucherDto.setQuantity(voucherDto.getQuantity() - 1);
+            _iVoucherService.update(voucherDto);
         }
         assert dtoSave != null;
         sendMailInfoOrderBill(dtoSave, dto.getDetails(), dto.getEmail());

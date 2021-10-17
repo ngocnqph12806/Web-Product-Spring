@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 <body>
@@ -15,7 +16,7 @@
                             <i class="mdi mdi-monitor"></i> Dashboard
                         </a>
                     </li>
-                    <li class="has-submenu">
+                    <li  class="has-submenu">
                         <a href="#">
                             <i class="mdi mdi-apps"></i>Người dùng
                         </a>
@@ -82,6 +83,15 @@
             </div><!-- end navigation -->
         </div><!-- end container-fluid -->
     </div><!-- end left-sidenav-->
+    <p sec:authorize="hasRole('ADMIN')">
+        ADMIN
+    </p>
+    <p sec:authorize="hasRole('STAFF')">
+        STAFF
+    </p>
+    <p sec:authorize="hasRole('SUPPER_ADMIN')">
+        SUPPER_ADMIN
+    </p>
 </div>
 </body>
 </html>

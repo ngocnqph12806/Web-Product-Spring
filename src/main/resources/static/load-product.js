@@ -71,7 +71,7 @@ async function saveProduct() {
         await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileUseManual.nameFile, {
             method: 'PUT',
             headers: {
-                "Authorization": "Bearer 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",
+                "Authorization": "Bearer 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",
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -103,7 +103,7 @@ async function saveProduct() {
                 await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileImage.nameFile[i], {
                     method: 'PUT',
                     headers: {
-                        "Authorization": "Bearer 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",
+                        "Authorization": "Bearer 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",
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({

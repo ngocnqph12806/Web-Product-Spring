@@ -86,10 +86,18 @@ public class UserApi extends AbstractApi {
     public void confirmUser(@PathVariable("id") String id,
                             @RequestParam("register_Code") Integer register_Code,
                             @RequestParam("url_Success") String url_Success) throws IOException {
-        _iUserService.findById(id);
-        if (_iConfirmService.put(register_Code, ContainsUtils.CONFIRM_REGISTER)) {
+        UserDto userDtoFindById = _iUserService.findById(id);
+        if (!userDtoFindById.getStatus() && _iConfirmService.put(register_Code, ContainsUtils.CONFIRM_REGISTER)) {
             _iUserService.confirmUser(id);
             response.sendRedirect(url_Success);
+        } else {
+            int code = (int) (Math.random() * 9999999);
+            String message = "<a href=\"http://localhost:8091/api/users/" + userDtoFindById.getId()
+                    + "?register_Code=" + code
+                    + "&url_Success=" + url_Success
+                    + "\">Xác nhận tài khoản</a>";
+            _iSendmailService.push(userDtoFindById.getEmail(), "Đăng ký tài khoản", message);
+            _iConfirmService.push(code, userDtoFindById, ContainsUtils.CONFIRM_REGISTER);
         }
         throw new NotFoundException(CookieUtils.get().errorsProperties(request, "lang", "page.not.found"));
     }
