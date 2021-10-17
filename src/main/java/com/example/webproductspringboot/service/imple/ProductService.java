@@ -108,18 +108,6 @@ public class ProductService extends AbstractService implements IProductService {
     }
 
     @Override
-    public Set<String> getSetCategoryDetailsByIdCategory(String idCategory) {
-        if (idCategory == null) return _iProductReponsitory.getAllNameCategory();
-        return _iProductReponsitory.getSetCategoryDetailsByIdCategory(idCategory);
-    }
-
-    @Override
-    public Set<String> getSetColorByIdCategory(String idCategory) {
-        if (idCategory == null) return _iProductReponsitory.getAllColor();
-        return _iProductReponsitory.getSetColorByIdCategory(idCategory);
-    }
-
-    @Override
     public ProductDto saveProduct(ProductDto dto) {
         ProductEntity entity = (ProductEntity) map(dto);
         if (entity == null)
@@ -127,6 +115,7 @@ public class ProductService extends AbstractService implements IProductService {
         UserEntity userEntity = getUserLogin();
         entity.setId(UUID.randomUUID().toString());
         entity.setStatus(true);
+        entity.setQuantity(0);
         String idUrl = String.valueOf(new Random().nextInt(20) * 1000000000);
         entity.setIdUrl(Long.parseLong(idUrl.replaceAll("-", "")));
         entity.setCreated(new Date(System.currentTimeMillis()));
@@ -146,6 +135,7 @@ public class ProductService extends AbstractService implements IProductService {
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "product", "product.not.found"));
         ProductEntity fake = optional.get();
         if (entity.getStatus() == null) entity.setStatus(fake.getStatus());
+        if (entity.getQuantity() == null) entity.setQuantity(fake.getQuantity());
         entity.setIdUrl(fake.getIdUrl());
         entity.setCreated(fake.getCreated());
         _iProductReponsitory.save(entity);

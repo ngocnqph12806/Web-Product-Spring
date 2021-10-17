@@ -8,8 +8,20 @@
 
 // " 123/13 Hương lộ 2. Khu phố 2, Quận Bình Tân. Phường Bình Trị Đông A"
 
+function checkDescriptionProduct(value) {
+    if (value === null || value === undefined || value === '') {
+        toastDanger('Vui lòng nhập mô tả sản phẩm', 'Lỗi');
+        return false;
+    }
+    if (value.trim().length < 255) {
+        toastWarning('Mô tả sản phẩm phải từ 255 ký tự', 'Lỗi');
+        return false;
+    }
+    return true;
+}
+
 function checkPath(value) {
-    const REGEX_PATH = /^[a-zA-Z0-9\-\_\.]+$/
+    const REGEX_PATH = /^[a-zA-Z0-9\-\_\.]+[a-zA-Z0-9]$/
     if (value === null || value === '') {
         toastDanger('Đường dẫn không được để trống', 'Lỗi');
         return false;
@@ -49,10 +61,27 @@ function checkQuantity(value, title) {
         return false;
     }
     if (Number(value) < 0) {
-        toastWarning(title + ' phải lớn hơn 0', 'Lỗi');
+        toastWarning(title + ' phải từ 0 hơn 0', 'Lỗi');
         return false
     }
     if (REGEX_QUANTITY.test(value)) {
+        return true
+    }
+    toastWarning(title + ' không đúng', 'Lỗi');
+    return false;
+}
+
+function checkColor(value, title) {
+    const REGEX_NAME = /^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ \-\.]+$/
+    if (value === null || value === '') {
+        toastDanger(title + ' không được để trống', 'Lỗi');
+        return false;
+    }
+    if (value.trim().length < 2 || value.trim().length > 15) {
+        toastWarning(title + ' từ 2 đến 15 ký tự', 'Lỗi');
+        return false
+    }
+    if (REGEX_NAME.test(value)) {
         return true
     }
     toastWarning(title + ' không đúng', 'Lỗi');

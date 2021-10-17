@@ -170,6 +170,7 @@
                 window.location = '/admin'
             },
             error: function (e) {
+                swal('Thất bại', 'Đăng nhập thất bại', 'error');
                 console.log('Đăng nhập thất bại')
             }
         });

@@ -63,7 +63,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" placeholder="Nhập số lượng mua"
-                                           name="quantity" maxlength="5" th:value="*{quantity}">
+                                           name="quantity" maxlength="3" th:value="*{quantity}">
                                 </div>
                             </div>
                             <div class="col-sm-6 row">
@@ -265,6 +265,15 @@
             if (name === 'idSaller') {
                 if (value === null || value === undefined || value === '') {
                     swal('Lỗi', 'Vui lòng nhân viên bán hàng', 'error');
+                    return;
+                }
+            }
+            if (name === 'fullName' && !checkRealName(value)) return;
+            if (name === 'phoneNumber' && !checkPhoneNumber(value)) return;
+            if (name === 'email' && !checkEmail(value)) return;
+            if (name === 'village' || name === 'ward' || name === 'district' || name === 'city') {
+                if (value === null || value === undefined || value === '') {
+                    swal('Lỗi', 'Vui lòng nhập đầy đủ địa chỉ nhận hàng');
                     return;
                 }
             }

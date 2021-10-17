@@ -90,7 +90,6 @@ public class ProductApi extends AbstractApi {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") String id,
                                     @RequestBody @Valid ProductFormDto form, Errors errors) {
-        System.out.println(form);
         if (errors.hasErrors())
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "product", errors.getFieldErrors().get(0).getDefaultMessage()));
         if (!form.getId().equals(id))

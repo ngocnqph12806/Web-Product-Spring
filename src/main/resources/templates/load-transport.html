@@ -101,7 +101,7 @@
         let textHtml = '<div class="input-group">' +
             '<input type="email" class="form-control" value="' + e.dataset.statusTransport + '">' +
             '<span class="input-group-append">' +
-            '<button type="button" class="btn btn-success" data-id="' + id + '" onclick="changeStatusTransport(this)">Submit</button>' +
+            '<button type="button" class="btn btn-success" data-id="' + id + '" onclick="changeStatusTransport(this)">Thay đổi</button>' +
             '</span>' +
             '</div>'
         $('#' + id).html(textHtml)
@@ -111,6 +111,7 @@
         console.log(e.dataset.id)
         let id = e.dataset.id
         let value = $('#' + id + ' input').val()
+        if (!checkName(value, 'Trạng thái vận chuyển')) return;
         $.ajax({
             url: '/api/transports/' + id + '/status-transport',
             type: 'PUT',

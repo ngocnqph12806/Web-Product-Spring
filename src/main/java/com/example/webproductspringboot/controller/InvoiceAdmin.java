@@ -42,7 +42,7 @@ public class InvoiceAdmin {
         return "load-form-invoice";
     }
 
-    @GetMapping("load/invoice/form/{id")
+    @GetMapping("load/invoice/form/{id}")
     public String loadFormEditInvoice(@PathVariable("id") String id, Model model) {
         try {
             model.addAttribute("invoice", _iInvoiceService.findById(id));

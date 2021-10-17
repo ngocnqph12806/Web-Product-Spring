@@ -50,7 +50,7 @@ public class ReturnProductAdmin {
             return "load-form-returns";
         } catch (Exception e) {
         }
-        return "redirect:/admin/returns/load";
+        return "redirect:/admin/load/returns";
     }
 
     @GetMapping("load/returns/form/add-by-id-order/{idOrder}")
@@ -63,7 +63,7 @@ public class ReturnProductAdmin {
             return "load-form-returns";
         } catch (Exception e) {
         }
-        return "redirect:/admin/returns/load";
+        return "redirect:/admin/load/returns";
     }
 
 }
