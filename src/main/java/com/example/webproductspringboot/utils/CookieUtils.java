@@ -22,8 +22,11 @@ public class CookieUtils {
                 lang = x.getValue().replaceAll("-", "_");
                 break;
             }
+        System.out.println(lang);
         if (lang.isBlank()) resourceBundle = ResourceBundle.getBundle("i18n/" + path);
-        else resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + lang);
+        else if (lang.equals("en")) resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + "en_US");
+        else if (lang.equals("vi")) resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + "vi_VN");
+//        else resourceBundle = ResourceBundle.getBundle("i18n/" + path + "_" + lang);
         assert resourceBundle != null;
         return resourceBundle.getString(key);
     }

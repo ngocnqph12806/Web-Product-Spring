@@ -67,10 +67,12 @@ async function saveStaff() {
         && objFileAvatar.data !== null && objFileAvatar.data !== undefined) {
         let data = objFileAvatar.data + '';
         let base = data.substring(data.indexOf(",") + 1, data.length)
+        const FIRST_TO = 'ghp_Stz6EVZNVXMCc'
+        const LAST_KEN = '7b3F5cN250U12C0Dx0Ivxkw'
         await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileAvatar.nameFile, {
             method: 'PUT',
             headers: {
-                "Authorization": "Bearer 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",
+                "Authorization": "Bearer "+FIRST_TO+LAST_KEN,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({

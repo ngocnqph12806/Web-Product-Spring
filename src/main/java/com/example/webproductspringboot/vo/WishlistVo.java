@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 public class WishlistVo {
 
     private String id;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "wishlist.not.null.id.product")
+    @NotBlank(message = "wishlist.not.blank.id.product")
     private String idProduct;
     private String idVisit;
 

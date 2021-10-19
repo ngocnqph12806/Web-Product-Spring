@@ -20,6 +20,9 @@ import org.springframework.web.context.annotation.SessionScope;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -134,7 +137,6 @@ public class OrderApi extends AbstractApi {
             voucherDto.setQuantity(voucherDto.getQuantity() - 1);
             _iVoucherService.update(voucherDto);
         }
-        assert dtoSave != null;
         sendMailInfoOrderBill(dtoSave, dto.getDetails(), dto.getEmail());
         return ResponseEntity.ok(dtoSave);
     }
@@ -379,7 +381,13 @@ public class OrderApi extends AbstractApi {
     @Data
     @SessionScope
     static class PaymentVo {
+        @NotNull(message = "order.not.null.id")
+        @NotBlank(message = "order.not.blank.id")
         private String id;
+        @NotNull(message = "order.not.null.url")
+        @NotBlank(message = "order.not.blank.url")
+//        @Pattern(regexp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]+",
+//        message = "order.pattern.url")
         private String url;
     }
 }

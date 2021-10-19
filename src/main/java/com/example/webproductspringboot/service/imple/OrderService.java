@@ -132,6 +132,28 @@ public class OrderService extends AbstractService implements IOrderService {
     }
 
     @Override
+    public List<Long> findAllDoanhSoTrongNam() {
+        List<Long> lst = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            lst.add(_iOrderReponsitory.finDoanhSoTrongThang(i + 1));
+        }
+        return lst;
+    }
+
+    @Override
+    public List<Long> findAllDoanhThuTrongNam() {
+        List<Long> lst = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            Long thang = _iOrderReponsitory.finDoanhThuTrongThang(i + 1);
+            if(thang == null){
+                thang = Long.valueOf("0");
+            }
+            lst.add(thang);
+        }
+        return lst;
+    }
+
+    @Override
     public void saveDetailOrder(OrderDetailDto x) {
         OrderDetailsEntity entity = (OrderDetailsEntity) map(x);
         if (entity == null)

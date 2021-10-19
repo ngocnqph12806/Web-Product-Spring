@@ -104,8 +104,10 @@ public class UserApi extends AbstractApi {
 
     @PostMapping
     public ResponseEntity<?> save(@Validated @RequestBody UserDto dto, Errors errors) {
-        if (errors.hasErrors())
+        if (errors.hasErrors()){
+            System.out.println(errors.getFieldErrors().get(0).getDefaultMessage());
             throw new BadRequestException(CookieUtils.get().errorsProperties(request, "user", errors.getFieldErrors().get(0).getDefaultMessage()));
+        }
 //        ResultDto<UserDto> result = new ResultDto<>(CREATED, _iUserService.save(dto));
         return ResponseEntity.ok(_iUserService.save(dto));
     }

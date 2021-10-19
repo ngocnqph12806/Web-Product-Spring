@@ -16,8 +16,8 @@ import java.util.Date;
 public class TransportDto {
 
     private String id;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "transport.not.null.id.order")
+    @NotBlank(message = "transport.not.blank.id.order")
     private String idOrder;
     private String fullName;
     private String phoneNumber;

@@ -16,20 +16,20 @@ import java.util.List;
 public class ReviewDto {
 
     private String id;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "review.not.null.id.product")
+    @NotBlank(message = "review.not.blank.id.product")
     private String idProduct;
     private String nameProduct;
-//    @NotNull
-//    @NotEmpty
+    @NotNull(message = "review.not.null.id.user")
+    @NotBlank(message = "review.not.blank.id.user")
     private String idUser;
     private String nameUser;
-    @NotNull
+    @NotNull(message = "review.not.null.point")
     @Min(20)
     @Max(100)
     private Integer point;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "review.not.null.description")
+    @NotBlank(message = "review.not.blank.description")
     private String description;
 //    @NotNull
 //    @NotEmpty

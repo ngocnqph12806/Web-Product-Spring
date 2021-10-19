@@ -17,13 +17,13 @@ public class VoucherDto {
     private String id;
     @NotNull(message = "NotNull.voucher.code")
     @NotBlank(message = "NotBlank.voucher.code")
-    @Pattern(regexp = "^[a-zA-Z0-9\\-]+$", message = "Pattern.voucher.code")
+//    @Pattern(regexp = "^[a-zA-Z0-9\\-]+$", message = "Pattern.voucher.code")
     @Size(min = 5, max = 30, message = "Size.voucher.code")
     private String code;
     @NotNull(message = "NotNull.voucher.title")
     @NotBlank(message = "NotBlank.voucher.title")
-    @Pattern(regexp = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ \\-.]+$",
-            message = "Pattern.voucher.title")
+//    @Pattern(regexp = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ \\-.]+$",
+//            message = "Pattern.voucher.title")
     @Size(min = 5, max = 100, message = "Size.voucher.title")
     private String title;
     private String idStaff;

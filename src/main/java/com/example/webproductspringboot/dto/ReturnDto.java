@@ -21,8 +21,8 @@ import java.util.List;
 public class ReturnDto {
 
     private String id;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "return.not.null.id.order")
+    @NotBlank(message = "return.not.blank.id.order")
     private String idOrder;
     private Date dateOrder;
     private String nameUser;
@@ -30,8 +30,8 @@ public class ReturnDto {
 //    @NotBlank
     private String idStaff;
     private String nameStaff;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "return.not.null.description")
+    @NotBlank(message = "return.not.blank.description")
     private String description;
     private Boolean status;
     private Date dateCreated;

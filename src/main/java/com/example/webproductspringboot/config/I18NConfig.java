@@ -25,7 +25,6 @@ public class I18NConfig implements WebMvcConfigurer {
                 "classpath:i18n/brand",
                 "classpath:i18n/category",
                 "classpath:i18n/collection",
-                "classpath:i18n/history",
                 "classpath:i18n/invoice",
                 "classpath:i18n/order",
                 "classpath:i18n/product",

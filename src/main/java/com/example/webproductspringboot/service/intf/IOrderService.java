@@ -33,4 +33,8 @@ public interface IOrderService {
     List<OrderDto> getAllOrderByUserLogin(String id);
 
     void updatePayment(String id);
+
+    List<Long> findAllDoanhSoTrongNam();
+
+    List<Long> findAllDoanhThuTrongNam();
 }

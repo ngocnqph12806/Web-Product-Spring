@@ -94,7 +94,13 @@ public class VoucherService extends AbstractService implements IVoucherService {
         Optional<VoucherEntity> optional = _iVoucherReponsitory.findByCode(code);
         if (optional.isEmpty())
             throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
-        return entityToVoucherApplyVo(optional.get());
+        VoucherEntity entity = optional.get();
+        long start = (new Date().getTime() - entity.getDateStart().getTime()) / 1000;
+        long end = (new Date().getTime() - entity.getDateEnd().getTime()) / 1000;
+        if (start >= 0 && end <= 0) {
+            return entityToVoucherApplyVo(entity);
+        }
+        throw new NotFoundException(CookieUtils.get().errorsProperties(request, "voucher", "voucher.not.found"));
     }
 
     private VoucherApplyVo entityToVoucherApplyVo(VoucherEntity entity) {

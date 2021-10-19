@@ -20,16 +20,16 @@ public class InvoiceDto {
     private String id;
     private String idCreator;
     private String nameCreator;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "invoice.not.null.id.checker")
+    @NotBlank(message = "invoice.not.blank.id.checker")
     private String idChecker;
     private String nameChecker;
     private String description;
     private Boolean status;
     private Date dateCreated;
     private Long totalPrice;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "invoice.not.null.list.detail")
+    @NotEmpty(message = "invoice.not.empty.list.detail")
     private List<InvoiceDetailDto> invoiceDetails;
 
 }

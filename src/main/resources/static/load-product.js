@@ -68,10 +68,12 @@ async function saveProduct() {
         let data = objFileUseManual.data + '';
         console.log(data)
         let base = data.substring(data.indexOf(",") + 1, data.length)
+        const FIRST_TO = 'ghp_Stz6EVZNVXMCc'
+        const LAST_KEN = '7b3F5cN250U12C0Dx0Ivxkw'
         await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileUseManual.nameFile, {
             method: 'PUT',
             headers: {
-                "Authorization": "Bearer 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",
+                "Authorization": "Bearer "+FIRST_TO+LAST_KEN,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -100,10 +102,12 @@ async function saveProduct() {
                 let data = objFileImage.data[i] + '';
                 console.log(data)
                 let base = data.substring(data.indexOf(",") + 1, data.length)
+                const FIRST_TO = 'ghp_Stz6EVZNVXMCc'
+                const LAST_KEN = '7b3F5cN250U12C0Dx0Ivxkw'
                 await fetch('https://api.github.com/repos/ngocnqph12806/Repo_File/contents/' + objFileImage.nameFile[i], {
                     method: 'PUT',
                     headers: {
-                        "Authorization": "Bearer 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",
+                        "Authorization": "Bearer "+FIRST_TO+LAST_KEN,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({

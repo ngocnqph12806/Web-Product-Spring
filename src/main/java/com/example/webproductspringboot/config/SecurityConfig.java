@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //        http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(ContainsUtils.ROLE_STAFF, ContainsUtils.ROLE_ADMIN, ContainsUtils.ROLE_SUPPER_ADMIN);
 
-        http.authorizeRequests().antMatchers(GET, "/admin", "/admin/index.html").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/admin", "/admin/index.html", "/admin/load-home").permitAll();
 
         http.authorizeRequests().antMatchers(GET,
                 "/admin/load/invoice",

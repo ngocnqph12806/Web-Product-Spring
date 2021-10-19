@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 
@@ -18,18 +20,22 @@ import java.util.List;
 public class CategoryDto {
 
     private String id;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "category.not.null.name")
+    @NotBlank(message = "category.not.blank.name")
+//    @Pattern(regexp = "[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ -.]{5,10}$",
+//            message = "category.pattern.name")
     private String name;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "category.not.null.banner")
+    @NotBlank(message = "category.not.blank.banner")
+//    @Pattern(regexp = ".*.(gif|jpe?g|bmp|png)",
+//            message = "category.pattern.banner")
     private String banner;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "category.not.null.path")
+    @NotBlank(message = "category.not.blank.path")
     private String path;
     private Long idPath;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "category.not.null.description")
+    @NotBlank(message = "category.not.blank.description")
     private String description;
     private Boolean status;
     private Date dateCreated;

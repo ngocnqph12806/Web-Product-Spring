@@ -40,7 +40,6 @@ public class ConfirmService implements IConfirmService {
     public void run() {
         for (ConfirmModel<UserDto> x : lst) {
             long seconds = (new Date().getTime() - x.getTime().getTime())/1000;
-            System.out.println(seconds);
             if (seconds > 60) {
                 lst.remove(x);
                 break;

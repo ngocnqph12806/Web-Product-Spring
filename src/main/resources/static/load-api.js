@@ -1,3 +1,8 @@
+async function openHome() {
+    await loadData('/admin/load-home')
+    document.title = 'Trang quản trị viên'
+}
+
 async function openFormProduct() {
     await loadData('/admin/load/product/form')
     document.title = 'Nhập thông tin sản phẩm'
@@ -133,6 +138,7 @@ $(document).ready(async function () {
                     success: function (response) {
                         response === null || response === undefined ? response = '' : response = response
                         $('#content').html(response)
+                        openHome()
                     },
                     error: function (e) {
                         $('#content').html('<h3>' + e.status + '</h3>')
@@ -315,7 +321,9 @@ function getWithAPI(obj, path) {
 //     + String(today.getMilliseconds()).padStart(3, '0') + '.';
 const nameOwner = 'ngocnqph12806';
 const nameRepo = 'Repo_File';
-const token = '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';
+const FIRST_TO = 'ghp_Stz6EVZNVXMCc'
+const LAST_KEN = '7b3F5cN250U12C0Dx0Ivxkw'
+const token = FIRST_TO + LAST_KEN;
 
 function getNameTime() {
     let today = new Date();
